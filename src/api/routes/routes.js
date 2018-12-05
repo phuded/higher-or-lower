@@ -1,0 +1,20 @@
+import {getPlayers, updatePlayer, createPlayer} from "../controllers/playerController";
+
+export default function routes(app) {
+
+    const root = "/higherorlower";
+
+    /**
+     * Returns ok as health response
+     */
+    app.get("/management/health", function (req, res) {
+        res.send('Ok');
+    });
+
+    app.route(root + "/api/players").get(getPlayers);
+
+    app.route(root + "/api/players/:name").put(updatePlayer)
+
+    app.route(root + "/api/players").post(createPlayer)
+
+};
