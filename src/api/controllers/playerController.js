@@ -2,12 +2,12 @@ import mysql from "mysql";
 
 function getConnection(){
 
-    return mysql.createConnection({
-        host: "localhost",
-        user: "higherorlower",
-        password: "Thorndon32!",
-        database: "higherorlower"
-    });
+    return  mysql.createConnection({
+            host: "localhost",
+            user: "higherorlower",
+            password: "Thorndon32!",
+            database: "higherorlower"
+        });
 }
 
 function getPlayer(name){
@@ -19,21 +19,39 @@ export function getPlayers(req, res) {
 
     const con = getConnection();
 
+    const orderBy = req.query["order-by"] ? req.query["order-by"] : "name";
+    const dir = req.query.dir ? req.query.dir : "asc";
+    const start = req.query.start ? req.query.start : 0;
+    const num = req.query.num ? req.query.num : 1000;
+
     con.connect(function(err) {
 
         if (err) {
             throw err;
         }
 
-        const sql = "SELECT * FROM player";
+        const countSql = "SELECT count(*) FROM player";
 
-        con.query(sql, function (err, result) {
+        con.query(countSql, function (err, countResult) {
 
             if (err) {
                 throw err;
             }
 
-            res.status(200).send(result);
+            const sql = "SELECT * FROM player order by " + orderBy + " " + dir + " limit " + start + ", " + num;
+
+            console.log(sql);
+
+            con.query(sql, function (err, players) {
+
+                if (err) {
+                    throw err;
+                }
+
+                const response = {max: countResult, players: players};
+
+                res.status(200).send(response);
+            });
         });
 
     });
