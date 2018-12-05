@@ -1,0 +1,377 @@
+.main{
+    /*position:	absolute;
+    top:		50px;
+    bottom:		47px;
+    width: 		100%;*/
+}
+
+.tab-content{
+	background:transparent;
+}
+
+.main p:first-child{
+	border:1px inset white;
+	background-color:lightGray;
+	padding:4px;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+	/*To fit app screen perfectly*/
+	margin-bottom:8px;
+}
+
+.main *{
+	text-align:center;
+}
+/*Hide dialogue close button*/
+.header a{
+	display:none !important;
+}
+
+#cardDisplay{
+	margin-left:auto;
+	margin-right:auto;
+	width:160px;
+	height:208px;
+	border:2px inset white;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+}
+
+#cardDisplay.green{
+	background:url("../images/correct.jpg") repeat scroll 0 0 transparent;
+}
+#cardDisplay.red{
+	background:url("../images/incorrect.jpg") repeat scroll 0 0 transparent;
+}
+
+#card{
+	width:100px;
+	height:145px;
+	margin-top: 20%;
+	margin-left:auto;
+	margin-right:auto;
+	border: 1px outset grey;
+	background:url(../images/allcards.png) no-repeat 0px 0px;
+}
+
+#gameButtons{
+    margin-top: 20px;
+}
+
+/* Betting buttons */
+#higher,#lower{
+	width: 150px;
+}
+
+/*Slider*/
+#sliderPanel{
+	height:40px;
+	margin-bottom:8px;
+}
+
+#sliderBar{
+	font-weight:bold;
+}
+
+#sliderBar div{
+	width: 65%;
+}
+
+#sliderBar div a{
+	width: 35px;
+	height: 35px;
+	margin-top:-18px;
+}
+
+#currentNumFingers{
+	width:25px;
+}
+
+/*Bottom bar*/
+#footer{
+	height:47px;
+	position: absolute;
+	bottom: 0;
+}
+
+#footer table{
+	border-spacing: 0;
+}
+
+#footer th{
+	width:115px;
+}
+
+#footer td{
+	width:80px;
+	font-size:0.9em;
+	border-left: 1px dotted #456F9A;
+}
+
+#footer td.wider{
+	width:115px;
+}
+
+#footer td span{
+	margin-left:5px;
+}
+
+.spinnerSmall{
+	height: 26px;
+	width: 26px;
+}
+
+/*Lee pop up */
+
+div#pictureContainer{
+	text-align:center;
+}
+
+div#pictureContainer >div{
+	height:80px;
+}
+
+#pictureDisplay{
+	margin:20px auto 5px;
+	width:174px;
+	height:174px;
+	border:1px solid #7AB9F0;
+}
+
+span#drinkMessage{
+	font-size:1.1em;
+	color:red;
+}
+
+#fingers{
+	font-weight:bold;
+}
+
+/* Form*/
+.formPanel{
+	margin-top:-6px;
+
+}
+
+/*Add/remove buttons*/
+a#addPlayer, a#delPlayer{
+	font-size:0.8em;
+	margin-left:0;
+	margin-bottom:10px;
+}
+
+/*Player Rows*/
+#playerRows{
+	width: 100%;
+	margin-left: -3px;
+}
+
+#playerRows a{
+    font-size: 0.8em;
+    margin: .4em 1px .4em 5px;
+}
+
+#playerRows td.icon a span.ui-btn-inner{
+    padding: .5em 3px .5em 23px;
+}
+
+#playerRows td.icon a span.ui-btn-inner span.ui-icon{
+    left: 3px;
+}
+
+#playerRows tr td.icon{
+	width:20%;
+}
+
+#playerRows tr td.icon-del{
+	width:15%;
+}
+
+#playerRows tr td:nth-child(2){
+	padding-left: 5px;
+}
+
+/* Toggle buttons */
+#gameOptions{
+	text-align: center;
+	margin-bottom:0px;
+	padding-bottom: 8px;
+}
+
+#gameOptions label{
+	font-size:0.9em;
+}
+
+/*Start & Cancel buttons*/
+#start,#cancel{
+	padding: 1px 8px 4px 8px;
+}
+
+.game_spinner{
+	position:relative;
+	top:3px;
+	left:10px;
+}
+
+.game_spinner img{
+	height:30px;
+	width:30px;
+	position:relative;
+	top:9px;
+}
+
+/*Player List*/
+#playerList li{
+	font-size:0.9em;
+}
+
+/*Player Form*/
+#playerForm>span{
+	font-size:1.2em;
+	font-weight:bold;
+}
+
+#playerForm p{
+	color:red;
+}
+
+/*Scores tab */
+#scoreTab{
+	padding:10px;
+}
+
+table.scoreTable{
+	border:1px solid #6D7B8D;
+	border-bottom-left-radius: 0.6em;
+    border-top-left-radius: 0.6em;
+	font-weight: bold;
+    text-shadow: none;
+	padding:3px;
+}
+
+table.scoreTable tr th, table.scoreTable tr td{
+	padding:2px;
+}
+
+table.scoreTable tr th{
+	width:100px;
+	max-width:100px;
+}
+
+
+table.scoreTable tr td{
+	width:22px;
+	max-width:22px;
+	text-align:center;
+	border: 1px solid grey;
+	font-size: 0.9em;
+}
+
+table.scoreTable tr td.correct{
+	background-color:#66CC99;
+}
+
+table.scoreTable tr td.incorrect{
+	background-color:#F78181;
+}
+
+#scoreTab a{
+	font-size: 0.8em;
+	width:90px;
+}
+
+#scoreTab a>span{
+	padding: .6em 0 .6em 20px !important;
+}
+
+#scoreTab a>span>span.ui-icon{
+	left:4px;
+}
+
+
+/*Drinkers tab */
+
+#drinkersTab{
+	padding: 2px;
+}
+
+#drinkersTab table{
+	margin-left:auto;
+	margin-right:auto;
+	text-align: center;
+	text-shadow:none;
+	font-size: 0.8em;
+}
+
+#drinkersTab table  tr th, #drinkersTab table tr td{
+	padding:3px 3px 4px 2px;
+	border: 1px solid gray;
+	background-color: #F4F4F4;
+}
+
+/*Header row*/
+#drinkersTab table tr th{
+	background-color:#98AFC7;
+	width: 70px;
+}
+
+/*First header*/
+#drinkersTab table tr th:first-child{
+	border-top-left-radius: 0.6em;
+	width: 17px;
+}
+
+/*First column*/
+#drinkersTab table tr td:first-child{
+	background-color:#98AFC7;
+	font-weight:bold;
+}
+
+/*Last on first column*/
+#drinkersTab table tr:last-child  td:first-child{
+	border-bottom-left-radius: 0.6em;
+}
+
+/*Header and footer column buttons*/
+.drinkers_header{
+	margin: 0.5em 0.2em;
+}
+
+.navButtons,.reloadButton{
+	width:300px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.reloadButton>p{
+	font-size:0.9em;
+}
+
+.navButtons>a,.reloadButton>a{
+	float:right;
+	font-size: 0.8em;
+}
+
+.navButtons>a:first-child{
+	float:left;
+}
+
+.drinkers_header > span,.navButtons>a > span, .reloadButton>a > span  {
+	padding: 0.6em 8px 0.7em 27px !important;
+	white-space: normal;
+}
+
+.drinkers_header span.ui-icon,.navButtons>a span.ui-icon, .reloadButton>a span.ui-icon{
+	left: 4px;
+}
+
+/*Spinner*/
+.spinner{
+	text-align:center;
+}
+.spinner img{
+	height: 64px;
+	width: 64px;
+}

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable = no">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<link rel="apple-touch-icon" href="images/iphone-iconS.png" />
+		<link rel="apple-touch-icon" sizes="72x72" href="images/iphone-iconM.png" />
+		<link rel="apple-touch-icon" sizes="114x114" href="images/iphone-iconL.png" />
+		<link rel="apple-touch-startup-image" href="images/startup.png">
+		<!--http://stackoverflow.com/questions/5767565/jquery-mobile-viewport-hide-safari-header-and-footer
+		http://developer.apple.com/library/safari/#documentation/appleapplications/reference/safariwebcontent/configuringwebapplications/configuringwebapplications.html-->
+
+		<title>Higher-Lower</title>
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/main.css" />
+
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+
+		<script type="text/javascript" src="lib/jquery-css-transform.js"></script>
+		<script type="text/javascript" src="lib/rotate3Di.js"></script>
+		<script type="text/javascript" src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+
+		<script type="text/javascript" src="js/engine.js"></script>
+		<script type="text/javascript" src="js/form.js"></script>
+		<script type="text/javascript" src="js/scores.js"></script>
+		<script type="text/javascript" src="js/drinkers.js"></script>
+		<script type="text/javascript" src="js/trans.js"></script>
+
+		<link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$.prepareGame();
+			});
+		</script>
+	</head>
+	<body>
+		<!-- Dialogue Form -->
+		<div data-role="page" id="form" data-title="Higher-Lower" data-theme="b">
+			<div data-role="header" data-theme="b">
+				<h1>New Game</h1>
+			</div>
+			<div id="newGameForm" data-role="content" class="tab-content">
+				<div class="gameForm">
+					<div data-role="collapsible-set" class="formPanel">
+						<div data-role="collapsible" data-collapsed="false" data-theme="c" data-content-theme="d">
+							<h3>Players</h3>
+							<a id="addPlayer" href="javascript:$.addPlayerRow()" data-role="button" data-icon="plus" data-inline="true" data-theme="a">Add Slot (+1)</a>
+							<a id="delPlayer" href="javascript:$.delPlayerRow()" data-role="button" data-icon="minus" data-inline="true" data-theme="c">Remove Slot (-1)</a>
+							<br/>
+							<span>Play as a guest, create a new player or choose an existing player:</span>
+							<table id="playerRows">
+								<tr id="player_1">
+									<td>
+										<input type="text" value="Guest 1" MAXLENGTH=8"/>
+									</td>
+									<td class="icon">
+										<a id="add_1" href="javascript:$.createNewPlayer(true, 1)" data-role="button" data-icon="plus">New</a>
+									</td>
+									<td class="icon">
+										<a id="search_1" href="javascript:$.showPlayerList(true, 1)" data-role="button" data-icon="search">Choose</a>
+									</td>
+									<td class="icon-del">
+										<a id="del_1" href="javascript:$.delPlayerRow(1)" data-role="button" data-icon="minus" data-iconpos="notext" style="display:none;">Remove</a>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<div data-role="collapsible" data-collapsed="true" class="drinkOption" data-theme="c" data-content-theme="d">
+							<h3>Drinks</h3>
+							<span><b>What are you drinking?</b></span>
+							<fieldset data-role="controlgroup">
+								<input type="radio" name="drink_choice" id="drink_beer_bottle" value="swig" class="drinkOption" checked="checked" />
+								<label for="drink_beer_bottle">Bottled Beer</label>
+
+								<input type="radio" name="drink_choice" id="drink_beer_draught" value="finger"  class="drinkOption"/>
+								<label for="drink_beer_draught">Draft Beer</label>
+
+								<input type="radio" name="drink_choice" id="drink_spirit_mixed" value="finger"  class="drinkOption"/>
+								<label for="drink_spirit_mixed">Mixed Spirit</label>
+
+								<input type="radio" name="drink_choice" id="drink_spirit_pure" value="shot"  class="drinkOption"/>
+								<label for="drink_spirit_pure">Pure Spirit</label>
+
+								<input type="radio" name="drink_choice" id="drink_wine" value="sip"  class="drinkOption"/>
+								<label for="drink_wine">Wine</label>
+							</fieldset>
+						</div>
+
+						<div data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="d">
+							<h3>Game Options</h3>
+							<fieldset id="gameOptions" data-role="controlgroup" data-role="fieldcontain">
+								<input type="checkbox" name="fullBetting" id="fullBetting" class="gameFlag"/>
+								<label for="fullBetting">Bet on any card</label>
+								<input type="checkbox" name="removeCards" id="removeCards" class="gameFlag" />
+								<label for="removeCards">Remove played cards</label>
+								<input type="checkbox" name="wholePack" id="wholePack" class="gameFlag" />
+								<label for="wholePack">Use the whole pack</label>
+							</fieldset>
+						</div>
+					</div>
+					<a href="javascript:$.startGame()" id="start" data-role="button" data-theme="b" data-inline="true" data-icon="check">Play!</a>
+					<a href="javascript:$.closeForm()" id="cancel" data-role="button" data-theme="c" data-inline="true" data-icon="back" style="display:none;">Back to game</a>
+					<span class="game_spinner" style="display:none;"><img src="images/loading.gif">&nbsp;Loading</span>
+				</div>
+				<!--Hidden player list -->
+				<div id="playerList" style="display:none;">
+					<ul data-role="listview" data-filter="true" data-inset="true" data-theme="c"></ul>
+					<a href="javascript:$.showPlayerList(false, null)" id="backFromList" data-role="button" data-theme="c" data-inline="true" data-icon="back">Back</a>
+				</div>
+				<!-- New player form -->
+				<div id="playerForm" style="display:none;">
+					<span>Create a new player</span><br/><br/>
+					<b>User Name*</b><br/>
+					<input type="text" class="playerFormField" name="pname" id="pname" MAXLENGTH=8"/><br/>
+					First Name<br/>
+					<input type="text" class="playerFormField" name="fname" id="fname"/><br/>
+					Surname<br/>
+					<input type="text"  class="playerFormField" name="surname" id="surname"/><br/>
+					<a href="javascript:$.createNewPlayer(false, true)" id="createPlayer" data-role="button" data-theme="b" data-inline="true" data-icon="check">Create</a>
+					<a href="javascript:$.createNewPlayer(false, false)" id="cancelPlayer" data-role="button" data-theme="c" data-inline="true" data-icon="back">Cancel</a>
+					<p style="display:none;">User name already in use or invalid!</p>
+				</div>
+				<!-- Download required icons -->
+				<img src="http://code.jquery.com/mobile/1.0b2/images/icon-search-black.png" style="display:none;"/>
+				<img src="http://code.jquery.com/mobile/1.0b2/images/icons-18-white.png" style="display:none;"/>
+				<img src="http://code.jquery.com/mobile/1.0b2/images/icons-36-white.png" style="display:none;"/>
+				<img src="images/allcards.png" style="display:none;"/>
+				<img src="images/correct.jpg" style="display:none;"/>
+				<img src="images/incorrect.jpg" style="display:none;"/>
+			</div>
+		</div>
+
+
+		<div data-role="page" id="game" data-theme="b" data-title="Higher-Lower">
+			<div data-role="header" data-theme="a">
+					<div id="game_navbar" data-role="navbar">
+						<ul>
+							<li><a href="#game" class="ui-btn-active" data-icon="home">Game</a></li>
+							<li><a href="javascript:$.slideTab(false,'scores')" data-icon="grid">Scores</a></li>
+							<li><a href="javascript:$.slideTab(false,'drinkers')" data-icon="star">Top Drinkers</a></li>
+						</ul>
+					</div>
+			</div>
+
+			<div class="main" class="tab-content" data-role="content">
+					<p><span id="playerName">&nbsp;</span></p>
+					<div id="sliderPanel">
+						<div id="sliderBar" style="display:none;">
+							Bet: <input type="range" name="slider" id="currentNumFingers" value="0" min="0" max="4" data-theme="c" readonly/>
+						</div>
+					</div>
+					<div id="cardDisplay">
+						<div id="card"></div>
+					</div>
+					<div id="gameButtons" data-role="controlgroup" data-type="horizontal">
+						<a id="higher" href="javascript:$.playTurn(true)" data-role="button" data-icon="arrow-u" data-theme="b">Higher</a>
+						<a id="lower" href="javascript:$.playTurn(false)" data-role="button" data-icon="arrow-d" data-theme="c">Lower</a>
+					</div>
+			</div>
+
+			<div id="footer" data-role="footer" data-theme="b">
+				<div data-role="controlgroup" data-type="horizontal">
+					<table>
+						<tr>
+							<th>
+								<a href="javascript:$.openForm()" data-role="button" data-transition="fade" data-icon="plus" data-theme="a" id="newGame">New Game</a>
+							</th>
+							<td class="wider">
+								<span>Bet:<span id="totalNumFingers"></span></span>
+							</td>
+							<td>
+								<span id="cardsLeft"></span>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+
+
+		<div data-role="page" id="scores" data-theme="b">
+			<div data-role="header" data-theme="a">
+					<div id="scores_navbar" data-role="navbar">
+						<ul>
+							<li><a href="javascript:$.slideTab(true,'game')" data-icon="home">Game</a></li>
+							<li><a href="#scores" class="ui-btn-active" data-icon="grid">Scores</a></li>
+							<li><a href="javascript:$.slideTab(false,'drinkers')" data-icon="star">Top Drinkers</a></li>
+						</ul>
+					</div>
+			</div>
+
+			<div id="scoreTab" class="tab-content" data-role="content">
+				<table class="scoreTable"></table>
+				<div id="scoreStats" style="display:none;">
+					<h3 id="stats_name" style="color:#155678;"></h3>
+					<p id="stats_guesses"><b>Guesses made: </b><span></span></p>
+					<p id="stats_correct"><b>Correct guesses: </b><span></span></p>
+					<p id="stats_incorrect"><b>Incorrect guesses: </b><span></span></p>
+					<p id="stats_percentage"><b>Percentage correct: </b><span></span></p>
+					<p id="stats_correctS"><b>Most correct guesses in a row: </b><span></span></p>
+					<p id="stats_incorrectS"><b>Most incorrect guesses in a row: </b><span></span></p>
+					<a href="javascript:$.showPlayerStats(0,false)" data-role="button" data-icon="back" data-theme="c">Back</a>
+				</div>
+			</div>
+
+		</div>
+
+		<div data-role="page" id="drinkers" data-theme="b">
+			<div data-role="header" data-theme="a">
+					<div id="drinkers_navbar" data-role="navbar">
+						<ul>
+							<li><a href="javascript:$.slideTab(true,'game')" data-icon="home">Game</a></li>
+							<li><a href="javascript:$.slideTab(true,'scores')" data-icon="grid">Scores</a></li>
+							<li><a href="#drinkers" class="ui-btn-active" data-icon="star">Top Drinkers</a></li>
+						</ul>
+					</div>
+			</div>
+
+			<div id="drinkersTab" class="tab-content" data-role="content">
+				<table>
+					<tr>
+						<th></th>
+						<th><a href="javascript:$.generateDrinkersTab(1,'name','asc')" data-role="button" data-icon="info" data-theme="c" class="drinkers_header">Name</a></th>
+						<th><a href="javascript:$.generateDrinkersTab(2,'max_finger','desc')" data-role="button" data-icon="arrow-d" data-theme="b" class="drinkers_header">Fingers Drank</a></th>
+						<th><a href="javascript:$.generateDrinkersTab(3,'max_correct','desc')" data-role="button" data-icon="info" data-theme="c" class="drinkers_header">Correct Guesses</a></th>
+						<!--<th><a href="javascript:$.generateDrinkersTab(4,'last_played','desc')" data-role="button" data-icon="info" data-theme="c" class="drinkers_header">Last Played</a></th>-->
+					</tr>
+				</table>
+				<div class="spinner">
+					<img src="images/loading.gif"/>
+				</div>
+				<div class="navButtons">
+						<a href="javascript:$.navDrinkersTab(-1)" data-role="button" data-icon="arrow-l" data-theme="c" data-inline="true">Prev</a>
+						<a href="javascript:$.navDrinkersTab(1)" data-role="button" data-icon="arrow-r" data-theme="a" data-inline="true">Next</a>
+				</div>
+				<div class="reloadButton" style="display:none;">
+						<p>Could not load drinkers, please check your internet connection & try again.</p>
+						<a href="javascript:$.navDrinkersTab(0)" data-role="button" data-icon="refresh" data-theme="a">Reload</a>
+				</div>
+			</div>
+
+		</div>
+
+		<!-- Lee You must drink Form -->
+		<div data-role="dialog" id="drink">
+			<div data-role="header" data-theme="b" class="header">
+				<h1>Drink!</h1>
+			</div>
+			<div id="pictureContainer" data-role="content" data-theme="b">
+				<img id="pictureDisplay" src="images/drink.jpg" class="ui-corner-all" title="You must drink!"/>
+				<div>
+					<span id="drinkMessage"></span>
+				</div>
+				<a href="javascript:$.closeDialog()" id="return" data-role="button" data-theme="c">Ok</a>
+			</div>
+		</div>
+
+	</body>
+</html>

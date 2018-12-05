@@ -9,19 +9,9 @@ const port = 8080;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const staticFiles = express.static(path.join(__dirname, "../build"));
-
 const root = "/higherorlower";
 
-app.use(root, staticFiles);
-// app.use(root + "/udo-panel", staticFiles);
-// app.use(root + "/workorder-panel", staticFiles);
-//
-// app.use(root + "/greenlight-wizard", staticFiles);
-// app.use(root + "/wizard", staticFiles);
-// app.use(root + "/asset-wizard", staticFiles);
-//
-// app.use(root + "/resource-panel", staticFiles);
+app.use(root, express.static(path.join(__dirname, '../public')))
 
 routes(app); //register the route
 
