@@ -28,11 +28,12 @@ export function getPlayers(req, res) {
 
         if (err) {
 
-            res.status(500).send({error: "Cannot connect to the DB: " + err});
+            con.end();
 
             console.log("Cannot connect to the DB: " + err);
 
-            return;
+            return res.status(500).send({error: "Cannot connect to the DB: " + err});
+
         }
 
         const countSql = "SELECT count(*) FROM player";
@@ -41,9 +42,9 @@ export function getPlayers(req, res) {
 
             if (err) {
 
-                res.status(500).send({error: "Cannot connect to the DB: " + err});
+                con.end();
 
-                return;
+                return res.status(500).send({error: "Cannot connect to the DB: " + err});
             }
 
             const sql = "SELECT * FROM player order by " + orderBy + " " + dir + " limit " + start + ", " + num;
@@ -58,7 +59,10 @@ export function getPlayers(req, res) {
 
                 const response = {total: countResult[0]["count(*)"], players: players};
 
-                res.status(200).send(response);
+                con.end();
+
+                return res.status(200).send(response);
+
             });
         });
 
@@ -81,11 +85,12 @@ export function createPlayer(req, res) {
 
         if (err) {
 
-            res.status(500).send({error: "Cannot connect to the DB: " + err});
+            con.end();
 
             console.log("Cannot connect to the DB: " + err);
 
-            return;
+            return res.status(500).send({error: "Cannot connect to the DB: " + err});
+
         }
 
         let createSql = "INSERT INTO player (name, fname, surname, max_correct, max_incorrect, max_finger, last_played)";
@@ -98,14 +103,18 @@ export function createPlayer(req, res) {
 
             if (err) {
 
-                res.status(500).send({error: "Cannot create player: " + name + ": " + err});
+                con.end();
 
-                return;
+                return res.status(500).send({error: "Cannot create player: " + name + ": " + err});
+
             }
 
             con.query(getPlayer(name), function (err, players) {
 
-                res.status(200).send(players[0]);
+                con.end();
+
+                return res.status(200).send(players[0]);
+
             });
         });
 
@@ -129,27 +138,29 @@ export function updatePlayer(req, res) {
 
         if (err) {
 
-            res.status(500).send({error: "Cannot connect to the DB: " + err});
+            con.end();
 
             console.log("Cannot connect to the DB: " + err);
 
-            return;
+            return res.status(500).send({error: "Cannot connect to the DB: " + err});
         }
 
         con.query(getPlayer(name), function (err, players) {
 
             if (err) {
 
-                res.status(500).send({error: "Cannot get player: " + name});
+                con.end();
 
-                return;
+                return res.status(500).send({error: "Cannot get player: " + name});
+
             }
 
             if(!players || players.length == 0){
 
-                res.status(404).send({error: "No player found: " + name});
+                con.end();
 
-                return;
+                return res.status(404).send({error: "No player found: " + name});
+
             }
 
             const player = players[0];
@@ -185,14 +196,18 @@ export function updatePlayer(req, res) {
 
                 if (err) {
 
-                    res.status(500).send({error: "Cannot update player: " + name + ": " + err});
+                    con.end();
 
-                    return;
+                    return res.status(500).send({error: "Cannot update player: " + name + ": " + err});
+
                 }
 
                 con.query(getPlayer(name), function (err, players) {
 
-                    res.status(200).send(players[0]);
+                    con.end();
+
+                    return res.status(200).send(players[0]);
+
                 });
             });
 
