@@ -153,7 +153,7 @@ export function updatePlayer(req, res) {
 
             if(maxFinger > currentMaxFinger){
 
-                updateSql += " max_fingers = " + maxFinger + ",";
+                updateSql += " max_finger = " + maxFinger + ",";
             }
 
             updateSql += " last_played = UTC_TIMESTAMP()";

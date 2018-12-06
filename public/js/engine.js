@@ -277,9 +277,11 @@ $.updateTurnScores = function(correctGuess, cBet){
 	}
 	
 	$.ajax({
-		type: "POST",
-		url: "editPlayer.php",
-		data: "name=" + oldPlayerName + "&maxFingers=" + (correctGuess? 0 : cBet) + "&maxCorrect=" + winningRun + "&maxIncorrect=" + losingRun,
+		type: "PUT",
+		url: "api/players/" + oldPlayerName,
+		data: {"max-finger": (correctGuess? 0 : cBet),
+			   "max-correct": winningRun,
+			   "max-incorrect": losingRun},
 		dataType: "json",
 		success: function(msg){							
 			//Updated!
