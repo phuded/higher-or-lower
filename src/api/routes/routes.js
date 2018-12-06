@@ -13,8 +13,8 @@ export default function routes(app) {
 
     app.route(root + "/api/players").get(getPlayers);
 
-    app.route(root + "/api/players/:name").put(updatePlayer)
+    app.route(root + "/api/players/:name").put(updatePlayer);
 
-    app.route(root + "/api/players").post(createPlayer)
+    app.route(root + "/api/players").post(createPlayer);
 
 };
