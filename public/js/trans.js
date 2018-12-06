@@ -5,22 +5,22 @@ $.openForm = function(){
 	$('div#playerList ul li').removeClass('ui-screen-hidden'); 
 	//Reset to top panel
 	$('.formPanel .ui-collapsible-contain:eq(0)').trigger('expand');
-	
-	//Show Form
-	$.mobile.changePage( "#form", {
-		transition: "fade",
-		changeHash: false
-	});
 
+	// Show form
+    $("#game-contents").hide();
+    $("#form").fadeIn();
 };
 
 //Custom function for closing menu
 $.closeForm = function(){
-	$.mobile.changePage( "#game", {
-		transition: "fade",
-		reverse:true,
-		changeHash: false
-	});
+
+	// New
+	$("#form").hide();
+	$("#game-contents").fadeIn();
+
+    // Show cancel
+    $("#cancel").show();
+
 };
 
 //Custom function for opening Lee dialogue
@@ -42,10 +42,10 @@ $.closeDialog = function(){
 
 
 //Slide
-$.slideTab = function(rev,tab){
-	$.mobile.changePage( "#"+tab, {
+$.slideTab = function(rev, tab){
+	$.mobile.changePage("#"+tab, {
 		transition: "slide",
-		reverse:rev,
+		reverse: rev,
 		changeHash: false
 	});
 	

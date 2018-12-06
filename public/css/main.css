@@ -62,7 +62,7 @@
 
 /* Betting buttons */
 #higher,#lower{
-	width: 150px;
+	width: 165px;
 }
 
 /*Slider*/
@@ -155,9 +155,13 @@ span#drinkMessage{
 
 }
 
+.formPanel .ui-collapsible-content{
+	padding: 10px 8px;
+}
+
 /*Add/remove buttons*/
 a#addPlayer, a#delPlayer{
-	font-size:0.8em;
+	font-size:0.7em;
 	margin-left:0;
 	margin-bottom:10px;
 }
@@ -169,7 +173,7 @@ a#addPlayer, a#delPlayer{
 }
 
 #playerRows a{
-    font-size: 0.8em;
+    font-size: 0.7em;
     margin: .4em 1px .4em 5px;
 }
 
@@ -206,7 +210,7 @@ a#addPlayer, a#delPlayer{
 
 /*Start & Cancel buttons*/
 #start,#cancel{
-	padding: 1px 8px 4px 8px;
+	padding: 1px 5px 1px 5px;
 }
 
 .game_spinner{
@@ -302,7 +306,7 @@ table.scoreTable tr td.incorrect{
 	margin-right:auto;
 	text-align: center;
 	text-shadow:none;
-	font-size: 0.8em;
+	font-size: 0.6em;
 }
 
 #drinkersTab table  tr th, #drinkersTab table tr td{
