@@ -1,4 +1,4 @@
-import {getPlayers, updatePlayer, createPlayer} from "../controllers/playerController";
+import {getPlayers, updatePlayer, createPlayer, deletePlayer} from "../controllers/playerController";
 
 export default function routes(app) {
 
@@ -17,4 +17,5 @@ export default function routes(app) {
 
     app.route(root + "/api/players").post(createPlayer);
 
+    app.route(root + "/api/players/:name").delete(deletePlayer);
 };
