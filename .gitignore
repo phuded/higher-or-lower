@@ -4,3 +4,4 @@ dist/*
 .DS_Store
 yarn.lock
 higherorlower.tar
+yarn-error.log
