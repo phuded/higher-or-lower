@@ -9,7 +9,7 @@
     "serve": "node dist/server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Matt Carter",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^1.18.7"
