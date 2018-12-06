@@ -3,11 +3,11 @@ import mysql from "mysql";
 function getConnection(){
 
     return  mysql.createConnection({
-            host: global.config.host,
-            user: global.config.user,
-            password: global.config.password,
-            database: global.config.database
-        });
+                host: global.config.host,
+                user: global.config.user,
+                password: global.config.password,
+                database: global.config.database
+            });
 }
 
 function getPlayer(name){
@@ -28,7 +28,9 @@ export function getPlayers(req, res) {
 
         if (err) {
 
-            res.status(500).send({error: "Cannot connect to the DB."});
+            res.status(500).send({error: "Cannot connect to the DB: " + err});
+
+            console.log("Cannot connect to the DB: " + err);
 
             return;
         }
@@ -38,7 +40,10 @@ export function getPlayers(req, res) {
         con.query(countSql, function (err, countResult) {
 
             if (err) {
-                throw err;
+
+                res.status(500).send({error: "Cannot connect to the DB: " + err});
+
+                return;
             }
 
             const sql = "SELECT * FROM player order by " + orderBy + " " + dir + " limit " + start + ", " + num;
@@ -76,7 +81,9 @@ export function createPlayer(req, res) {
 
         if (err) {
 
-            res.status(500).send({error: "Cannot connect to the DB."});
+            res.status(500).send({error: "Cannot connect to the DB: " + err});
+
+            console.log("Cannot connect to the DB: " + err);
 
             return;
         }
@@ -122,7 +129,9 @@ export function updatePlayer(req, res) {
 
         if (err) {
 
-            res.status(500).send({error: "Cannot connect to the DB."});
+            res.status(500).send({error: "Cannot connect to the DB: " + err});
+
+            console.log("Cannot connect to the DB: " + err);
 
             return;
         }
