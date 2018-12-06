@@ -3,10 +3,10 @@ import mysql from "mysql";
 function getConnection(){
 
     return  mysql.createConnection({
-            host: "localhost",
-            user: "higherorlower",
-            password: "Thorndon32!",
-            database: "higherorlower"
+            host: global.config.host,
+            user: global.config.user,
+            password: global.config.password,
+            database: global.config.database
         });
 }
 
@@ -43,7 +43,7 @@ export function getPlayers(req, res) {
 
             const sql = "SELECT * FROM player order by " + orderBy + " " + dir + " limit " + start + ", " + num;
 
-            console.log(sql);
+            //console.log(sql);
 
             con.query(sql, function (err, players) {
 
@@ -130,7 +130,17 @@ export function updatePlayer(req, res) {
         con.query(getPlayer(name), function (err, players) {
 
             if (err) {
-                throw err;
+
+                res.status(500).send({error: "Cannot get player: " + name});
+
+                return;
+            }
+
+            if(!players || players.length == 0){
+
+                res.status(404).send({error: "No player found: " + name});
+
+                return;
             }
 
             const player = players[0];
