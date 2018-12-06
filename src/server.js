@@ -9,9 +9,7 @@ const port = 8080;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const root = "/higherorlower";
-
-app.use(root, express.static(path.join(__dirname, '../public')))
+app.use(express.static(path.join(__dirname, '../public')))
 
 routes(app); //register the route
 

@@ -2,7 +2,7 @@ import {getPlayers, updatePlayer, createPlayer} from "../controllers/playerContr
 
 export default function routes(app) {
 
-    const root = "/higherorlower";
+    const root = "";
 
     /**
      * Returns ok as health response
