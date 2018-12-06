@@ -27,7 +27,10 @@ export function getPlayers(req, res) {
     con.connect(function(err) {
 
         if (err) {
-            throw err;
+
+            res.status(500).send({error: "Cannot connect to the DB."});
+
+            return;
         }
 
         const countSql = "SELECT count(*) FROM player";
@@ -48,7 +51,7 @@ export function getPlayers(req, res) {
                     throw err;
                 }
 
-                const response = {max: countResult, players: players};
+                const response = {total: countResult[0]["count(*)"], players: players};
 
                 res.status(200).send(response);
             });
@@ -72,7 +75,10 @@ export function createPlayer(req, res) {
     con.connect(function(err) {
 
         if (err) {
-            throw err;
+
+            res.status(500).send({error: "Cannot connect to the DB."});
+
+            return;
         }
 
         let createSql = "INSERT INTO player (name, fname, surname, max_correct, max_incorrect, max_finger, last_played)";
@@ -84,7 +90,10 @@ export function createPlayer(req, res) {
         con.query(createSql, function (err, result) {
 
             if (err) {
-                throw err;
+
+                res.status(500).send({error: "Cannot create player: " + name + ": " + err});
+
+                return;
             }
 
             con.query(getPlayer(name), function (err, players) {
@@ -112,7 +121,10 @@ export function updatePlayer(req, res) {
     con.connect(function(err) {
 
         if (err) {
-            throw err;
+
+            res.status(500).send({error: "Cannot connect to the DB."});
+
+            return;
         }
 
         con.query(getPlayer(name), function (err, players) {
@@ -153,7 +165,10 @@ export function updatePlayer(req, res) {
             con.query(updateSql, function (err, result) {
 
                 if (err) {
-                    throw err;
+
+                    res.status(500).send({error: "Cannot update player: " + name + ": " + err});
+
+                    return;
                 }
 
                 con.query(getPlayer(name), function (err, players) {

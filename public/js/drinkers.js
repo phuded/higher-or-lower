@@ -14,16 +14,16 @@ $.generateDrinkersTab = function(id, orderBy, dir){
 	if(sDir){
 		//if same column - flip sort order
 		if(sDir.col==id){
-			table.data("sort",sDir.dir=="asc"?{col:id,dir:"desc"}:{col:id,dir:"asc"});
+			table.data("sort", sDir.dir == "asc" ? {col:id, dir:"desc"} : {col:id, dir:"asc"});
 		}
 		//else set default column order (per HTML)
 		else{
-			table.data("sort",{col:id,dir:dir});
+			table.data("sort", {col:id, dir:dir});
 		}
 	}
 	//else set default column order (per HTML)
 	else{
-		table.data("sort",{col:id,dir:dir});
+		table.data("sort", {col:id ,dir:dir});
 	}
 	
 	//Set var as actual direction
@@ -36,7 +36,7 @@ $.generateDrinkersTab = function(id, orderBy, dir){
 	table.find("tr th:eq("+id+") a").attr("data-theme", "b").removeClass("ui-btn-up-c ui-btn-hover-c").addClass("ui-btn-up-b");
 	
 	//Reset/store start position
-	table.data("start",0);
+	table.data("start", 0);
 	
 	$.generateDrinkersTable(table,orderBy,sDir,maxDrinkerRows,0);
 };
@@ -74,32 +74,22 @@ $.navDrinkersTab = function(direction){
 };
 
 $.generateDrinkersTable = function(table, orderBy, sDir, num, start){
+
 	$.ajax({
-		type: "POST",
-		url: "listScores.php",
-		dataType:"json",
-		data:"orderBy=" + orderBy + "&dir=" + sDir + "&num=" + num + "&start=" + start,
+		type: "GET",
+		url: "api/players?order-by=" + orderBy + "&dir=" + sDir + "&num=" + num + "&start=" + start,
 		success: function(json){
+
 			//Remove again
 			table.find("tr:gt(0)").remove();
 			
 			//Store max
-			table.data("max",json[0].max);
+			table.data("max", json.total);
 			
 			//Populate
-			$.each(json[1], function(index,value){
-				//Last Played Code
-				/*
-				var lastPlayed = value.lastPlayed;
-				if(!lastPlayed){
-					lastPlayed = "";
-				}
-				else{
-					lastPlayed = lastPlayed.substring(8,10) + "/" + lastPlayed.substring(5,7) + "/"+ lastPlayed.substring(0,4);
-				}
-				table.append("<tr><td>"+(index+1)+"</td><td>" + value.name + "</td><td>" + value.maxFingers + "</td><td>" + value.maxCorrect + "</td><td>" + lastPlayed + "</td></tr>");
-				*/
-				table.append("<tr><td>"+(index+start+1)+"</td><td>" + value.name + "</td><td>" + value.maxFingers + "</td><td>" + value.maxCorrect + "</td><td>" + value.maxIncorrect + "</td></tr>");
+			$.each(json.players, function(index, value){
+
+				table.append("<tr><td>" + (index + start + 1) + "</td><td>" + value.name + "</td><td>" + value["max_finger"] + "</td><td>" + value["max_correct"] + "</td><td>" + value["max_incorrect"] + "</td></tr>");
 			});
 			
 			//Show or hide nav buttons
@@ -110,7 +100,7 @@ $.generateDrinkersTable = function(table, orderBy, sDir, num, start){
 				$(".navButtons>a:eq(0)").show();
 			}
 			
-			if((start + num)>=table.data("max")){
+			if((start + num) >= table.data("max")){
 				$(".navButtons>a:eq(1)").hide();
 			}
 			else{

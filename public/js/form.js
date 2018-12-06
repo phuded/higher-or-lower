@@ -1,21 +1,26 @@
 
 /* Get List of players */
 $.getPlayerList = function(){
+
 	$("div#playerList ul").html("");
+
 	//Get Player List
 	$.ajax({
-		type: "POST",
-		url: "listPlayers.php",
-		dataType: "json",
+		type: "GET",
+		url: "api/players",
 		success: function(json){
+
+			const players = json.players;
 
 			var options = ''; 
 
-			for (var i = 0; i < json.length; i++) {
+			for (var i = 0; i < players.length; i++) {
 
-				var name =json[i].name;
-				var wName = json[i].fname ?" ("+json[i].fname.substring(0, 1) + "." + json[i].surname + ")" : "";
-				options += "<li><a href='javascript:$.showPlayerList(false, &#39;" + name + "&#39;)'>"+name + wName + "</a></li>";
+                const name = players[i].name;
+
+				const wName = players[i].fname ?" ("+players[i].fname.substring(0, 1) + "." + players[i].surname + ")" : "";
+
+				options += "<li><a href='javascript:$.showPlayerList(false, &#39;" + name + "&#39;)'>" + name + wName + "</a></li>";
 			}
 
 			$("div#playerList ul").append(options);
@@ -33,6 +38,7 @@ $.getPlayerList = function(){
 
 //Show form panels - list 
 $.showPlayerList = function(show, player){
+
 	var formContent = $(".gameForm");
 	var playerList = $("#playerList");
 	
@@ -79,37 +85,46 @@ $.createNewPlayer = function(show, player){
 			//Get username
 			var playerName = $("#pname").val();
 			
-			if((playerName.length>0) && (playerName.indexOf("Player ") == -1)){
+			if((playerName.length > 0) && (playerName.indexOf("Player ") == -1)){
+
 				var fName = $("#fname").val();
 				var surname = $("#surname").val();
 				
 				//Add new player
 				$.ajax({
 					type: "POST",
-					url: "createPlayer.php",
-					data: "name="+playerName+"&fname="+fName+"&surname="+surname,
+					url: "api/players",
+					data: {	name: playerName,
+							"first-name": fName,
+							surname: surname
+					},
 					dataType: "json",
 					success: function(json){
-						if(json.success){
-							//Added!
-							//Refresh player list
-							$.getPlayerList();
-							//Show previous screen
-							playerForm.fadeOut(function() {
-								formContent.fadeIn('fast');
-								var num = playerForm.data("playerNum");
-								$("tr#player_"+num+" input").val(playerName);
-								$.clearNewPlayerForm();
-							});
-						}
-						else{
-							//Already in use - clear name and show warning
-							$("#pname").val("");
-							playerForm.find("p").show();
-						}
+
+						//Added!
+						//Refresh player list
+						$.getPlayerList();
+
+						//Show previous screen
+						playerForm.fadeOut(function() {
+
+							formContent.fadeIn('fast');
+
+							var num = playerForm.data("playerNum");
+
+							$("tr#player_"+num+" input").val(playerName);
+
+							$.clearNewPlayerForm();
+						});
 					},
 					error: function(XMLHttpRequest, textStatus, errorThrown) {
+
 						// Error!
+                        //Already in use - clear name and show warning
+                        $("#pname").val("");
+                        playerForm.find("p").show();
+
+                        return;
 					}
 				});
 			}
