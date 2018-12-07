@@ -32,7 +32,7 @@
 	margin-left:auto;
 	margin-right:auto;
 	width:220px;
-	height:295px;
+	height:340px;
 	border:2px inset white;
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
@@ -47,15 +47,15 @@
 }
 #cardDisplay.red{
     background: rgb(255,84,68); /* Old browsers */
-    background: -moz-linear-gradient(top, rgba(255,84,68,1) 0%, rgba(255,48,25,1) 35%, rgba(255,35,15,1) 46%, rgba(160,3,3,1) 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, rgba(255,84,68,1) 0%,rgba(255,48,25,1) 35%,rgba(255,35,15,1) 46%,rgba(160,3,3,1) 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, rgba(255,84,68,1) 0%,rgba(255,48,25,1) 35%,rgba(255,35,15,1) 46%,rgba(160,3,3,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    background: -moz-linear-gradient(top, rgba(255,84,68,1) 0%, rgba(247,4,4,1) 53%, rgba(206,10,4,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(255,84,68,1) 0%,rgba(247,4,4,1) 53%,rgba(206,10,4,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(255,84,68,1) 0%,rgba(247,4,4,1) 53%,rgba(206,10,4,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 
 #card{
 	width:160px;
 	height:232px;
-	margin-top: 15%;
+	margin-top: 25%;
 	margin-left:auto;
 	margin-right:auto;
 	border: 1px outset grey;
@@ -69,6 +69,7 @@
 /* Betting buttons */
 #higher,#lower{
 	width: 165px;
+	font-size: 1.3em;
 }
 
 /*Slider*/
