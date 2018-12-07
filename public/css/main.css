@@ -74,7 +74,7 @@
 /*Slider*/
 #sliderPanel{
 	height:40px;
-	margin-bottom:8px;
+    margin-bottom: calc(10vh);
 }
 
 #sliderBar{
