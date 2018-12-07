@@ -31,8 +31,8 @@
 #cardDisplay{
 	margin-left:auto;
 	margin-right:auto;
-	width:160px;
-	height:208px;
+	width:220px;
+	height:295px;
 	border:2px inset white;
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
@@ -40,16 +40,22 @@
 }
 
 #cardDisplay.green{
-	background:url("../images/correct.jpg") repeat scroll 0 0 transparent;
+    background: #b4ddb4; /* Old browsers */
+    background: -moz-linear-gradient(top, #b4ddb4 0%, #83c783 17%, #52b152 33%, #008a00 67%, #005700 100%, #002400 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #b4ddb4 0%,#83c783 17%,#52b152 33%,#008a00 67%,#005700 100%,#002400 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #b4ddb4 0%,#83c783 17%,#52b152 33%,#008a00 67%,#005700 100%,#002400 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 #cardDisplay.red{
-	background:url("../images/incorrect.jpg") repeat scroll 0 0 transparent;
+    background: rgb(255,84,68); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(255,84,68,1) 0%, rgba(255,48,25,1) 35%, rgba(255,35,15,1) 46%, rgba(160,3,3,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(255,84,68,1) 0%,rgba(255,48,25,1) 35%,rgba(255,35,15,1) 46%,rgba(160,3,3,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(255,84,68,1) 0%,rgba(255,48,25,1) 35%,rgba(255,35,15,1) 46%,rgba(160,3,3,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 
 #card{
-	width:100px;
-	height:145px;
-	margin-top: 20%;
+	width:160px;
+	height:232px;
+	margin-top: 15%;
 	margin-left:auto;
 	margin-right:auto;
 	border: 1px outset grey;

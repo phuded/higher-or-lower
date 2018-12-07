@@ -138,7 +138,7 @@ $.playTurn = function(higherGuess){
 
 
 //Display the card
-$.displayCard = function(card,correctGuess){
+$.displayCard = function(card, correctGuess){
 	//Card number
 	var cardNum = parseInt(card.substring(1));
 	//Card image
@@ -148,14 +148,17 @@ $.displayCard = function(card,correctGuess){
 	
 	//Not first card -flipping
 	if(correctGuess !== undefined){
+
 		//Hide slider if bet on any card is off
 		if(!$("#fullBetting").attr('checked')){
+
 			$("#sliderBar").hide();
+
 		}
 		//Rotate card and display new one
 		cardImg.rotate3Di(
 			360,
-			1000,
+			1500,
 			{
 				sideChange: function(front) {
 					if (front) {
@@ -163,7 +166,7 @@ $.displayCard = function(card,correctGuess){
 						$(this).css('background','url(images/allcards.png) no-repeat '+$.getCardCoords(card));			
 					} else {
 						//Make back of card the pack;
-						$(this).css('background','url(images/allcards.png) no-repeat 0px -580px');	
+						$(this).css('background','url(images/allcards.png) no-repeat 0px -928px');
 					}
 				},
 				complete:function(){
@@ -190,7 +193,7 @@ $.displayCard = function(card,correctGuess){
 					}
 					
 					//Check if can display betting buttons
-					if((cardNum>5 & cardNum<11) || $("#fullBetting").attr('checked')){
+					if((cardNum > 5 & cardNum < 11) || $("#fullBetting").attr('checked')){
 						$("#sliderBar").show();
 					}
 						
@@ -205,7 +208,7 @@ $.displayCard = function(card,correctGuess){
 	}
 	else{
 		//Showing card for first time
-		cardImg.css('background',"url(images/allcards.png) no-repeat "+$.getCardCoords(card));		
+		cardImg.css('background',"url(images/allcards.png) no-repeat " + $.getCardCoords(card));
 		cardImg.show();
 		
 		//Check if can display betting buttons
@@ -346,28 +349,28 @@ Array.prototype.remove = function(from, to) {
 
 //Return card coords 
 $.getCardCoords = function(card){
-	var cardSuit = card.substring(0,1);
+	var cardSuit = card.substring(0, 1);
 	var y;
 	
 	if(cardSuit == 'c'){
 		y = "0px"
 	}
 	else if (cardSuit == 'd'){
-		y = "-145px"
+		y = "-232px"
 	}
 	else if (cardSuit == 'h'){
-		y = "-290px"
+		y = "-464px"
 	}
 	else{
-		y = "-435px"
+		y = "-696px"
 	}
-	var x = (parseInt(card.substring(1)) - 2) * -100;
+	var x = (parseInt(card.substring(1)) - 2) * -160;
 
 	return x + "px " + y;
 };
  
 
-$.preLoadImages = function(imageList,callback) {
+$.preLoadImages = function(imageList, callback) {
 		var pic = [], i, total, loaded = 0;
 		if (typeof imageList != 'undefined') {
 			if ($.isArray(imageList)) {
@@ -411,7 +414,9 @@ var cards = new Array();
 
 //Number of drinkers displayed in table
 var maxDrinkerRows = 10;
+
 //Drink type
 var drinkType;
+
 //Images to preload
-var preloadImages =['images/allcards.png','images/correct.jpg','images/incorrect.jpg'];
+var preloadImages =['images/allcards.png'];
