@@ -158,7 +158,7 @@ $.displayCard = function(card, correctGuess){
 		//Rotate card and display new one
 		cardImg.rotate3Di(
 			360,
-			1500,
+			900,
 			{
 				sideChange: function(front) {
 					if (front) {
