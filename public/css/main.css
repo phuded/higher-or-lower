@@ -46,10 +46,10 @@
     background: linear-gradient(to bottom, #b4ddb4 0%,#83c783 17%,#52b152 33%,#008a00 67%,#005700 100%,#002400 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 #cardDisplay.red{
-    background: rgb(255,84,68); /* Old browsers */
-    background: -moz-linear-gradient(top, rgb(255, 118, 101, 1) 0%, rgba(247,4,4,1) 53%, rgba(206,10,4,1) 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, rgba(255, 118, 101, 1) 0%,rgba(247,4,4,1) 53%,rgba(206,10,4,1) 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, rgba(255, 118, 101, 1) 0%,rgba(247,4,4,1) 53%,rgba(206,10,4,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    background: rgb(255,126,114); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(255,126,114,1) 0%, rgba(244,24,24,1) 53%, rgba(206,10,4,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(255,126,114,1) 0%,rgba(244,24,24,1) 53%,rgba(206,10,4,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(255,126,114,1) 0%,rgba(244,24,24,1) 53%,rgba(206,10,4,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 
 #card{
