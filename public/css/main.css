@@ -130,18 +130,17 @@
 /*Lee pop up */
 
 div#pictureContainer{
-	text-align:center;
+	text-align: center;
 }
 
 div#pictureContainer >div{
-	height:80px;
+	height: 80px;
 }
 
 .pictureDisplay{
-	margin:20px auto 5px;
-	width:174px;
-	height:174px;
-	border:1px solid #7AB9F0;
+	margin: 20px auto 5px;
+	width: 174px;
+	height: 174px;
 }
 
 span#drinkMessage{
