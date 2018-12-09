@@ -165,7 +165,9 @@
 			<div id="game-contents" style="display: none;">
 
 				<div class="main" class="tab-content" data-role="content">
-						<p><span id="playerName">&nbsp;</span></p>
+						<p class="playerNameBar">
+							<span id="playerName"/>
+						</p>
 						<div id="sliderPanel">
 							<div id="sliderBar" style="display:none;">
 								Bet: <input type="range" name="slider" id="currentNumFingers" value="0" min="0" max="4" data-theme="c" readonly/>
@@ -184,11 +186,11 @@
 					<div data-role="controlgroup" data-type="horizontal">
 						<table>
 							<tr>
-								<th>
+								<td>
 									<a href="javascript:$.openForm()" data-role="button" data-transition="fade" data-icon="plus" data-theme="a" id="newGame">New Game</a>
-								</th>
-								<td class="wider">
-									<span>Bet:<span id="totalNumFingers"></span></span>
+								</td>
+								<td>
+									<span>Bet: <span id="totalNumFingers"></span></span>
 								</td>
 								<td>
 									<span id="cardsLeft"></span>

@@ -9,15 +9,18 @@
 	background:transparent;
 }
 
-.main p:first-child{
+.main .playerNameBar{
 	border:1px inset white;
 	background-color:lightGray;
 	padding:4px;
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
 	border-radius: 8px;
+
 	/*To fit app screen perfectly*/
 	margin-bottom:8px;
+
+	font-size: 1.25em;
 }
 
 .main *{
@@ -29,11 +32,11 @@
 }
 
 #cardDisplay{
-	margin-left:auto;
-	margin-right:auto;
-	width:220px;
-	height:340px;
-	border:2px inset white;
+	margin-left: auto;
+	margin-right: auto;
+	width: 220px;
+	height: 340px;
+	border: 3px inset white;
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
 	border-radius: 8px;
@@ -63,7 +66,7 @@
 }
 
 #gameButtons{
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 /* Betting buttons */
@@ -105,24 +108,17 @@
 
 #footer table{
 	border-spacing: 0;
+	width: 100%;
+	text-align: center;
 }
 
-#footer th{
-	width:115px;
+#footer table td{
+    width: 33%;
 }
 
 #footer td{
-	width:80px;
 	font-size:0.9em;
 	border-left: 1px dotted #456F9A;
-}
-
-#footer td.wider{
-	width:115px;
-}
-
-#footer td span{
-	margin-left:5px;
 }
 
 .spinnerSmall{
