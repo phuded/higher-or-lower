@@ -185,9 +185,21 @@ $.displayCard = function(card, correctGuess){
 						}
 						else{
 							$("#drinkMessage").html("<b>"+players[currentPlayer] + "</b> you must drink...<br/>&nbsp;");
+
 						}
+
+                        if (Math.random() >= 0.5){
+                            $("#pictureDisplay1").show();
+                            $("#pictureDisplay2").hide();
+                        }
+                        else{
+                            $("#pictureDisplay2").show();
+                            $("#pictureDisplay1").hide();
+                        }
+
 						//Reset bet since all fingers drank!
-						currentBet =0;
+						currentBet = 0;
+
 						//Show Lee
 						setTimeout('$.openDialog()',150);
 					}
@@ -222,7 +234,9 @@ $.displayCard = function(card, correctGuess){
 	
 	//Remove card if remove cards is enabled
 	if($("#removeCards").attr('checked')){
+
 		cards.remove(cards.indexOf(card));
+
 		if(cards.length == 0){
 			//If no cards left - reset pack
 			$.resetPack();

@@ -137,7 +137,7 @@ div#pictureContainer >div{
 	height:80px;
 }
 
-#pictureDisplay{
+.pictureDisplay{
 	margin:20px auto 5px;
 	width:174px;
 	height:174px;
