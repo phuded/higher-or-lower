@@ -4,20 +4,22 @@ $.updateScore = function(correct, oldPlayer){
 	playersScores[oldPlayer].push(correct);
 	
 	//Get the row object for the old player
-	var playerScoreRow = $("#scoreTab table tr:eq("+oldPlayer+")");
+	var playerScoreRow = $("#scoreTab table tr:eq(" + oldPlayer + ")");
 
 	$.addScoreCol(playerScoreRow,correct,oldPlayer);
 };
 
 //Add a new column to the score tab
-$.addScoreCol = function(playerScoreRow,correct, playerId){
+$.addScoreCol = function(playerScoreRow, correct, playerId){
 	//If table is full - delete first row before adding latest
 	
-	var numCols = 6;
+	var numCols = 8;
 	
 	if(playerScoreRow.children("td").size() == numCols){
+
 		playerScoreRow.find("td:eq(0)").remove();
 	}
+
 	if(correct){
 		playerScoreRow.append("<td class='correct'>" + playersScores[playerId].length)
 	}
