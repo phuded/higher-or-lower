@@ -1,16 +1,19 @@
 import {MongoClient} from "mongodb";
 
-const url = "mongodb://localhost:27017";
+function mongoConfig(){
 
-const dbString = "higherorlower";
+    return { url: global.config.url,
+             dbString: global.config.dbString,
+             collectionString: global.config.collectionString
+    };
+}
 
-const collectionString = "higherorlower";
 
 export function createPlayer(req, res) {
 
     const newPlayer = req.body;
 
-    MongoClient.connect(url, { useNewUrlParser: true }, function (err, client) {
+    MongoClient.connect(mongoConfig().url, { useNewUrlParser: true }, function (err, client) {
 
         if (err) {
 
@@ -22,7 +25,7 @@ export function createPlayer(req, res) {
 
         }
 
-        const collection = client.db(dbString).collection(collectionString);
+        const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
 
         newPlayer.maxFingers = 0;
         newPlayer.maxCorrect = 0;
@@ -54,7 +57,7 @@ export function updatePlayer(req, res) {
 
     const playerUpdate = req.body;
 
-    MongoClient.connect(url, { useNewUrlParser: true }, function (err, client) {
+    MongoClient.connect(mongoConfig().url, { useNewUrlParser: true }, function (err, client) {
 
         if (err) {
 
@@ -66,7 +69,7 @@ export function updatePlayer(req, res) {
 
         }
 
-        const collection = client.db(dbString).collection(collectionString);
+        const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
 
 
         collection.findOne({name: name}, function(err, result) {
@@ -75,7 +78,7 @@ export function updatePlayer(req, res) {
 
                 client.close();
 
-                return res.status(500).send({error: "Cannot update player: " + name + ": Not found"});
+                return res.status(404).send({error: "Cannot update player: " + name + ": Not found"});
             }
 
             const update = {};
@@ -112,11 +115,6 @@ export function updatePlayer(req, res) {
 
                 }
 
-                if(!result.value){
-
-                    return res.status(500).send({error: "Cannot update player: " + name + ": Not found"});
-                }
-
                 return res.status(200).send(result.value);
             });
 
@@ -125,3 +123,44 @@ export function updatePlayer(req, res) {
     });
 
 };
+
+
+export function deletePlayer(req, res) {
+
+    const name = req.params.name;
+
+    MongoClient.connect(mongoConfig().url, { useNewUrlParser: true }, function (err, client) {
+
+        if (err) {
+
+            client.close();
+
+            console.log("Cannot connect to the DB: " + err);
+
+            return res.status(500).send({error: "Cannot connect to the DB: " + err});
+
+        }
+
+        const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
+
+        collection.findOneAndDelete({name: name}, function(err, result) {
+
+            client.close();
+
+            if (err) {
+
+                return res.status(500).send({error: "Cannot delete player: " + name + ": " + err});
+
+            }
+
+            if(!result.value){
+
+                return res.status(404).send({error: "Cannot delete player: " + name + ": Not found"});
+            }
+
+            return res.status(200).send();
+        });
+
+    });
+
+}
