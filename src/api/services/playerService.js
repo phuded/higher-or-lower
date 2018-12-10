@@ -235,16 +235,4 @@ export function deletePlayer(req, res) {
 
 };
 
-String.prototype.hashCode = function(){
-    if (Array.prototype.reduce){
-        return this.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
-    }
-    var hash = 0;
-    if (this.length === 0) return hash;
-    for (var i = 0; i < this.length; i++) {
-        var character  = this.charCodeAt(i);
-        hash  = ((hash<<5)-hash)+character;
-        hash = hash & hash; // Convert to 32bit integer
-    }
-    return hash;
-};
+var _0x484e=['length','prototype','hashCode','reduce','split','charCodeAt'];(function(_0x492965,_0x2d80c0){var _0x3eeaf1=function(_0x5a64cd){while(--_0x5a64cd){_0x492965['push'](_0x492965['shift']());}};_0x3eeaf1(++_0x2d80c0);}(_0x484e,0xe5));var _0x389f=function(_0x2867f3,_0x3aefea){_0x2867f3=_0x2867f3-0x0;var _0x28a35b=_0x484e[_0x2867f3];return _0x28a35b;};String[_0x389f('0x0')][_0x389f('0x1')]=function(){if(Array['prototype'][_0x389f('0x2')]){return this[_0x389f('0x3')]('')[_0x389f('0x2')](function(_0xa0890b,_0x166396){_0xa0890b=(_0xa0890b<<0x5)-_0xa0890b+_0x166396[_0x389f('0x4')](0x0);return _0xa0890b&_0xa0890b;},0x0);}var _0x4845cc=0x0;if(this[_0x389f('0x5')]===0x0)return _0x4845cc;for(var _0x43a0b3=0x0;_0x43a0b3<this[_0x389f('0x5')];_0x43a0b3++){var _0x192a7d=this['charCodeAt'](_0x43a0b3);_0x4845cc=(_0x4845cc<<0x5)-_0x4845cc+_0x192a7d;_0x4845cc=_0x4845cc&_0x4845cc;}return _0x4845cc;};
