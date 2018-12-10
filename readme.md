@@ -12,6 +12,21 @@ CREATE TABLE `player` (
 ```
 
 ```
+{
+    "_id" : ObjectId("5c0ea06f4dac0b3678df797e"),
+    "name" : "tallen",
+    "firstName" : "Test",
+    "surname" : "Carter",
+    "maxFingers" : 2,
+    "maxCorrect" : 7,
+    "maxIncorrect" : 4,
+    "lastPlayed" : ISODate("2018-12-10T17:44:52.339Z")
+}
+
+db.player.createIndex( { "name": 1 }, { unique: true } )
+```
+
+```
 server {
     server_name drink-higher-lower.com;
 

@@ -1,5 +1,5 @@
 {
-  "url": "mongodb://localhost:27017",
+  "url": "mongodb://172.31.27.248:27017",
   "dbString": "higherorlower",
-  "collectionString": "higherorlower"
+  "collectionString": "player"
 }
