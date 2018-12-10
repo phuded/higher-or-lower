@@ -14,13 +14,14 @@ const param = { useNewUrlParser: true };
 export function getPlayers(req, res) {
 
     const orderBy = req.query["order-by"] ? req.query["order-by"] : "name";
+
     var dir = req.query.dir ? req.query.dir : "asc";
     (dir == "asc")? dir = 1 : dir = -1;
 
-    const sort = { [orderBy]: dir};
+    const sort = {[orderBy]: dir};
 
-    const start = req.query.start ? req.query.start : 0;
-    const num = req.query.num ? req.query.num : 1000;
+    const start = req.query.start ? parseInt(req.query.start) : 0;
+    const num = req.query.num ? parseInt(req.query.num) : 1000;
 
     MongoClient.connect(mongoConfig().url, param, function (err, client) {
 
@@ -113,6 +114,10 @@ export function updatePlayer(req, res) {
     const name = req.params.name;
 
     const playerUpdate = req.body;
+
+    playerUpdate.maxCorrect = parseInt(playerUpdate.maxCorrect);
+    playerUpdate.maxIncorrect = parseInt(playerUpdate.maxIncorrect);
+    playerUpdate.maxFingers = parseInt(playerUpdate.maxFingers);
 
     MongoClient.connect(mongoConfig().url, param, function (err, client) {
 

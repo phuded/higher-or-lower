@@ -89,7 +89,7 @@ $.generateDrinkersTable = function(table, orderBy, sDir, num, start){
 			//Populate
 			$.each(json.players, function(index, value){
 
-				table.append("<tr><td>" + (index + start + 1) + "</td><td>" + value.name + "</td><td>" + value["max_finger"] + "</td><td>" + value["max_correct"] + "</td><td>" + value["max_incorrect"] + "</td></tr>");
+				table.append("<tr><td>" + (index + start + 1) + "</td><td>" + value.name + "</td><td>" + value.maxFingers + "</td><td>" + value.maxCorrect + "</td><td>" + value.maxIncorrect + "</td></tr>");
 			});
 			
 			//Show or hide nav buttons

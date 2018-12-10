@@ -298,7 +298,8 @@ $.updateTurnScores = function(correctGuess, cBet){
 		url: "api/players/" + oldPlayerName,
 		data: {"maxFingers": (correctGuess? 0 : cBet),
 			   "maxCorrect": winningRun,
-			   "maxIncorrect": losingRun},
+			   "maxIncorrect": losingRun
+		},
 		dataType: "json",
 		success: function(msg){							
 			//Updated!
