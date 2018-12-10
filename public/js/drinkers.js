@@ -62,9 +62,9 @@ $.navDrinkersTab = function(direction){
 	
 	switch(col){
 		case 1: col = 'name'; break;
-		case 2:	col = 'max_finger'; break;
-		case 3: col = 'max_correct'; break;
-        case 4: col = 'max_incorrect'; break;
+		case 2:	col = 'maxFingers'; break;
+		case 3: col = 'maxCorrect'; break;
+        case 4: col = 'maxIncorrect'; break;
 	}
 	
 	//Show loading

@@ -95,7 +95,7 @@ $.createNewPlayer = function(show, player){
 					type: "POST",
 					url: "api/players",
 					data: {	name: playerName,
-							"first-name": fName,
+							firstName: fName,
 							surname: surname
 					},
 					dataType: "json",

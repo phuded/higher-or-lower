@@ -1,5 +1,4 @@
 import {getPlayers as sGetPlayers, createPlayer as sCreatePlayer, updatePlayer as sUpdatePlayer, deletePlayer as sDeletePlayer} from "../services/playerService";
-import {createPlayer as mCreatePlayer, updatePlayer as mUpdatePlayer, deletePlayer as mDeletePlayer} from "../services/playerServiceMongo";
 
 export function getPlayers(req, res) {
 
@@ -9,15 +8,15 @@ export function getPlayers(req, res) {
 
 export function createPlayer(req, res) {
 
-    return mCreatePlayer(req, res);//sCreatePlayer(req, res);
+    return sCreatePlayer(req, res);//sCreatePlayer(req, res);
 };
 
 export function updatePlayer(req, res) {
 
-    return mUpdatePlayer(req, res);
+    return sUpdatePlayer(req, res);
 };
 
 export function deletePlayer(req, res) {
 
-    return mDeletePlayer(req, res);
+    return sDeletePlayer(req, res);
 };
