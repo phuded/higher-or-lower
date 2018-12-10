@@ -155,12 +155,14 @@ export function updatePlayer(req, res) {
                 update.maxFingers = playerUpdate.maxFingers;
             }
 
-            if(Object.getOwnPropertyNames(update).length === 0){
+            update.lastPlayed = new Date();
 
-                client.close();
-
-                return res.status(200).send(result);
-            }
+            // if(Object.getOwnPropertyNames(update).length === 0){
+            //
+            //     client.close();
+            //
+            //     return res.status(200).send(result);
+            // }
 
             collection.findOneAndUpdate({name: name}, {$set: update}, { upsert: false, returnOriginal: false }, function(err, result) {
 

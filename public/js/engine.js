@@ -14,7 +14,7 @@ $.prepareGame = function(){
 	//When the drinkers tab is selected
 	$('#drinkers').live('pageshow',function(event){
 		$("#drinkersTab table").removeData("sort");
-		$.generateDrinkersTab(2, "max_finger", "desc");
+		$.generateDrinkersTab(2, "maxFingers", "desc");
 	});
 	
 	//When the scores tab is unselected - reset the stats deep view

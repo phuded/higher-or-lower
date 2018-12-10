@@ -13,7 +13,7 @@ $.generateDrinkersTab = function(id, orderBy, dir){
 	//If a column has ever been stored
 	if(sDir){
 		//if same column - flip sort order
-		if(sDir.col==id){
+		if(sDir.col == id){
 			table.data("sort", sDir.dir == "asc" ? {col:id, dir:"desc"} : {col:id, dir:"asc"});
 		}
 		//else set default column order (per HTML)
@@ -38,7 +38,7 @@ $.generateDrinkersTab = function(id, orderBy, dir){
 	//Reset/store start position
 	table.data("start", 0);
 	
-	$.generateDrinkersTable(table,orderBy,sDir,maxDrinkerRows,0);
+	$.generateDrinkersTable(table, orderBy, sDir, maxDrinkerRows,0);
 };
 
 $.navDrinkersTab = function(direction){
