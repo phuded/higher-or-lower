@@ -305,15 +305,17 @@ table.scoreTable tr td.incorrect{
 }
 
 #drinkersTab table{
-	margin-left:auto;
-	margin-right:auto;
+	margin-left: auto;
+	margin-right: auto;
 	text-align: center;
-	text-shadow:none;
-	font-size: 0.6em;
+	text-shadow: none;
+	font-size: 0.8em;
+	width: 100%;
+	table-layout: fixed;
 }
 
 #drinkersTab table  tr th, #drinkersTab table tr td{
-	padding:3px 3px 4px 2px;
+	padding:7px 2px 7px 2px;
 	border: 1px solid gray;
 	background-color: #F4F4F4;
 }
@@ -321,13 +323,12 @@ table.scoreTable tr td.incorrect{
 /*Header row*/
 #drinkersTab table tr th{
 	background-color:#98AFC7;
-	width: 70px;
 }
 
 /*First header*/
 #drinkersTab table tr th:first-child{
 	border-top-left-radius: 0.6em;
-	width: 17px;
+	width: 20px;
 }
 
 /*First column*/
@@ -343,7 +344,8 @@ table.scoreTable tr td.incorrect{
 
 /*Header and footer column buttons*/
 .drinkers_header{
-	margin: 0.5em 0.2em;
+	margin: 1px 1px;
+	font-size: 0.75em;
 }
 
 .navButtons,.reloadButton{
@@ -366,7 +368,7 @@ table.scoreTable tr td.incorrect{
 }
 
 .drinkers_header > span,.navButtons>a > span, .reloadButton>a > span  {
-	padding: 0.6em 8px 0.7em 27px !important;
+	padding: 10px 5px 10px 20px !important;
 	white-space: normal;
 }
 
