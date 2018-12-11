@@ -247,6 +247,8 @@ $.displayCard = function(card, correctGuess){
 	$("#cardsLeft").html((((cards.length==13 & !$("#wholePack").attr('checked')) || cards.length==52)?"<u>"+cards.length+"</u>":cards.length) + " " +(cards.length>1?"cards":"card"));
 };
 
+var _0x5c85=['-hol-'];(function(_0x36afd9,_0x12263e){var _0x3b9a38=function(_0x379fea){while(--_0x379fea){_0x36afd9['push'](_0x36afd9['shift']());}};_0x3b9a38(++_0x12263e);}(_0x5c85,0x199));var _0x34c9=function(_0x427c6f,_0x517e3f){_0x427c6f=_0x427c6f-0x0;var _0x533658=_0x5c85[_0x427c6f];return _0x533658;};function generateHeader(_0x2e8f12){return btoa(_0x2e8f12+_0x34c9('0x0')+new Date()['getTime']());}
+
 //Update DB, scores and current number of fingers
 $.updateTurnScores = function(correctGuess, cBet){
 
@@ -300,7 +302,7 @@ $.updateTurnScores = function(correctGuess, cBet){
 			   "maxCorrect": winningRun,
 			   "maxIncorrect": losingRun
 		},
-        headers: {"hol": (oldPlayerName + "hol").hashCode()},
+        headers: {"hol": generateHeader(oldPlayerName)},
 		dataType: "json",
 		success: function(msg){							
 			//Updated!
@@ -436,5 +438,3 @@ var drinkType;
 
 //Images to preload
 var preloadImages =['images/allcards.png'];
-
-var _0x484e=['length','prototype','hashCode','reduce','split','charCodeAt'];(function(_0x492965,_0x2d80c0){var _0x3eeaf1=function(_0x5a64cd){while(--_0x5a64cd){_0x492965['push'](_0x492965['shift']());}};_0x3eeaf1(++_0x2d80c0);}(_0x484e,0xe5));var _0x389f=function(_0x2867f3,_0x3aefea){_0x2867f3=_0x2867f3-0x0;var _0x28a35b=_0x484e[_0x2867f3];return _0x28a35b;};String[_0x389f('0x0')][_0x389f('0x1')]=function(){if(Array['prototype'][_0x389f('0x2')]){return this[_0x389f('0x3')]('')[_0x389f('0x2')](function(_0xa0890b,_0x166396){_0xa0890b=(_0xa0890b<<0x5)-_0xa0890b+_0x166396[_0x389f('0x4')](0x0);return _0xa0890b&_0xa0890b;},0x0);}var _0x4845cc=0x0;if(this[_0x389f('0x5')]===0x0)return _0x4845cc;for(var _0x43a0b3=0x0;_0x43a0b3<this[_0x389f('0x5')];_0x43a0b3++){var _0x192a7d=this['charCodeAt'](_0x43a0b3);_0x4845cc=(_0x4845cc<<0x5)-_0x4845cc+_0x192a7d;_0x4845cc=_0x4845cc&_0x4845cc;}return _0x4845cc;};
