@@ -57,10 +57,5 @@ export function updateGame(req, res) {
         return res.status(400).send({error: "Invalid parameters"});
     }
 
-    return sUpdateGame(id, turnBody.playerName, turnBody.guess, turnBody.bet, res);
+    return sUpdateGame(id, turnBody.playerName, turnBody.guess, parseInt(turnBody.bet), res);
 };
-
-// export function deletePlayer(req, res) {
-//
-//     return sDeletePlayer(req, res);
-// };
