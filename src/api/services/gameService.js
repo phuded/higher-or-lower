@@ -134,7 +134,7 @@ export function createGame(gameBody, res) {
 
 };
 
-export function updateGame(id, guess, bet, res) {
+export function updateGame(id, playerName, guess, bet, res) {
 
     MongoClient.connect(mongoConfig().url, param, function (err, client) {
 
@@ -154,6 +154,15 @@ export function updateGame(id, guess, bet, res) {
 
                 return res.status(404).send({error: "Cannot find game with ID: " + id + ": " + err});
 
+            }
+
+            const currentPlayer = game.players[game.currentPlayer].name;
+
+            if(currentPlayer != playerName){
+
+                client.close();
+
+                return res.status(400).send({error: "Cannot update game: " + id + ": " + " invalid current player: " + playerName});
             }
 
             const response = playTurn(game, guess, bet);

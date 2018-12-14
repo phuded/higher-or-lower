@@ -97,9 +97,17 @@ export function playTurn(game, guess, bet){
         game.bet = 0
 
     }
-    
+
+    game.players[game.currentPlayer].stats.push(status);
+
     // Next player
-    game.currentPlayer++;
+    if(game.currentPlayer < (game.players.length -1)) {
+
+        game.currentPlayer++;
+    }
+    else{
+        game.currentPlayer = 0;
+    }
 
     game.cardsLeft = game.cards.length;
 

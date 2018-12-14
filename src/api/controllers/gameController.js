@@ -28,6 +28,15 @@ export function createGame(req, res) {
         return new res.status(400).send({error: "Invalid parameters"});
     }
 
+    const players = [];
+
+    gameBody.players.forEach(function (playerName) {
+
+        players.push({name: playerName, stats: []})
+    });
+
+    gameBody.players = players;
+
     return sCreateGame(gameBody, res);
 
 };
@@ -43,12 +52,12 @@ export function updateGame(req, res) {
 
     let turnBody = req.body;
 
-    if(!turnBody.guess || !turnBody.bet){
+    if((turnBody.guess == null) || (turnBody.bet == null) || !turnBody.playerName){
 
         return res.status(400).send({error: "Invalid parameters"});
     }
 
-    return sUpdateGame(id, turnBody.guess, turnBody.bet, res);
+    return sUpdateGame(id, turnBody.playerName, turnBody.guess, turnBody.bet, res);
 };
 
 // export function deletePlayer(req, res) {
