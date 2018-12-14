@@ -29,5 +29,5 @@ export default function routes(app) {
 
     app.route(root + "/api/games").post(createGame);
 
-    app.route(root + "/api/games").put(updateGame);
+    app.route(root + "/api/games/:id").put(updateGame);
 };

@@ -1,5 +1,5 @@
 import {MongoClient, ObjectId} from "mongodb";
-import Game from "../models/game";
+import {Game, playTurn} from "../models/game";
 
 function mongoConfig(){
 
@@ -66,7 +66,7 @@ export function getGames(req, res) {
 };
 
 export function getGame(id, res) {
-    
+
     MongoClient.connect(mongoConfig().url, param, function (err, client) {
 
         if (err) {
@@ -79,17 +79,15 @@ export function getGame(id, res) {
 
         const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
 
-        collection.findOne({_id: new ObjectId(id)}, {fields: {cards: 0}}, function(err, result) {
+        collection.findOne({_id: new ObjectId(id)}, {projection: {cards: 0}}, function(err, result) {
 
             client.close();
 
-            if (err) {
+            if (err || !result) {
 
                 return res.status(404).send({error: "Cannot find game with ID: " + id + ": " + err});
 
             }
-
-            console.log(result);
 
             return res.status(200).send(result);
 
@@ -135,6 +133,52 @@ export function createGame(gameBody, res) {
     });
 
 };
+
+export function updateGame(id, guess, bet, res) {
+
+    MongoClient.connect(mongoConfig().url, param, function (err, client) {
+
+        if (err) {
+
+            console.log("Cannot connect to the DB: " + err);
+
+            return res.status(500).send({error: "Cannot connect to the DB: " + err});
+
+        }
+
+        const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
+
+        collection.findOne({_id: new ObjectId(id)}, function(err, game) {
+
+            if (err) {
+
+                return res.status(404).send({error: "Cannot find game with ID: " + id + ": " + err});
+
+            }
+
+            const response = playTurn(game, guess, bet);
+
+            collection.findOneAndUpdate({_id: new ObjectId(id)}, {$set: game}, { upsert: false, returnOriginal: false }, function(err, result) {
+
+                client.close();
+
+                if (err) {
+
+                    return res.status(500).send({error: "Cannot update game: " + id + ": " + err});
+
+                }
+
+                return res.status(200).send(response);
+            });
+
+        });
+
+
+    });
+
+};
+
+
 //
 // export function updatePlayer(req, res) {
 //
