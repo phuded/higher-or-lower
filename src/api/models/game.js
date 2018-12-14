@@ -79,7 +79,7 @@ export function playTurn(game, guess, bet){
 
     const guessedHigher = guess && (nextCard.value >= currentCardValue);
     const guessedLower = !guess && (currentCardValue >= nextCard.value);
-
+    
     let status = false;
 
     let fingersToDrink = null;
