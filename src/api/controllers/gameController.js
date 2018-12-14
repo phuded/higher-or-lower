@@ -6,7 +6,7 @@ export function getGame(req, res) {
 
     if(!id){
 
-        return new res.status(400).send({error: "Invalid parameters"});
+        return new res.status(400).send({error: "Invalid parameters: no ID specified."});
     }
 
     return sGetGame(id, res);
@@ -47,7 +47,7 @@ export function updateGame(req, res) {
 
     if(!id){
 
-        return res.status(400).send({error: "Invalid parameters"});
+        return res.status(400).send({error: "Invalid parameters: no ID specified."});
     }
 
     let turnBody = req.body;
