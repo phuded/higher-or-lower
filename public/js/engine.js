@@ -167,10 +167,10 @@ $.playTurn = function(higherGuess){
 			//Updated!
 
 			//Display card
-			$.displayCard(res.nextCard, res.status, res.nextPlayer, res.bet, res.fingersToDrink, res.cardsLeft);
+			$.displayCard(res.currentCard, res.status, res.currentPlayer, res.bet, res.fingersToDrink, res.cardsLeft);
 
 			//Finally make the current card the next one
-			currentCard = res.nextCard;
+			currentCard = res.currentCard;
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
 			// Error!
