@@ -5,7 +5,7 @@ function mongoConfig(){
 
     return { url: global.config.url,
              dbString: global.config.dbString,
-             collectionString: global.config.collectionString
+             collectionString: global.config.playerCollectionString
     };
 }
 

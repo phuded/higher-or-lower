@@ -4,7 +4,11 @@ export function Game(players, drinkType, remove){
 
     this.players = players;
 
-    this.currentPlayer = 0;
+    this.currentPlayerIdx = 0;
+
+    this.currentPlayer = this.players[0];
+
+    this.status = null;
 
     this.cards = newPack();
 
@@ -13,6 +17,8 @@ export function Game(players, drinkType, remove){
     this.currentCard = getCard(this);
 
     this.bet = 0;
+
+    this.fingersToDrink = 0;
 
     this.drinkType = drinkType;
 
@@ -23,7 +29,7 @@ export function Game(players, drinkType, remove){
         return {
             _id: this._id,
             players: this.players,
-            currentPlayer: this.players[this.currentPlayer],
+            currentPlayer: this.currentPlayer,
             remove: this.remove,
             currentCard: this.currentCard,
             bet: this.bet,
@@ -33,22 +39,6 @@ export function Game(players, drinkType, remove){
     };
 
 };
-
-function TurnResponse(status, nextCard, nextPlayer, bet, fingersToDrink, cardsLeft){
-
-    this.status = status;
-
-    this.nextCard = nextCard;
-
-    this.nextPlayer = nextPlayer;
-
-    this.bet = bet;
-
-    this.fingersToDrink = fingersToDrink;
-
-    this.cardsLeft = cardsLeft;
-}
-
 
 function newPack(){
 
@@ -82,7 +72,7 @@ export function playTurn(game, guess, bet){
     
     let status = false;
 
-    let fingersToDrink = null;
+    let fingersToDrink = 0;
 
     if(guessedHigher || guessedLower){
 
@@ -98,21 +88,25 @@ export function playTurn(game, guess, bet){
 
     }
 
-    game.players[game.currentPlayer].stats.push(status);
+    game.fingersToDrink = fingersToDrink;
+
+    game.status = status;
+
+    game.players[game.currentPlayerIdx].stats.push(status);
 
     // Next player
-    if(game.currentPlayer < (game.players.length -1)) {
+    if(game.currentPlayerIdx < (game.players.length -1)) {
 
-        game.currentPlayer++;
+        game.currentPlayerIdx++;
     }
     else{
-        game.currentPlayer = 0;
+        game.currentPlayerIdx = 0;
     }
 
-    game.cardsLeft = game.cards.length;
+    // Set player
+    game.currentPlayer = game.players[game.currentPlayerIdx];
 
-    // Return: status, next card, next player, current bet, fingers to drink
-    return new TurnResponse(status, nextCard, game.players[game.currentPlayer], game.bet, fingersToDrink, game.cardsLeft)
+    game.cardsLeft = game.cards.length;
 };
 
 function getCard(game){

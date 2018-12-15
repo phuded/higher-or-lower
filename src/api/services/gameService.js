@@ -156,7 +156,7 @@ export function updateGame(id, playerName, guess, bet, res) {
 
             }
 
-            const currentPlayer = game.players[game.currentPlayer].name;
+            const currentPlayer = game.currentPlayer.name;
 
             if(currentPlayer != playerName){
 
@@ -165,7 +165,8 @@ export function updateGame(id, playerName, guess, bet, res) {
                 return res.status(400).send({error: "Cannot update game: " + id + ": " + " invalid current player: " + playerName});
             }
 
-            const response = playTurn(game, guess, bet);
+            // Make changes
+            playTurn(game, guess, bet);
 
             collection.findOneAndUpdate({_id: new ObjectId(id)}, {$set: game}, { upsert: false, returnOriginal: false }, function(err, result) {
 
@@ -177,6 +178,10 @@ export function updateGame(id, playerName, guess, bet, res) {
 
                 }
 
+                const response = result.value;
+
+                delete response.cards;
+
                 return res.status(200).send(response);
             });
 
@@ -187,149 +192,38 @@ export function updateGame(id, playerName, guess, bet, res) {
 
 };
 
+export function deleteGame(id, res) {
 
-//
-// export function updatePlayer(req, res) {
-//
-//     const name = req.params.name;
-//
-//     // Security Hack
-//     var hol = req.headers.hol;
-//
-//     if(!hol){
-//
-//         return res.status(500).send({error: "Invalid request."});
-//     }
-//
-//     hol = atob(hol).split("-");
-//
-//     if(hol[0] != name){
-//
-//         return res.status(500).send({error: "Invalid request."});
-//     }
-//
-//     if(hol[1] != "hol"){
-//
-//         return res.status(500).send({error: "Invalid request."});
-//     }
-//
-//     const clientTimeStamp = hol[2];
-//
-//     const currrentTimeStamp = new Date().getTime();
-//
-//     if((currrentTimeStamp - clientTimeStamp) > 1000){
-//
-//         return res.status(500).send({error: "Invalid request."});
-//     }
-//
-//     const playerUpdate = req.body;
-//
-//     playerUpdate.maxCorrect = parseInt(playerUpdate.maxCorrect);
-//     playerUpdate.maxIncorrect = parseInt(playerUpdate.maxIncorrect);
-//     playerUpdate.maxFingers = parseInt(playerUpdate.maxFingers);
-//
-//     MongoClient.connect(mongoConfig().url, param, function (err, client) {
-//
-//         if (err) {
-//
-//             console.log("Cannot connect to the DB: " + err);
-//
-//             return res.status(500).send({error: "Cannot connect to the DB: " + err});
-//
-//         }
-//
-//         const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
-//
-//
-//         collection.findOne({name: name}, function(err, result) {
-//
-//             if(!result || err){
-//
-//                 client.close();
-//
-//                 return res.status(404).send({error: "Cannot update player: " + name + ": Not found"});
-//             }
-//
-//             const update = {};
-//
-//             if(playerUpdate.maxCorrect > result.maxCorrect){
-//
-//                 update.maxCorrect = playerUpdate.maxCorrect;
-//             }
-//
-//             if(playerUpdate.maxIncorrect > result.maxIncorrect){
-//
-//                 update.maxIncorrect = playerUpdate.maxIncorrect;
-//             }
-//
-//             if(playerUpdate.maxFingers > result.maxFingers){
-//
-//                 update.maxFingers = playerUpdate.maxFingers;
-//             }
-//
-//             update.lastPlayed = new Date();
-//
-//             // if(Object.getOwnPropertyNames(update).length === 0){
-//             //
-//             //     client.close();
-//             //
-//             //     return res.status(200).send(result);
-//             // }
-//
-//             collection.findOneAndUpdate({name: name}, {$set: update}, { upsert: false, returnOriginal: false }, function(err, result) {
-//
-//                 client.close();
-//
-//                 if (err) {
-//
-//                     return res.status(500).send({error: "Cannot update player: " + name + ": " + err});
-//
-//                 }
-//
-//                 return res.status(200).send(result.value);
-//             });
-//
-//         });
-//
-//     });
-//
-// };
-//
-//
-// export function deletePlayer(req, res) {
-//
-//     const name = req.params.name;
-//
-//     MongoClient.connect(mongoConfig().url, param, function (err, client) {
-//
-//         if (err) {
-//
-//             console.log("Cannot connect to the DB: " + err);
-//
-//             return res.status(500).send({error: "Cannot connect to the DB: " + err});
-//
-//         }
-//
-//         const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
-//
-//         collection.findOneAndDelete({name: name}, function(err, result) {
-//
-//             client.close();
-//
-//             if (err) {
-//
-//                 return res.status(500).send({error: "Cannot delete player: " + name + ": " + err});
-//
-//             }
-//
-//             if(!result.value){
-//
-//                 return res.status(404).send({error: "Cannot delete player: " + name + ": Not found"});
-//             }
-//
-//             return res.status(200).send();
-//         });
-//
-//     });
-//
-// };
+     MongoClient.connect(mongoConfig().url, param, function (err, client) {
+
+         if (err) {
+
+             console.log("Cannot connect to the DB: " + err);
+
+             return res.status(500).send({error: "Cannot connect to the DB: " + err});
+
+         }
+
+         const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
+
+         collection.findOneAndDelete({_id: new ObjectId(id)}, function(err, result) {
+
+             client.close();
+
+             if (err) {
+
+                 return res.status(500).send({error: "Cannot delete game: " + id + ": " + err});
+
+             }
+
+             if(!result.value){
+
+                 return res.status(404).send({error: "Cannot delete game: " + id + ": Not found"});
+             }
+
+             return res.status(200).send();
+         });
+
+     });
+
+ };

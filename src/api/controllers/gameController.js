@@ -1,4 +1,4 @@
-import {getGames as sGetGames, getGame as sGetGame, createGame as sCreateGame, updateGame as sUpdateGame} from "../services/gameService";
+import {getGames as sGetGames, getGame as sGetGame, createGame as sCreateGame, updateGame as sUpdateGame, deleteGame as sDeleteGame} from "../services/gameService";
 
 export function getGame(req, res) {
 
@@ -58,4 +58,17 @@ export function updateGame(req, res) {
     }
 
     return sUpdateGame(id, turnBody.playerName, (turnBody.guess == "true"), parseInt(turnBody.bet), res);
+};
+
+
+export function deleteGame(req, res) {
+
+    const id = req.params.id;
+
+    if(!id){
+
+        return res.status(400).send({error: "Invalid parameters: no ID specified."});
+    }
+
+    return sDeleteGame(id, res);
 };

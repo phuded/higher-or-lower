@@ -155,10 +155,6 @@ $.playTurn = function(higherGuess){
 	//Reset bet counter
 	$("#currentNumFingers").val(0).slider("refresh");
 
-	//Get new card
-	// var nextCard = cards[Math.floor(Math.random()*cards.length)];
-	// var correctGuess = (higherGuess & $.compareCards(nextCard,currentCard)) || (!higherGuess & $.compareCards(currentCard,nextCard));
-
 	$.ajax({
 		type: "PUT",
 		url: "api/games/" + gameId,
@@ -262,17 +258,21 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 		);
 	}
 	else{
+
 		//Showing card for first time
 		cardImg.css('background',"url(images/allcards.png) no-repeat " + $.getCardCoords(card));
 		cardImg.show();
 		
 		//Check if can display betting buttons
-		if((cardNum>5 & cardNum<11) || $("#fullBetting").attr('checked')){
+		if((cardNum > 5 & cardNum < 11) || $("#fullBetting").attr('checked')){
 			$("#sliderBar").show();
 		}
 		else{
 			$("#sliderBar").hide();
 		}
+
+        //Set the next player and change text
+        $.setNextPlayer(currentPlayer);
 	}
 	
 	// //Remove card if remove cards is enabled
@@ -397,14 +397,9 @@ function removeCardChecked(){
 
 
 //Game variables
-// var players = new Array();
-// var playersScores = new Array();
-//
 var currentCard;
 var currentPlayer;
 var currentBet = 0;
-//
-// var cards = new Array();
 
 //Number of drinkers displayed in table
 var maxDrinkerRows = 10;
