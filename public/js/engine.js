@@ -136,7 +136,9 @@ $.refreshGame = function(){
             $.scheduleRefresh();
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
+        
             // Error!
+            $.scheduleRefresh();
         }
     });
 
