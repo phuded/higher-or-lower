@@ -1,7 +1,7 @@
 var players;
 
 //Update the score for a player
-$.updateScore = function(_players){
+$.updateScore = function(_players, fingersToDrink){
 
 	players = _players;
 
@@ -10,10 +10,18 @@ $.updateScore = function(_players){
     //Create scoretab var
     var scoreTableBody = "";
 
+
+    var updatedPlayer = null;
+
     //Set players in array
     $(players).each(function(pIdx, player){
 
         const playerName = player.name;
+
+        if(playerName === currentPlayer.name){
+
+            updatedPlayer = player;
+		}
 
         //Add in header row
         scoreTableBody += "<tr><th><a href='javascript:$.showPlayerStats(" + pIdx + ", true)' data-role='button' data-icon='grid' data-theme='"+((pIdx%2 == 0)?"c":"b")+"'>" + playerName + "</a></th>";
@@ -47,7 +55,73 @@ $.updateScore = function(_players){
 
     // Reset scoretab
 	$(".scoreTable").show();
+
+	sendHighScores(updatedPlayer, fingersToDrink);
 };
+
+
+function sendHighScores(updatedPlayer, fingersToDrink){
+
+    var playerName = updatedPlayer.name;
+
+    //Check for winning streak
+    var winningRun = 0;
+
+    //Losing streak
+    var losingRun = 0;
+
+    var correctGuess = updatedPlayer.stats[updatedPlayer.stats.length - 1];
+
+    if(correctGuess){
+
+        //Determine any winning streak
+        for(var i = updatedPlayer.stats.length; i--; i>=0){
+
+            var prevTurn = updatedPlayer.stats[i];
+
+            if(prevTurn){
+                winningRun++;
+            }
+            else{
+                break;
+            }
+        }
+    }
+    else{
+
+        //Determine any losing streak
+        for(i = updatedPlayer.stats.length; i--; i>=0){
+
+            var prevTurn = updatedPlayer.stats[i];
+
+            if(!prevTurn){
+                losingRun++;
+            }
+            else{
+                break;
+            }
+        }
+    }
+
+    $.ajax({
+        type: "PUT",
+        url: "api/players/" + playerName,
+        data: { "maxFingers": fingersToDrink,
+				"maxCorrect": winningRun,
+				"maxIncorrect": losingRun
+        },
+        headers: {"hol": generateHeader(playerName)},
+        dataType: "json",
+        success: function(msg){
+            //Updated!
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            // Error!
+        }
+    });
+
+}
+
 
 
 /*Show player stats*/

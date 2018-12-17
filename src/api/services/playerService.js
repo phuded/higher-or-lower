@@ -157,7 +157,6 @@ export function updatePlayer(req, res) {
 
         const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
 
-
         collection.findOne({name: name}, function(err, result) {
 
             if(!result || err){

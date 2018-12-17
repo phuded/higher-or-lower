@@ -87,7 +87,10 @@ $.startGame = function(){
 			gameId = game._id;
 
             currentCard = game.currentCard;
-            currentPlayer = game.currentPlayer;
+
+            //Set the next player and change text
+            $.setNextPlayer(game.currentPlayer);
+
             currentBet = game.bet;
 
             //Preload images & close dialogue
@@ -223,7 +226,7 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 					}
 						
 					//Update scores
-					$.updateTurnScores(players, bet);
+					$.updateTurnScores(players, bet, fingersToDrink);
 					
 					//Set the next player and change text
 					$.setNextPlayer(nextPlayer);
@@ -234,7 +237,7 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 	else{
 
 		//Showing card for first time
-		cardImg.css('background',"url(images/allcards.png) no-repeat " + $.getCardCoords(card));
+		cardImg.css('background', "url(images/allcards.png) no-repeat " + $.getCardCoords(card));
 		cardImg.show();
 		
 		//Check if can display betting buttons
@@ -244,9 +247,6 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 		else{
 			$("#sliderBar").hide();
 		}
-
-        //Set the next player and change text
-        $.setNextPlayer(currentPlayer);
 	}
 	
 	//Update num of cards left
@@ -256,31 +256,13 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 var _0x5c85=['-hol-'];(function(_0x36afd9,_0x12263e){var _0x3b9a38=function(_0x379fea){while(--_0x379fea){_0x36afd9['push'](_0x36afd9['shift']());}};_0x3b9a38(++_0x12263e);}(_0x5c85,0x199));var _0x34c9=function(_0x427c6f,_0x517e3f){_0x427c6f=_0x427c6f-0x0;var _0x533658=_0x5c85[_0x427c6f];return _0x533658;};function generateHeader(_0x2e8f12){return btoa(_0x2e8f12+_0x34c9('0x0')+new Date()['getTime']());}
 
 //Update DB, scores and current number of fingers
-$.updateTurnScores = function(players, currentBet){
-
-
-	// $.ajax({
-	// 	type: "PUT",
-	// 	url: "api/players/" + oldPlayerName,
-	// 	data: {"maxFingers": (correctGuess? 0 : cBet),
-	// 		   "maxCorrect": winningRun,
-	// 		   "maxIncorrect": losingRun
-	// 	},
-    //     headers: {"hol": generateHeader(oldPlayerName)},
-	// 	dataType: "json",
-	// 	success: function(msg){
-	// 		//Updated!
-	// 	},
-	// 	error: function(XMLHttpRequest, textStatus, errorThrown) {
-	// 		// Error!
-	// 	}
-	// });
+$.updateTurnScores = function(players, bet, fingersToDrink){
 
 	//Update fingers	
-	$("#totalNumFingers").text(currentBet + " " + ((currentBet>1 || currentBet==0)?drinkType +"s":drinkType));
+	$("#totalNumFingers").text(bet + " " + ((bet>1 || bet==0)?drinkType +"s":drinkType));
 	
 	//Update the score on score tab
-	$.updateScore(players);
+	$.updateScore(players, fingersToDrink);
 };
 
 
