@@ -163,7 +163,7 @@ export function updateGame(id, playerName, guess, bet, res) {
 
                 client.close();
 
-                return res.status(400).send({error: "Cannot update game: " + id + ": " + " invalid current player: " + playerName});
+                return res.status(400).send({error: "Cannot update game: " + id + ": Invalid current player: " + playerName});
             }
 
             // Make changes
