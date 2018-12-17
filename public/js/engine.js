@@ -45,11 +45,7 @@ $.startGame = function(){
     	return;
     }
 
-	// //Reset player
-	// currentPlayer = 0;
-	//
-	// //Reset bet
-	// currentBet=0;
+
 	//Set drink type
 	$("input.drinkOption").each(function(){
 		if($(this).attr("checked")){
@@ -59,24 +55,10 @@ $.startGame = function(){
 	//Reset bet counter
 	$("#totalNumFingers").text("0 " + drinkType + "s");
 
-	// players = new Array();
-	// playersScores = new Array();
-
-	//Restore all cards based on toggle
-	//$.resetPack();
-
-	//Reset scoretab
-    $(".scoreTable").show();
-	$(".scoreTable").html("");
-
 	//Show loading
 	if(!$("#cancel").is(":visible")){
 		$(".game_spinner").show();
 	}
-
-	//Create scoretab var
-	var scoreTable = "";
-
 
 	var players = [];
 
@@ -86,18 +68,7 @@ $.startGame = function(){
 
 		players.push(playerName);
 
-		//Add in header row
-		scoreTable += "<tr><th><a href='javascript:$.showPlayerStats("+(players.length-1)+",true)' data-role='button' data-icon='grid' data-theme='"+((players.length%2 == 0)?"c":"b")+"'>"+playerName+"</a></th></tr>";
 	});
-
-	//Append table to div
-	$(".scoreTable").append(scoreTable).trigger("create");
-
-	//Display Player
-	// $("#playerName").html("<strong>"+players[currentPlayer] + "</strong> guess Higher or Lower!");
-	//
-	// //New card
-	// currentCard = cards[Math.floor(Math.random()*cards.length)];
 
 	//Hide any current card
 	$("#cardDisplay").removeClass('green red');
@@ -123,6 +94,9 @@ $.startGame = function(){
             $.preLoadImages(preloadImages,function() {
                 //Hide loading
                 $(".game_spinner").hide();
+
+                // Reset scoretab
+                $(".scoreTable").hide();
 
                 $.closeForm();
 
@@ -167,7 +141,7 @@ $.playTurn = function(higherGuess){
 			//Updated!
 
 			//Display card
-			$.displayCard(res.currentCard, res.status, res.currentPlayer, res.bet, res.fingersToDrink, res.cardsLeft);
+			$.displayCard(res.currentCard, res.status, res.currentPlayer, res.bet, res.fingersToDrink, res.cardsLeft, res.players);
 
 			//Finally make the current card the next one
 			currentCard = res.currentCard;
@@ -182,7 +156,7 @@ $.playTurn = function(higherGuess){
 
 
 //Display the card
-$.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, cardsLeft){
+$.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, cardsLeft, players){
 	//Card number
 	var cardNum = parseInt(card.value);
 	//Card image
@@ -249,7 +223,7 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 					}
 						
 					//Update scores
-					$.updateTurnScores(correctGuess, bet);
+					$.updateTurnScores(players, bet);
 					
 					//Set the next player and change text
 					$.setNextPlayer(nextPlayer);
@@ -275,25 +249,14 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
         $.setNextPlayer(currentPlayer);
 	}
 	
-	// //Remove card if remove cards is enabled
-	// if($("#removeCards").attr('checked')){
-	//
-	// 	cards.remove(cards.indexOf(card));
-	//
-	// 	if(cards.length == 0){
-	// 		//If no cards left - reset pack
-	// 		$.resetPack();
-	// 	}
-	// }
-	
 	//Update num of cards left
-	$("#cardsLeft").html("<u>" + cardsLeft + "</u>" + (cardsLeft>1?"cards":"card"));
+	$("#cardsLeft").html("<u>" + cardsLeft + "</u>" + (cardsLeft>1?" cards":" card"));
 };
 
 var _0x5c85=['-hol-'];(function(_0x36afd9,_0x12263e){var _0x3b9a38=function(_0x379fea){while(--_0x379fea){_0x36afd9['push'](_0x36afd9['shift']());}};_0x3b9a38(++_0x12263e);}(_0x5c85,0x199));var _0x34c9=function(_0x427c6f,_0x517e3f){_0x427c6f=_0x427c6f-0x0;var _0x533658=_0x5c85[_0x427c6f];return _0x533658;};function generateHeader(_0x2e8f12){return btoa(_0x2e8f12+_0x34c9('0x0')+new Date()['getTime']());}
 
 //Update DB, scores and current number of fingers
-$.updateTurnScores = function(correctGuess, currentBet){
+$.updateTurnScores = function(players, currentBet){
 
 
 	// $.ajax({
@@ -317,7 +280,7 @@ $.updateTurnScores = function(correctGuess, currentBet){
 	$("#totalNumFingers").text(currentBet + " " + ((currentBet>1 || currentBet==0)?drinkType +"s":drinkType));
 	
 	//Update the score on score tab
-	//$.updateScore(correctGuess, currentPlayer);
+	$.updateScore(players);
 };
 
 
@@ -387,7 +350,7 @@ function removeCardChecked(){
 
    const remove = $("#removeCards").attr('checked');
 
-   if(remove === true){
+   if(remove === "checked"){
 
    		return true;
    }
