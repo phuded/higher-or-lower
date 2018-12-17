@@ -46,7 +46,7 @@ export function getGames(req, res) {
                 return res.status(500).send({error: "Cannot execute count query: " + err});
             }
 
-            collection.find({}, {fields: {cards: 0}}).sort(sort).skip(start).limit(num).toArray(function(err, results) {
+            collection.find({}, {projection: {cards: 0}}).sort(sort).skip(start).limit(num).toArray(function(err, results) {
 
                 client.close();
 

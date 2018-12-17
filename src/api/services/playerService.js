@@ -45,7 +45,7 @@ export function getPlayers(req, res) {
                 return res.status(500).send({error: "Cannot execute count query: " + err});
             }
 
-            collection.find().sort(sort).skip(start).limit(num).toArray(function(err, results) {
+            collection.find({}, {sort: sort, skip: start, limit: num}).toArray(function(err, results) {
 
                 client.close();
 
