@@ -1,4 +1,5 @@
-import {getGames as sGetGames, getGame as sGetGame, createGame as sCreateGame, updateGame as sUpdateGame, deleteGame as sDeleteGame} from "../services/gameService";
+import {getGames as sGetGames, getGame as sGetGame, createGame as sCreateGame, updateGame as sUpdateGame, updateGamePlayers as sUpdateGamePlayers, deleteGame as sDeleteGame} from "../services/gameService";
+import GamePlayer from "../models/gamePlayer";
 
 export function getGame(req, res) {
 
@@ -23,16 +24,16 @@ export function createGame(req, res) {
 
     let gameBody = req.body;
 
-    if(!gameBody.players || !gameBody.drinkType || (gameBody.remove == null)){
+    if(!gameBody.name || !gameBody.players || !gameBody.drinkType || (gameBody.remove == null) || (gameBody.wholePack == null)){
 
-        return new res.status(400).send({error: "Invalid parameters"});
+        return res.status(400).send({error: "Invalid parameters"});
     }
 
     const players = [];
 
     gameBody.players.forEach(function (playerName) {
 
-        players.push({name: playerName, stats: []})
+        players.push(new GamePlayer(playerName));
     });
 
     gameBody.players = players;
@@ -58,6 +59,25 @@ export function updateGame(req, res) {
     }
 
     return sUpdateGame(id, turnBody.playerName, (turnBody.guess == "true"), parseInt(turnBody.bet), res);
+};
+
+export function updateGamePlayers(req, res) {
+
+    const id = req.params.id;
+
+    if(!id){
+
+        return res.status(400).send({error: "Invalid parameters: no ID specified."});
+    }
+
+    let turnBody = req.body;
+
+    if(!turnBody.players){
+
+        return res.status(400).send({error: "Invalid parameters"});
+    }
+
+    return sUpdateGamePlayers(id, turnBody.players, res);
 };
 
 

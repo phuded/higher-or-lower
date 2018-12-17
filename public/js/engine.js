@@ -3,6 +3,9 @@ $.prepareGame = function(){
 
 	//Get player list
 	$.getPlayerList();
+
+    //Get game list
+    $.getGameList();
 	
 	$('#drink').live('pageshow',function(event){
 		var fingers = $("#numFingers");
@@ -45,13 +48,13 @@ $.startGame = function(){
     	return;
     }
 
+    //Set drink type
+    $("input.drinkOption").each(function(){
+        if($(this).attr("checked")){
+            drinkType = $(this).val()
+        }
+    });
 
-	//Set drink type
-	$("input.drinkOption").each(function(){
-		if($(this).attr("checked")){
-			drinkType = $(this).val()
-		}
-	});
 	//Reset bet counter
 	$("#totalNumFingers").text("0 " + drinkType + "s");
 
@@ -73,18 +76,43 @@ $.startGame = function(){
 	//Hide any current card
 	$("#cardDisplay").removeClass('green red');
 
+
+	if(!gameId || !$("#selectedGameId").val()){
+
+		console.log("NEW GAME");
+
+        $.createNewGame(players);
+
+		return;
+	}
+
+    console.log("EXISTING GAME");
+
+	$.joinGame(players);
+
+};
+
+
+$.createNewGame = function(players){
+
+    const date = new Date();
+    const gameName = players[0] + " [" + date.toLocaleDateString() + " " + date.toTimeString().substring(0, 5) + "]";
+
     $.ajax({
         type: "POST",
         url: "api/games",
-        data: {"players" : players,
-			"drinkType": drinkType,
-			"remove": removeCardChecked()
+        data: {
+            "name" : gameName,
+            "players" : players,
+            "drinkType": drinkType,
+            "remove": removeCardChecked(),
+            "wholePack": useWholePackChecked()
         },
         dataType: "json",
         success: function(game){
             //Updated!
 
-			gameId = game._id;
+            gameId = game._id;
 
             currentCard = game.currentCard;
 
@@ -92,6 +120,9 @@ $.startGame = function(){
             $.setNextPlayer(game.currentPlayer);
 
             currentBet = game.bet;
+
+            //Refresh game list
+            $.getGameList();
 
             //Preload images & close dialogue
             $.preLoadImages(preloadImages,function() {
@@ -118,6 +149,56 @@ $.startGame = function(){
         }
     });
 
+};
+
+$.joinGame = function(players){
+
+    $.ajax({
+        type: "PUT",
+        url: "api/games/" + gameId + "/players",
+        data: {
+            "players" : players
+        },
+        dataType: "json",
+        success: function(game){
+            //Updated!
+
+            gameId = game._id;
+
+            currentCard = game.currentCard;
+
+            //Set the next player and change text
+            $.setNextPlayer(game.currentPlayer);
+
+            currentBet = game.bet;
+
+            //Refresh game list
+            $.getGameList();
+
+            //Preload images & close dialogue
+            $.preLoadImages(preloadImages,function() {
+                //Hide loading
+                $(".game_spinner").hide();
+
+                // Reset scoretab
+                $(".scoreTable").hide();
+
+                $.closeForm();
+
+                //Display card
+                $.displayCard(currentCard);
+
+                //Reset bet slider
+                $("#currentNumFingers").val(0).slider("refresh");
+
+                //Update num of cards left
+                $("#cardsLeft").html("<u>" + game.cardsLeft + "</u>" + (game.cardsLeft>1?" cards":" card"));
+            });
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            // Error!
+        }
+    });
 
 };
 
@@ -338,7 +419,19 @@ function removeCardChecked(){
    }
 
    return false;
-}
+};
+
+function useWholePackChecked(){
+
+    const remove = $("#wholePack").attr('checked');
+
+    if(remove === "checked"){
+
+        return true;
+    }
+
+    return false;
+};
 
 
 //Game variables

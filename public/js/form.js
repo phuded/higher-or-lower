@@ -2,36 +2,71 @@
 /* Get List of players */
 $.getPlayerList = function(){
 
-	$("div#playerList ul").html("");
+    $("div#playerList ul").html("");
 
-	//Get Player List
-	$.ajax({
-		type: "GET",
-		url: "api/players",
-		success: function(json){
+    //Get Player List
+    $.ajax({
+        type: "GET",
+        url: "api/players",
+        success: function(json){
 
-			const players = json.players;
+            const players = json.players;
 
-			var options = ''; 
+            var options = '';
 
-			for (var i = 0; i < players.length; i++) {
+            for (var i = 0; i < players.length; i++) {
 
                 const name = players[i].name;
 
-				const wName = players[i].fname ?" ("+players[i].fname.substring(0, 1) + "." + players[i].surname + ")" : "";
+                const wName = players[i].fname ?" ("+players[i].fname.substring(0, 1) + "." + players[i].surname + ")" : "";
 
-				options += "<li><a href='javascript:$.showPlayerList(false, &#39;" + name + "&#39;)'>" + name + wName + "</a></li>";
-			}
+                options += "<li><a href='javascript:$.showPlayerList(false, &#39;" + name + "&#39;)'>" + name + wName + "</a></li>";
+            }
 
-			$("div#playerList ul").append(options);
-			
-			//Refresh View
-			$('#playerList ul').listview('refresh');	
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			//Error
-		}
-	});
+            $("div#playerList ul").append(options);
+
+            //Refresh View
+            $('#playerList ul').listview('refresh');
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            //Error
+        }
+    });
+};
+
+/* Get List of players */
+$.getGameList = function(){
+
+    $("div#gameList ul").html("");
+
+    //Get Player List
+    $.ajax({
+        type: "GET",
+        url: "api/games",
+        success: function(json){
+
+            const games = json.games;
+
+            var options = '';
+
+            for (var i = 0; i < games.length; i++) {
+
+                const id = games[i]._id;
+
+                const name = games[i].name;
+
+                options += "<li><a href='javascript:$.showGameList(false, &#39;" + id + "&#39;, &#39;" + name + "&#39;)'>" + name + "</a></li>";
+            }
+
+            $("div#gameList ul").append(options);
+
+            //Refresh View
+            $('#gameList ul').listview('refresh');
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            //Error
+        }
+    });
 };
 
 /*TRANSITIONS*/
@@ -39,28 +74,28 @@ $.getPlayerList = function(){
 //Show form panels - list 
 $.showPlayerList = function(show, player){
 
-	var formContent = $(".gameForm");
-	var playerList = $("#playerList");
-	
-	if(show){
-		formContent.fadeOut(function() {
-			playerList.fadeIn('fast');
-		 });		
+    var formContent = $(".gameForm");
+    var playerList = $("#playerList");
 
-		playerList.data("playerNum", player);
-	}
-	else{	
-		playerList.fadeOut(function() {
-			formContent.fadeIn('fast');
+    if(show){
+        formContent.fadeOut(function() {
+            playerList.fadeIn('fast');
+        });
 
-			if(player != null){
+        playerList.data("playerNum", player);
+    }
+    else{
+        playerList.fadeOut(function() {
+            formContent.fadeIn('fast');
+
+            if(player != null){
 
                 var num = playerList.data("playerNum");
                 $("tr#player_"+num+" input").val(player);
 
-			}
-		 });
-	}
+            }
+        });
+    }
 };
 
 //Show form panels - create new player
@@ -201,7 +236,7 @@ $.delPlayerRow = function(rowNum){
 	}
 };
 
-$.createRow = function (playerNumber,name){
+$.createRow = function (playerNumber, name){
 
 	var newPlayerRow = "<tr id='player_"+playerNumber+"'><td><input type='text' value='"+name+"' MAXLENGTH=8/></td>";
 		
@@ -213,3 +248,35 @@ $.createRow = function (playerNumber,name){
 
 	return newPlayerRow;
 };
+
+
+$.showGameList = function(show, selectedGameId, selectedGameName){
+
+    var formContent = $(".gameForm");
+    var gameList = $("#gameList");
+
+    if(show){
+        formContent.fadeOut(function() {
+            gameList.fadeIn('fast');
+        });
+    }
+    else{
+        gameList.fadeOut(function() {
+            formContent.fadeIn('fast');
+
+            if(selectedGameId != null){
+
+                gameId = selectedGameId;
+
+                $("#selectedGameId").val(selectedGameName);
+
+            }
+        });
+    }
+};
+
+$.clearGame = function(){
+
+    gameId = null;
+    $("#selectedGameId").val("");
+}

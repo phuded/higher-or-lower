@@ -164,9 +164,12 @@ span#drinkMessage{
 
 /*Add/remove buttons*/
 a#addPlayer, a#delPlayer{
-	font-size:0.7em;
 	margin-left:0;
 	margin-bottom:10px;
+}
+
+a.smallerButton{
+	font-size:0.7em;
 }
 
 /*Player Rows*/

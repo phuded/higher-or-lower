@@ -61,10 +61,55 @@
 						<h3 style="margin-block-start: 0.4em;"><img src="images/beer.png" style="height: 33px; vertical-align: middle; margin-right: 8px;"/>New Game</h3>
 
 						<div data-role="collapsible-set" class="formPanel">
-							<div data-role="collapsible" data-collapsed="false" data-theme="c" data-content-theme="d">
-								<h3>1. Add Players</h3>
-								<a id="addPlayer" href="javascript:$.addPlayerRow()" data-role="button" data-icon="plus" data-inline="true" data-theme="a">Add Player (+1)</a>
-								<a id="delPlayer" href="javascript:$.delPlayerRow()" data-role="button" data-icon="minus" data-inline="true" data-theme="c">Remove Player (-1)</a>
+
+
+							<div data-role="collapsible" data-collapsed="false" class="drinkOption" data-theme="c" data-content-theme="d">
+								<h3>Create New Game</h3>
+
+								<span><b>1. What are you drinking?</b></span>
+								<fieldset data-role="controlgroup">
+									<input type="radio" name="drink_choice" id="drink_beer_bottle" value="swig" class="drinkOption" checked="checked" />
+									<label for="drink_beer_bottle">Bottled Beer</label>
+
+									<input type="radio" name="drink_choice" id="drink_beer_draught" value="finger"  class="drinkOption"/>
+									<label for="drink_beer_draught">Draft Beer</label>
+
+									<input type="radio" name="drink_choice" id="drink_spirit_mixed" value="finger"  class="drinkOption"/>
+									<label for="drink_spirit_mixed">Mixed Spirit</label>
+
+									<input type="radio" name="drink_choice" id="drink_spirit_pure" value="shot"  class="drinkOption"/>
+									<label for="drink_spirit_pure">Pure Spirit</label>
+
+									<input type="radio" name="drink_choice" id="drink_wine" value="sip"  class="drinkOption"/>
+									<label for="drink_wine">Wine</label>
+								</fieldset>
+
+								<span><b>2. Select Game Options</b></span>
+								<fieldset id="gameOptions" data-role="controlgroup" data-role="fieldcontain">
+									<input type="checkbox" name="fullBetting" id="fullBetting" class="gameFlag"/>
+									<label for="fullBetting">Bet on any card</label>
+									<input type="checkbox" name="removeCards" id="removeCards" class="gameFlag" />
+									<label for="removeCards">Remove played cards</label>
+									<input type="checkbox" name="wholePack" id="wholePack" class="gameFlag" />
+									<label for="wholePack">Use the whole pack</label>
+								</fieldset>
+							</div>
+
+							<div data-role="collapsible" data-collapsed="true" class="drinkOption" data-theme="c" data-content-theme="d">
+								<h3>Choose Existing Game</h3>
+
+								<input id="selectedGameId" type="text"/>
+
+								<a id="chooseGame" class="smallerButton" href="javascript:$.showGameList(true)" data-role="button" data-icon="search" data-inline="true" data-theme="b">Choose Game</a>
+								<a id="clearGame" class="smallerButton" href="javascript:$.clearGame()" data-role="button" data-icon="minus" data-inline="true">Clear</a>
+
+							</div>
+
+
+							<div data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="d">
+								<h3>Add Players</h3>
+								<a id="addPlayer" class="smallerButton" href="javascript:$.addPlayerRow()" data-role="button" data-icon="plus" data-inline="true" data-theme="a">Add Player (+1)</a>
+								<a id="delPlayer" class="smallerButton" href="javascript:$.delPlayerRow()" data-role="button" data-icon="minus" data-inline="true" data-theme="c">Remove Player (-1)</a>
 								<br/>
 								<span style="font-size: 0.8em;">Play as a guest, register a new player or choose existing:</span>
 								<table id="playerRows">
@@ -84,38 +129,8 @@
 									</tr>
 								</table>
 							</div>
-							<div data-role="collapsible" data-collapsed="true" class="drinkOption" data-theme="c" data-content-theme="d">
-								<h3>2. Choose your drink</h3>
-								<span><b>What are you drinking?</b></span>
-								<fieldset data-role="controlgroup">
-									<input type="radio" name="drink_choice" id="drink_beer_bottle" value="swig" class="drinkOption" checked="checked" />
-									<label for="drink_beer_bottle">Bottled Beer</label>
 
-									<input type="radio" name="drink_choice" id="drink_beer_draught" value="finger"  class="drinkOption"/>
-									<label for="drink_beer_draught">Draft Beer</label>
 
-									<input type="radio" name="drink_choice" id="drink_spirit_mixed" value="finger"  class="drinkOption"/>
-									<label for="drink_spirit_mixed">Mixed Spirit</label>
-
-									<input type="radio" name="drink_choice" id="drink_spirit_pure" value="shot"  class="drinkOption"/>
-									<label for="drink_spirit_pure">Pure Spirit</label>
-
-									<input type="radio" name="drink_choice" id="drink_wine" value="sip"  class="drinkOption"/>
-									<label for="drink_wine">Wine</label>
-								</fieldset>
-							</div>
-
-							<div data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="d">
-								<h3>3. Select Game Options</h3>
-								<fieldset id="gameOptions" data-role="controlgroup" data-role="fieldcontain">
-									<input type="checkbox" name="fullBetting" id="fullBetting" class="gameFlag"/>
-									<label for="fullBetting">Bet on any card</label>
-									<input type="checkbox" name="removeCards" id="removeCards" class="gameFlag" />
-									<label for="removeCards">Remove played cards</label>
-									<input type="checkbox" name="wholePack" id="wholePack" class="gameFlag" />
-									<label for="wholePack">Use the whole pack</label>
-								</fieldset>
-							</div>
 						</div>
 
 						<a href="javascript:$.startGame()" id="start" data-role="button" data-theme="b" data-inline="true" data-icon="check">Play!</a>
@@ -124,6 +139,12 @@
 
 						<span class="game_spinner" style="display:none;"><img src="images/loading.gif"/>&nbsp;Loading</span>
 
+					</div>
+
+					<!--Hidden game list -->
+					<div id="gameList" style="display:none;">
+						<ul data-role="listview" data-filter="true" data-inset="true" data-theme="c"></ul>
+						<a href="javascript:$.showGameList(false, null, null)" id="backFromListGame" data-role="button" data-theme="c" data-inline="true" data-icon="back">Back</a>
 					</div>
 
 					<!--Hidden player list -->

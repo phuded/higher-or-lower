@@ -1,6 +1,8 @@
-export function Game(players, drinkType, remove){
+export function Game(name, players, drinkType, remove, wholePack){
 
-    this._id
+    this._id;
+
+    this.name = name;
 
     this.players = players;
 
@@ -10,9 +12,11 @@ export function Game(players, drinkType, remove){
 
     this.status = null;
 
-    this.cards = newPack();
+    this.cards = newPack(wholePack);
 
     this.remove = remove;
+
+    this.wholePack = wholePack;
 
     this.currentCard = getCard(this);
 
@@ -31,6 +35,7 @@ export function Game(players, drinkType, remove){
             players: this.players,
             currentPlayer: this.currentPlayer,
             remove: this.remove,
+            wholePack: this.wholePack,
             currentCard: this.currentCard,
             bet: this.bet,
             drinkType: this.drinkType,
@@ -40,15 +45,18 @@ export function Game(players, drinkType, remove){
 
 };
 
-function newPack(){
+function newPack(wholePack){
 
     let cards = [];
 
     for(let i = 2; i < 15; i++){
         cards.push(new Card("hearts", i));
-        cards.push(new Card("diamonds", i));
-        cards.push(new Card("clubs", i));
-        cards.push(new Card("spades", i));
+
+        if(wholePack) {
+            cards.push(new Card("diamonds", i));
+            cards.push(new Card("clubs", i));
+            cards.push(new Card("spades", i));
+        }
     }
 
     return cards;
@@ -108,6 +116,22 @@ export function playTurn(game, guess, bet){
 
     game.cardsLeft = game.cards.length;
 };
+
+export function checkIfPlayerInGame(game, playerName){
+
+    let inGame = false;
+
+    game.players.forEach(function (player) {
+
+        if(player.name == playerName){
+
+            inGame = true;
+        }
+    });
+
+    return inGame;
+}
+
 
 function getCard(game){
 

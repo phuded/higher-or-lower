@@ -1,5 +1,6 @@
 import {MongoClient, ObjectId} from "mongodb";
-import {Game, playTurn} from "../models/game";
+import {Game, playTurn, checkIfPlayerInGame} from "../models/game";
+import GamePlayer from "../models/gamePlayer";
 
 function mongoConfig(){
 
@@ -113,7 +114,7 @@ export function createGame(gameBody, res) {
 
         const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
 
-        const game = new Game(gameBody.players, gameBody.drinkType, (gameBody.remove == "true"));
+        const game = new Game(gameBody.name, gameBody.players, gameBody.drinkType, (gameBody.remove == "true"), (gameBody.wholePack == "true"));
 
         collection.insertOne(game, function(err, result) {
 
@@ -167,6 +168,75 @@ export function updateGame(id, playerName, guess, bet, res) {
 
             // Make changes
             playTurn(game, guess, bet);
+
+            collection.findOneAndUpdate({_id: new ObjectId(id)}, {$set: game}, { upsert: false, returnOriginal: false }, function(err, result) {
+
+                client.close();
+
+                if (err) {
+
+                    return res.status(500).send({error: "Cannot update game: " + id + ": " + err});
+
+                }
+
+                const response = result.value;
+
+                delete response.cards;
+
+                return res.status(200).send(response);
+            });
+
+        });
+
+
+    });
+
+};
+
+
+
+export function updateGamePlayers(id, newPlayers, res) {
+
+    MongoClient.connect(mongoConfig().url, param, function (err, client) {
+
+        if (err) {
+
+            console.log("Cannot connect to the DB: " + err);
+
+            return res.status(500).send({error: "Cannot connect to the DB: " + err});
+
+        }
+
+        const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
+
+        collection.findOne({_id: new ObjectId(id)}, function(err, game) {
+
+            if (err) {
+
+                return res.status(404).send({error: "Cannot find game with ID: " + id + ": " + err});
+
+            }
+
+            let gameUpdated = false;
+
+            newPlayers.forEach(function (newPlayer) {
+
+                const inGame = checkIfPlayerInGame(game, newPlayer);
+
+                if(!inGame){
+
+                    gameUpdated = true;
+
+                    game.players.push(new GamePlayer(newPlayer))
+                }
+            });
+
+            if(!gameUpdated){
+
+                client.close();
+
+                return res.status(200).send(game);
+            }
 
             collection.findOneAndUpdate({_id: new ObjectId(id)}, {$set: game}, { upsert: false, returnOriginal: false }, function(err, result) {
 
