@@ -128,7 +128,7 @@ $.refreshGame = function(){
                 $("#currentNumFingers").val(0).slider("refresh");
 
                 //Display card
-                $.displayCard(res.currentCard, res.status, res.currentPlayer, res.bet, res.fingersToDrink, res.cardsLeft, res.players);
+                $.displayCard(res.currentCard, res.status, res.currentPlayer, res.bet, res.fingersToDrink, res.cardsLeft, res.players, true);
 
                 //Finally make the current card the next one
                 currentCard = res.currentCard;
@@ -302,7 +302,7 @@ $.playTurn = function(higherGuess){
 			//Updated!
 
 			//Display card
-			$.displayCard(res.currentCard, res.status, res.currentPlayer, res.bet, res.fingersToDrink, res.cardsLeft, res.players);
+			$.displayCard(res.currentCard, res.status, res.currentPlayer, res.bet, res.fingersToDrink, res.cardsLeft, res.players, false);
 
 			//Finally make the current card the next one
 			currentCard = res.currentCard;
@@ -322,7 +322,7 @@ $.playTurn = function(higherGuess){
 
 
 //Display the card
-$.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, cardsLeft, players){
+$.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, cardsLeft, players, skipAnimation){
 	//Card number
 	var cardNum = parseInt(card.value);
 	//Card image
@@ -362,25 +362,28 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 						$("#cardDisplay").addClass('red');
 					
 						//Show Lee
-						if(fingersToDrink > 0){
-							$("#drinkMessage").html("<b>"+ currentPlayer.name + "</b> you must drink...<br/><span id='numFingers'>"+(fingersToDrink > 1?fingersToDrink + " " + drinkType + "s!":fingersToDrink + " " + drinkType + "!")+"</span>");
+						if(!skipAnimation){
+
+                            if(fingersToDrink > 0){
+                                $("#drinkMessage").html("<b>"+ currentPlayer.name + "</b> you must drink...<br/><span id='numFingers'>"+(fingersToDrink > 1?fingersToDrink + " " + drinkType + "s!":fingersToDrink + " " + drinkType + "!")+"</span>");
+                            }
+                            else{
+                                $("#drinkMessage").html("<b>"+ currentPlayer.name + "</b> you must drink...<br/>&nbsp;");
+
+                            }
+
+                            if (Math.random() >= 0.5){
+                                $("#pictureDisplay1").show();
+                                $("#pictureDisplay2").hide();
+                            }
+                            else{
+                                $("#pictureDisplay2").show();
+                                $("#pictureDisplay1").hide();
+                            }
+
+                            //Show Lee
+                            setTimeout('$.openDialog()',150);
 						}
-						else{
-							$("#drinkMessage").html("<b>"+ currentPlayer.name + "</b> you must drink...<br/>&nbsp;");
-
-						}
-
-                        if (Math.random() >= 0.5){
-                            $("#pictureDisplay1").show();
-                            $("#pictureDisplay2").hide();
-                        }
-                        else{
-                            $("#pictureDisplay2").show();
-                            $("#pictureDisplay1").hide();
-                        }
-
-						//Show Lee
-						setTimeout('$.openDialog()',150);
 					}
 					
 					//Check if can display betting buttons
