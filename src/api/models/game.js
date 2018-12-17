@@ -1,4 +1,4 @@
-export function Game(name, players, drinkType, remove, wholePack){
+export function Game(name, players, drinkType, remove, wholePack, betAnyCard){
 
     this._id;
 
@@ -18,6 +18,8 @@ export function Game(name, players, drinkType, remove, wholePack){
 
     this.wholePack = wholePack;
 
+    this.betAnyCard = betAnyCard;
+
     this.currentCard = getCard(this);
 
     this.bet = 0;
@@ -36,6 +38,7 @@ export function Game(name, players, drinkType, remove, wholePack){
             currentPlayer: this.currentPlayer,
             remove: this.remove,
             wholePack: this.wholePack,
+            betAnyCard: this.betAnyCard,
             currentCard: this.currentCard,
             bet: this.bet,
             drinkType: this.drinkType,

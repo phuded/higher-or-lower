@@ -114,7 +114,7 @@ export function createGame(gameBody, res) {
 
         const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
 
-        const game = new Game(gameBody.name, gameBody.players, gameBody.drinkType, (gameBody.remove == "true"), (gameBody.wholePack == "true"));
+        const game = new Game(gameBody.name, gameBody.players, gameBody.drinkType, (gameBody.remove == "true"), (gameBody.wholePack == "true"), (gameBody.betAnyCard == "true"));
 
         collection.insertOne(game, function(err, result) {
 

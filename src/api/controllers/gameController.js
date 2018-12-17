@@ -24,7 +24,7 @@ export function createGame(req, res) {
 
     let gameBody = req.body;
 
-    if(!gameBody.name || !gameBody.players || !gameBody.drinkType || (gameBody.remove == null) || (gameBody.wholePack == null)){
+    if(!gameBody.name || !gameBody.players || !gameBody.drinkType || (gameBody.remove == null) || (gameBody.wholePack == null) || (gameBody.betAnyCard == null)){
 
         return res.status(400).send({error: "Invalid parameters"});
     }

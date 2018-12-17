@@ -84,31 +84,33 @@ $.startGame = function(){
 
         $.createNewGame(players);
 
-        $.scheduleRefresh();
-
 		return;
 	}
 
     console.log("EXISTING GAME");
 
 	$.joinGame(players);
-
-    $.scheduleRefresh();
-
 };
 
 $.scheduleRefresh = function (){
 	
-    refresh = null;
+    $.clearRefresh();
+
+    refresh = setTimeout(function(){$.refreshGame()}, 5000);
+
+}
+
+$.clearRefresh = function (){
 
     clearTimeout(refresh);
 
-    refresh = setTimeout(function(){$.refreshGame()}, 5000);
+    refresh = null;
 }
 
 $.refreshGame = function(){
 
-    console.log("REFRESHING");
+    // Clear Refresh
+    $.clearRefresh();
 
     $.ajax({
         type: "GET",
@@ -133,11 +135,12 @@ $.refreshGame = function(){
 
             }
 
+            //Refresh
             $.scheduleRefresh();
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
         
-            // Error!
+            // Refresh
             $.scheduleRefresh();
         }
     });
@@ -146,6 +149,9 @@ $.refreshGame = function(){
 
 
 $.createNewGame = function(players){
+
+    // Clear Refresh
+    $.clearRefresh();
 
     const date = new Date();
     const gameName = players[0] + " [" + date.toLocaleDateString() + " " + date.toTimeString().substring(0, 5) + "]";
@@ -158,7 +164,8 @@ $.createNewGame = function(players){
             "players" : players,
             "drinkType": drinkType,
             "remove": removeCardChecked(),
-            "wholePack": useWholePackChecked()
+            "wholePack": useWholePackChecked(),
+            "betAnyCard": betAnyCardChecked()
         },
         dataType: "json",
         success: function(game){
@@ -167,6 +174,9 @@ $.createNewGame = function(players){
             gameId = game._id;
 
             currentCard = game.currentCard;
+
+            // Set bet on any card
+            betAnyCard = game.betAnyCard;
 
             //Set the next player and change text
             $.setNextPlayer(game.currentPlayer);
@@ -194,6 +204,9 @@ $.createNewGame = function(players){
 
                 //Update num of cards left
                 $("#cardsLeft").html("<u>" + game.cardsLeft + "</u>" + (game.cardsLeft>1?" cards":" card"));
+
+                //Refresh
+                $.scheduleRefresh();
             });
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -204,6 +217,9 @@ $.createNewGame = function(players){
 };
 
 $.joinGame = function(players){
+
+    // Clear Refresh
+    $.clearRefresh();
 
     $.ajax({
         type: "PUT",
@@ -219,6 +235,9 @@ $.joinGame = function(players){
 
             currentCard = game.currentCard;
 
+            // Set bet on any card
+            betAnyCard = game.betAnyCard;
+
             //Set the next player and change text
             $.setNextPlayer(game.currentPlayer);
 
@@ -237,7 +256,7 @@ $.joinGame = function(players){
 
                 $.closeForm();
 
-                //Display card
+                //Display
                 $.displayCard(currentCard);
 
                 //Reset bet slider
@@ -245,6 +264,9 @@ $.joinGame = function(players){
 
                 //Update num of cards left
                 $("#cardsLeft").html("<u>" + game.cardsLeft + "</u>" + (game.cardsLeft>1?" cards":" card"));
+
+                //Refresh
+                $.scheduleRefresh();
             });
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -255,6 +277,9 @@ $.joinGame = function(players){
 };
 
 $.playTurn = function(higherGuess){
+
+    // Clear Refresh
+    $.clearRefresh();
 
 	//Remove colour from background
 	$("#cardDisplay").removeClass('green red');
@@ -281,9 +306,14 @@ $.playTurn = function(higherGuess){
 
 			//Finally make the current card the next one
 			currentCard = res.currentCard;
+
+            // Refresh
+            $.scheduleRefresh();
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			// Error!
+
+            // Refresh
+            $.scheduleRefresh();
 		}
 	});
 
@@ -302,7 +332,7 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 	if(correctGuess !== undefined){
 
 		//Hide slider if bet on any card is off
-		if(!$("#fullBetting").attr('checked')){
+		if(!betAnyCard){
 
 			$("#sliderBar").hide();
 
@@ -354,7 +384,7 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 					}
 					
 					//Check if can display betting buttons
-					if((cardNum > 5 & cardNum < 11) || $("#fullBetting").attr('checked')){
+					if((cardNum > 5 & cardNum < 11) || betAnyCard){
 						$("#sliderBar").show();
 					}
 						
@@ -374,7 +404,7 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 		cardImg.show();
 		
 		//Check if can display betting buttons
-		if((cardNum > 5 & cardNum < 11) || $("#fullBetting").attr('checked')){
+		if((cardNum > 5 & cardNum < 11) || betAnyCard){
 			$("#sliderBar").show();
 		}
 		else{
@@ -485,11 +515,26 @@ function useWholePackChecked(){
     return false;
 };
 
+function betAnyCardChecked(){
+
+    const remove = $("#fullBetting").attr('checked');
+
+    if(remove === "checked"){
+
+        return true;
+    }
+
+    return false;
+};
+
+
 
 //Game variables
 var currentCard;
 var currentPlayer;
 var currentBet = 0;
+
+var betAnyCard = false;
 
 //Number of drinkers displayed in table
 var maxDrinkerRows = 10;
