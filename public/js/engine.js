@@ -1,3 +1,4 @@
+var refresh = null;
 
 $.prepareGame = function(){
 
@@ -83,12 +84,61 @@ $.startGame = function(){
 
         $.createNewGame(players);
 
+        $.scheduleRefresh();
+
 		return;
 	}
 
     console.log("EXISTING GAME");
 
 	$.joinGame(players);
+
+    $.scheduleRefresh();
+
+};
+
+$.scheduleRefresh = function (){
+	
+    refresh = null;
+
+    clearTimeout(refresh);
+
+    refresh = setTimeout(function(){$.refreshGame()}, 5000);
+}
+
+$.refreshGame = function(){
+
+    console.log("REFRESHING");
+
+    $.ajax({
+        type: "GET",
+        url: "api/games/" + gameId,
+        dataType: "json",
+        success: function(res){
+
+        	if((res.currentPlayer.name !== currentPlayer.name) || (res.currentCard.suit !== currentCard.suit) && (res.currentCard.value !== currentCard.value)) {
+                //Updated!
+                //Remove colour from background
+                $("#cardDisplay").removeClass('green red');
+
+
+                //Reset bet counter
+                $("#currentNumFingers").val(0).slider("refresh");
+
+                //Display card
+                $.displayCard(res.currentCard, res.status, res.currentPlayer, res.bet, res.fingersToDrink, res.cardsLeft, res.players);
+
+                //Finally make the current card the next one
+                currentCard = res.currentCard;
+
+            }
+
+            $.scheduleRefresh();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            // Error!
+        }
+    });
 
 };
 
@@ -306,7 +356,7 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 						$("#sliderBar").show();
 					}
 						
-					//Update scores
+					//TODO Update scores - no need if just joining existing game?!
 					$.updateTurnScores(players, bet, fingersToDrink);
 					
 					//Set the next player and change text
