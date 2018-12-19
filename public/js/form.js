@@ -51,11 +51,23 @@ $.getGameList = function(){
 
             for (var i = 0; i < games.length; i++) {
 
-                const id = games[i]._id;
+                const game = games[i];
 
-                const name = games[i].name;
+                const id = game._id;
 
-                options += "<li><a href='javascript:$.showGameList(false, &#39;" + id + "&#39;, &#39;" + name + "&#39;)'>" + name + "</a></li>";
+                const name = game.name;
+
+                const owner = game.owner;
+
+                options += "<li><a href='javascript:$.showGameList(false, &#39;" + id + "&#39;, &#39;" + name + "&#39;)'>" + name + "</a>";
+
+                console.log()
+
+                if(owner === $("#selectedPlayerName").val()) {
+                    options += "<a href='javascript:$.deleteGame(&#39;" + id + "&#39;)' data-role='button' data-theme='c' data-inline='true' data-icon='minus'></a>";
+                }
+
+                options += "</li>";
             }
 
             $("div#gameList ul").append(options);
@@ -91,13 +103,35 @@ $.showPlayerList = function(show, player){
 
                 $("#selectedPlayerName").val(player);
 
+                $.getGameList();
+
             }
         });
     }
 };
 
-//Show form panels - create new player
+$.deleteGame = function(id){
 
+    $.ajax({
+        type: "DELETE",
+        url: "api/games/" + id,
+        dataType: "json",
+        success: function(json){
+
+            //Refresh game list
+            $.getGameList();
+
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+
+        }
+    });
+
+}
+
+
+//Show form panels - create new player
 $.createNewPlayer = function(show, player){
 	var formContent = $(".gameForm");
 	var playerForm = $("#playerForm");
@@ -133,15 +167,16 @@ $.createNewPlayer = function(show, player){
 					success: function(json){
 
 						//Added!
-						//Refresh player list
+						//Refresh player & game list
 						$.getPlayerList();
+                        $.getGameList();
 
 						//Show previous screen
 						playerForm.fadeOut(function() {
 
 							formContent.fadeIn('fast');
 
-							$("#playerName").val(playerName);
+							$("#selectedPlayerName").val(playerName);
 
 							$.clearNewPlayerForm();
 						});

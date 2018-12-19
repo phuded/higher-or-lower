@@ -1,5 +1,5 @@
 import {getPlayers, updatePlayer, createPlayer, deletePlayer} from "../controllers/playerController";
-import {getGame, getGames, createGame, updateGame, updateGamePlayers} from "../controllers/gameController";
+import {getGame, getGames, createGame, updateGame, deleteGame, updateGamePlayers} from "../controllers/gameController";
 
 export default function routes(app) {
 
@@ -30,6 +30,8 @@ export default function routes(app) {
     app.route(root + "/api/games").post(createGame);
 
     app.route(root + "/api/games/:id").put(updateGame);
+
+    app.route(root + "/api/games/:id").delete(deleteGame);
 
     app.route(root + "/api/games/:id/players").put(updateGamePlayers);
 };
