@@ -258,6 +258,9 @@ $.joinGame = function(players){
                 //Update fingers
                 $("#totalNumFingers").text(currentBet + " " + ((currentBet>1 || currentBet==0)? drinkType + "s" : drinkType));
 
+                //Update the score on score tab
+                $.updateScore(game.players, game.fingersToDrink, true);
+
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
 

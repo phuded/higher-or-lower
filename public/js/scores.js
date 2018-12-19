@@ -1,7 +1,7 @@
 var players;
 
 //Update the score for a player
-$.updateScore = function(_players, fingersToDrink){
+$.updateScore = function(_players, fingersToDrink, skipHighScores){
 
 	players = _players;
 
@@ -56,7 +56,9 @@ $.updateScore = function(_players, fingersToDrink){
     // Reset scoretab
 	$(".scoreTable").show();
 
-	sendHighScores(updatedPlayer, fingersToDrink);
+	if(!skipHighScores) {
+        sendHighScores(updatedPlayer, fingersToDrink);
+    }
 };
 
 
