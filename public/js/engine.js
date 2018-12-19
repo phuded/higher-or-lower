@@ -3,7 +3,7 @@ var refresh = null;
 $.prepareGame = function(){
 
 	//Get player list
-	$.getPlayerList();
+    $.getPlayerList();
 
     //Get game list
     $.getGameList();
