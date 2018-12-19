@@ -39,11 +39,9 @@ $.startGame = function(){
 	var canPlay = true;
 		
 	//Check to ensure all player names are entered
-	$("#playerRows tr").each(function(){
-		if($(this).children("td:eq(0)").children("input").val() == ""){
-			canPlay = false;
-		}
-	});
+	if($("#selectedPlayerName").val() == ""){
+		canPlay = false;
+	}
 
     if(!canPlay){
     	return;
@@ -64,12 +62,7 @@ $.startGame = function(){
 	var players = [];
 
 	//Set players in array
-	$("#playerRows tr").each(function(){
-		const playerName = $(this).find("input").val();
-
-		players.push(playerName);
-
-	});
+	players.push($("#selectedPlayerName").val());
 
 	//Hide any current card
 	$("#cardDisplay").removeClass('green red');
@@ -159,6 +152,7 @@ $.createNewGame = function(players){
         data: {
             "name" : gameName,
             "players" : players,
+			"owner": players[0],
             "drinkType": drinkType,
             "remove": removeCardChecked(),
             "wholePack": useWholePackChecked(),

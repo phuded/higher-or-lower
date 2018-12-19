@@ -162,45 +162,8 @@ span#drinkMessage{
 	padding: 10px 8px;
 }
 
-/*Add/remove buttons*/
-a#addPlayer, a#delPlayer{
-	margin-left:0;
-	margin-bottom:10px;
-}
-
 a.smallerButton{
 	font-size:0.7em;
-}
-
-/*Player Rows*/
-#playerRows{
-	width: 100%;
-	margin-left: -3px;
-}
-
-#playerRows a{
-    font-size: 0.7em;
-    margin: .4em 1px .4em 5px;
-}
-
-#playerRows td.icon a span.ui-btn-inner{
-    padding: .5em 3px .5em 23px;
-}
-
-#playerRows td.icon a span.ui-btn-inner span.ui-icon{
-    left: 3px;
-}
-
-#playerRows tr td.icon{
-	width:20%;
-}
-
-#playerRows tr td.icon-del{
-	width:15%;
-}
-
-#playerRows tr td:nth-child(2){
-	padding-left: 5px;
 }
 
 /* Toggle buttons */

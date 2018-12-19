@@ -1,8 +1,10 @@
-export function Game(name, players, drinkType, remove, wholePack, betAnyCard){
+export function Game(name, owner, players, drinkType, remove, wholePack, betAnyCard){
 
     this._id;
 
     this.name = name;
+
+    this.owner = owner;
 
     this.players = players;
 
@@ -34,6 +36,8 @@ export function Game(name, players, drinkType, remove, wholePack, betAnyCard){
 
         return {
             _id: this._id,
+            name: this.name,
+            owner: this.owner,
             players: this.players,
             currentPlayer: this.currentPlayer,
             remove: this.remove,

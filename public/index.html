@@ -62,9 +62,21 @@
 
 						<div data-role="collapsible-set" class="formPanel">
 
+							<div data-role="collapsible" data-collapsed="false" data-theme="c" data-content-theme="d">
+								<h3>1. Select Player</h3>
+								<span style="font-size: 0.8em;">Register a new player or choose an existing:</span>
+								<br/>
 
-							<div data-role="collapsible" data-collapsed="false" class="drinkOption" data-theme="c" data-content-theme="d">
-								<h3>Create New Game</h3>
+								<a id="add" class="smallerButton" href="javascript:$.createNewPlayer(true, 1)" data-role="button" data-icon="plus" data-inline="true" data-theme="b">New</a>
+								<a id="search" class="smallerButton" href="javascript:$.showPlayerList(true, 1)" data-role="button" data-icon="search" data-inline="true" >Choose</a>
+
+
+								<input id="selectedPlayerName" type="text" MAXLENGTH=8" DISABLED/>
+
+							</div>
+
+							<div data-role="collapsible" data-collapsed="true" class="drinkOption" data-theme="c" data-content-theme="d">
+								<h3>2a. Create New Game</h3>
 
 								<span><b>1. What are you drinking?</b></span>
 								<fieldset data-role="controlgroup">
@@ -96,40 +108,14 @@
 							</div>
 
 							<div data-role="collapsible" data-collapsed="true" class="drinkOption" data-theme="c" data-content-theme="d">
-								<h3>Choose Existing Game</h3>
-
-								<input id="selectedGameId" type="text"/>
+								<h3>2b. Choose Existing Game</h3>
 
 								<a id="chooseGame" class="smallerButton" href="javascript:$.showGameList(true)" data-role="button" data-icon="search" data-inline="true" data-theme="b">Choose Game</a>
 								<a id="clearGame" class="smallerButton" href="javascript:$.clearGame()" data-role="button" data-icon="minus" data-inline="true">Clear</a>
 
+								<input id="selectedGameId" type="text" DISABLED/>
+
 							</div>
-
-
-							<div data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="d">
-								<h3>Add Players</h3>
-								<a id="addPlayer" class="smallerButton" href="javascript:$.addPlayerRow()" data-role="button" data-icon="plus" data-inline="true" data-theme="a">Add Player (+1)</a>
-								<a id="delPlayer" class="smallerButton" href="javascript:$.delPlayerRow()" data-role="button" data-icon="minus" data-inline="true" data-theme="c">Remove Player (-1)</a>
-								<br/>
-								<span style="font-size: 0.8em;">Play as a guest, register a new player or choose existing:</span>
-								<table id="playerRows">
-									<tr id="player_1">
-										<td>
-											<input type="text" value="Guest 1" MAXLENGTH=8"/>
-										</td>
-										<td class="icon">
-											<a id="add_1" href="javascript:$.createNewPlayer(true, 1)" data-role="button" data-icon="plus">New</a>
-										</td>
-										<td class="icon">
-											<a id="search_1" href="javascript:$.showPlayerList(true, 1)" data-role="button" data-icon="search">Choose</a>
-										</td>
-										<td class="icon-del">
-											<a id="del_1" href="javascript:$.delPlayerRow(1)" data-role="button" data-icon="minus" data-iconpos="notext" style="display:none;">Remove</a>
-										</td>
-									</tr>
-								</table>
-							</div>
-
 
 						</div>
 
