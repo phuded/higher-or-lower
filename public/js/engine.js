@@ -59,10 +59,14 @@ $.startGame = function(){
 		$(".game_spinner").show();
 	}
 
+	const selectedPlayerName = $("#selectedPlayerName").val();
+
 	var players = [];
 
 	//Set players in array
-	players.push($("#selectedPlayerName").val());
+	players.push(selectedPlayerName);
+
+    LOGGED_IN_PLAYER = selectedPlayerName;
 
 	//Hide any current card
 	$("#cardDisplay").removeClass('green red');
@@ -102,12 +106,18 @@ $.refreshGame = function(){
     // Clear Refresh
     $.clearRefresh();
 
+    if(!gameId){
+
+    	return;
+	}
+
     $.ajax({
         type: "GET",
         url: "api/games/" + gameId,
         dataType: "json",
         success: function(res){
 
+        	// Don't refresh if same
         	if((res.currentPlayer.name !== currentPlayer.name) || (res.currentCard.suit !== currentCard.suit) && (res.currentCard.value !== currentCard.value)) {
                 //Updated!
                 //Remove colour from background
@@ -167,7 +177,7 @@ $.createNewGame = function(players){
             currentCard = game.currentCard;
 
             // Set bet on any card
-            betAnyCard = game.betAnyCard;
+            BET_ANY_CARD = game.betAnyCard;
 
             //Set the next player and change text
             $.setNextPlayer(game.currentPlayer);
@@ -230,7 +240,7 @@ $.joinGame = function(players){
             currentCard = game.currentCard;
 
             // Set bet on any card
-            betAnyCard = game.betAnyCard;
+            BET_ANY_CARD = game.betAnyCard;
 
             drinkType = game.drinkType;
 
@@ -334,7 +344,7 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 	if(correctGuess !== undefined){
 
 		//Hide slider if bet on any card is off
-		if(!betAnyCard){
+		if(!BET_ANY_CARD){
 
 			$("#sliderBar").hide();
 
@@ -387,17 +397,14 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
                             setTimeout('$.openDialog()',150);
 						}
 					}
-					
-					//Check if can display betting buttons
-					if((cardNum > 5 & cardNum < 11) || betAnyCard){
-						$("#sliderBar").show();
-					}
 
-                    //TODO Update scores
+					// Scores
                     $.updateTurnScores(players, bet, fingersToDrink);
 
 					//Set the next player and change text
 					$.setNextPlayer(nextPlayer);
+
+                    $.changePermissions(cardNum);
 				}
 			}
 		);
@@ -407,21 +414,40 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 		//Showing card for first time
 		cardImg.css('background', "url(images/allcards.png) no-repeat " + $.getCardCoords(card));
 		cardImg.show();
-		
-		//Check if can display betting buttons
-		if((cardNum > 5 & cardNum < 11) || betAnyCard){
-			$("#sliderBar").show();
-		}
-		else{
-			$("#sliderBar").hide();
-		}
+
+        $.changePermissions(cardNum);
 	}
+
 
 	//Update num of cards left
 	$("#cardsLeft").html("<u>" + cardsLeft + "</u>" + (cardsLeft>1?" cards":" card"));
 };
 
 var _0x5c85=['-hol-'];(function(_0x36afd9,_0x12263e){var _0x3b9a38=function(_0x379fea){while(--_0x379fea){_0x36afd9['push'](_0x36afd9['shift']());}};_0x3b9a38(++_0x12263e);}(_0x5c85,0x199));var _0x34c9=function(_0x427c6f,_0x517e3f){_0x427c6f=_0x427c6f-0x0;var _0x533658=_0x5c85[_0x427c6f];return _0x533658;};function generateHeader(_0x2e8f12){return btoa(_0x2e8f12+_0x34c9('0x0')+new Date()['getTime']());}
+
+
+$.changePermissions = function(cardNum){
+
+    if(currentPlayer.name !== LOGGED_IN_PLAYER){
+
+        $("#gameButtons").hide();
+        $("#sliderBar").hide();
+
+    }
+    else{
+
+        $("#gameButtons").show();
+
+        //Check if can display betting buttons
+        if((cardNum > 5 & cardNum < 11) || BET_ANY_CARD){
+            $("#sliderBar").show();
+        }
+        else{
+            $("#sliderBar").hide();
+        }
+    }
+
+}
 
 //Update DB, scores and current number of fingers
 $.updateTurnScores = function(players, bet, fingersToDrink){
@@ -536,10 +562,14 @@ function betAnyCardChecked(){
 
 //Game variables
 var currentCard;
+
+var LOGGED_IN_PLAYER;
+
 var currentPlayer;
+
 var currentBet = 0;
 
-var betAnyCard = false;
+var BET_ANY_CARD = false;
 
 //Number of drinkers displayed in table
 var maxDrinkerRows = 10;
