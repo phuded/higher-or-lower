@@ -56,9 +56,6 @@ $.startGame = function(){
         }
     });
 
-	//Reset bet counter
-	$("#totalNumFingers").text("0 " + drinkType + "s");
-
 	//Show loading
 	if(!$("#cancel").is(":visible")){
 		$(".game_spinner").show();
@@ -96,7 +93,7 @@ $.scheduleRefresh = function (){
 	
     $.clearRefresh();
 
-    refresh = setTimeout(function(){$.refreshGame()}, 5000);
+    refresh = setTimeout(function(){$.refreshGame()}, 4000);
 
 }
 
@@ -199,6 +196,9 @@ $.createNewGame = function(players){
                 //Display card
                 $.displayCard(currentCard);
 
+                //Reset bet counter
+                $("#totalNumFingers").text("0 " + drinkType + "s");
+
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
 
@@ -238,6 +238,8 @@ $.joinGame = function(players){
             // Set bet on any card
             betAnyCard = game.betAnyCard;
 
+            drinkType = game.drinkType;
+
             //Set the next player and change text
             $.setNextPlayer(game.currentPlayer);
 
@@ -258,6 +260,9 @@ $.joinGame = function(players){
 
                 //Display
                 $.displayCard(currentCard);
+
+                //Update fingers
+                $("#totalNumFingers").text(currentBet + " " + ((currentBet>1 || currentBet==0)? drinkType + "s" : drinkType));
 
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
@@ -390,10 +395,10 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 					if((cardNum > 5 & cardNum < 11) || betAnyCard){
 						$("#sliderBar").show();
 					}
-						
-					//TODO Update scores - no need if just joining existing game?!
-					$.updateTurnScores(players, bet, fingersToDrink);
-					
+
+                    //TODO Update scores
+                    $.updateTurnScores(players, bet, fingersToDrink);
+
 					//Set the next player and change text
 					$.setNextPlayer(nextPlayer);
 				}
@@ -414,7 +419,7 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 			$("#sliderBar").hide();
 		}
 	}
-	
+
 	//Update num of cards left
 	$("#cardsLeft").html("<u>" + cardsLeft + "</u>" + (cardsLeft>1?" cards":" card"));
 };
