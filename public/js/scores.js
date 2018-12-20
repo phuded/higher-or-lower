@@ -18,7 +18,7 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
 
         const playerName = player.name;
 
-        if(playerName === currentPlayer.name){
+        if(playerName === CURRENT_PLAYER.name){
 
             updatedPlayer = player;
 		}

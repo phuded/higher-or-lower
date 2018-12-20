@@ -50,7 +50,7 @@ $.startGame = function(){
     //Set drink type
     $("input.drinkOption").each(function(){
         if($(this).attr("checked")){
-            drinkType = $(this).val()
+            DRINK_TYPE = $(this).val()
         }
     });
 
@@ -118,7 +118,7 @@ $.refreshGame = function(){
         success: function(res){
 
         	// Don't refresh if same
-        	if((res.currentPlayer.name !== currentPlayer.name) || (res.currentCard.suit !== currentCard.suit) && (res.currentCard.value !== currentCard.value)) {
+        	if((res.currentPlayer.name !== CURRENT_PLAYER.name) || (res.currentCard.suit !== CURRENT_CARD.suit) && (res.currentCard.value !== CURRENT_CARD.value)) {
                 //Updated!
                 //Remove colour from background
                 $("#cardDisplay").removeClass('green red');
@@ -131,7 +131,7 @@ $.refreshGame = function(){
                 $.displayCard(res.currentCard, res.status, res.currentPlayer, res.bet, res.fingersToDrink, res.cardsLeft, res.players, true);
 
                 //Finally make the current card the next one
-                currentCard = res.currentCard;
+                CURRENT_CARD = res.currentCard;
 
             }
 
@@ -163,7 +163,7 @@ $.createNewGame = function(players){
             "name" : gameName,
             "players" : players,
 			"owner": players[0],
-            "drinkType": drinkType,
+            "drinkType": DRINK_TYPE,
             "remove": removeCardChecked(),
             "wholePack": useWholePackChecked(),
             "betAnyCard": betAnyCardChecked()
@@ -174,7 +174,7 @@ $.createNewGame = function(players){
 
             GAME_ID = game._id;
 
-            currentCard = game.currentCard;
+            CURRENT_CARD = game.currentCard;
 
             // Set bet on any card
             BET_ANY_CARD = game.betAnyCard;
@@ -182,13 +182,13 @@ $.createNewGame = function(players){
             //Set the next player and change text
             $.setNextPlayer(game.currentPlayer);
 
-            currentBet = game.bet;
+            CURRENT_BET = game.bet;
 
             //Refresh game list
             $.getGameList();
 
             //Preload images & close dialogue
-            $.preLoadImages(preloadImages,function() {
+            $.preLoadImages(PRELOAD_IMAGES,function() {
                 //Hide loading
                 $(".game_spinner").hide();
 
@@ -198,10 +198,10 @@ $.createNewGame = function(players){
                 $.closeForm();
 
                 //Display card
-                $.displayCard(currentCard);
+                $.displayCard(CURRENT_CARD);
 
                 //Reset bet counter
-                $("#totalNumFingers").text("0 " + drinkType + "s");
+                $("#totalNumFingers").text("0 " + DRINK_TYPE + "s");
 
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
@@ -237,23 +237,23 @@ $.joinGame = function(players){
 
             GAME_ID = game._id;
 
-            currentCard = game.currentCard;
+            CURRENT_CARD = game.currentCard;
 
             // Set bet on any card
             BET_ANY_CARD = game.betAnyCard;
 
-            drinkType = game.drinkType;
+            DRINK_TYPE = game.drinkType;
 
             //Set the next player and change text
             $.setNextPlayer(game.currentPlayer);
 
-            currentBet = game.bet;
+            CURRENT_BET = game.bet;
 
             //Refresh game list
             $.getGameList();
 
             //Preload images & close dialogue
-            $.preLoadImages(preloadImages,function() {
+            $.preLoadImages(PRELOAD_IMAGES,function() {
                 //Hide loading
                 $(".game_spinner").hide();
 
@@ -263,10 +263,10 @@ $.joinGame = function(players){
                 $.closeForm();
 
                 //Display
-                $.displayCard(currentCard);
+                $.displayCard(CURRENT_CARD);
 
                 //Update fingers
-                $("#totalNumFingers").text(currentBet + " " + ((currentBet>1 || currentBet==0)? drinkType + "s" : drinkType));
+                $("#totalNumFingers").text(CURRENT_BET + " " + ((CURRENT_BET>1 || CURRENT_BET==0)? DRINK_TYPE + "s" : DRINK_TYPE));
 
                 //Update the score on score tab
                 $.updateScore(game.players, game.fingersToDrink, true);
@@ -307,7 +307,7 @@ $.playTurn = function(higherGuess){
 		url: "api/games/" + GAME_ID,
 		data: {"bet": currentBet,
 			"guess" : higherGuess,
-			"playerName" : currentPlayer.name
+			"playerName" : CURRENT_PLAYER.name
 		},
 		dataType: "json",
 		success: function(res){
@@ -317,7 +317,7 @@ $.playTurn = function(higherGuess){
 			$.displayCard(res.currentCard, res.status, res.currentPlayer, res.bet, res.fingersToDrink, res.cardsLeft, res.players, false);
 
 			//Finally make the current card the next one
-			currentCard = res.currentCard;
+			CURRENT_CARD = res.currentCard;
 
             // Refresh
             $.scheduleRefresh();
@@ -377,10 +377,10 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 						if(!skipAnimation){
 
                             if(fingersToDrink > 0){
-                                $("#drinkMessage").html("<b>"+ currentPlayer.name + "</b> you must drink...<br/><span id='numFingers'>"+(fingersToDrink > 1?fingersToDrink + " " + drinkType + "s!":fingersToDrink + " " + drinkType + "!")+"</span>");
+                                $("#drinkMessage").html("<b>"+ CURRENT_PLAYER.name + "</b> you must drink...<br/><span id='numFingers'>"+(fingersToDrink > 1?fingersToDrink + " " + DRINK_TYPE + "s!":fingersToDrink + " " + DRINK_TYPE + "!")+"</span>");
                             }
                             else{
-                                $("#drinkMessage").html("<b>"+ currentPlayer.name + "</b> you must drink...<br/>&nbsp;");
+                                $("#drinkMessage").html("<b>"+ CURRENT_PLAYER.name + "</b> you must drink...<br/>&nbsp;");
 
                             }
 
@@ -428,7 +428,7 @@ var _0x5c85=['-hol-'];(function(_0x36afd9,_0x12263e){var _0x3b9a38=function(_0x3
 
 $.changePermissions = function(cardNum){
 
-    if(currentPlayer.name !== LOGGED_IN_PLAYER){
+    if(CURRENT_PLAYER.name !== LOGGED_IN_PLAYER){
 
         $("#gameButtons").hide();
         $("#sliderBar").hide();
@@ -453,7 +453,7 @@ $.changePermissions = function(cardNum){
 $.updateTurnScores = function(players, bet, fingersToDrink){
 
 	//Update fingers	
-	$("#totalNumFingers").text(bet + " " + ((bet>1 || bet==0)?drinkType +"s":drinkType));
+	$("#totalNumFingers").text(bet + " " + ((bet>1 || bet==0)? DRINK_TYPE + "s" : DRINK_TYPE));
 	
 	//Update the score on score tab
 	$.updateScore(players, fingersToDrink);
@@ -463,9 +463,9 @@ $.updateTurnScores = function(players, bet, fingersToDrink){
 //Get the next player from the array
 $.setNextPlayer = function(nextPlayer){
 
-    currentPlayer = nextPlayer;
+    CURRENT_PLAYER = nextPlayer;
 	//change text
-	$("#playerName").html("<strong>" + currentPlayer.name + "</strong> guess Higher or Lower!");
+	$("#playerName").html("<strong>" + CURRENT_PLAYER.name + "</strong> guess Higher or Lower!");
 };
 
 //Return card coords 
@@ -561,23 +561,23 @@ function betAnyCardChecked(){
 
 
 //Game variables
-var currentCard;
+var CURRENT_CARD;
 
 var LOGGED_IN_PLAYER;
 
-var currentPlayer;
+var CURRENT_PLAYER;
 
-var currentBet = 0;
+var CURRENT_BET = 0;
 
 var BET_ANY_CARD = false;
 
-//Number of drinkers displayed in table
-var maxDrinkerRows = 10;
-
 //Drink type
-var drinkType;
-
-//Images to preload
-var preloadImages =['images/allcards.png'];
+var DRINK_TYPE;
 
 var GAME_ID;
+
+//Number of drinkers displayed in table
+var MAX_DRINKER_ROWS = 10;
+
+//Images to preload
+var PRELOAD_IMAGES =['images/allcards.png'];

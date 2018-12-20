@@ -38,7 +38,7 @@ $.generateDrinkersTab = function(id, orderBy, dir){
 	//Reset/store start position
 	table.data("start", 0);
 	
-	$.generateDrinkersTable(table, orderBy, sDir, maxDrinkerRows,0);
+	$.generateDrinkersTable(table, orderBy, sDir, MAX_DRINKER_ROWS,0);
 };
 
 $.navDrinkersTab = function(direction){
@@ -48,10 +48,10 @@ $.navDrinkersTab = function(direction){
 	
 	//Depending on direction, add to or remove from start
 	if(direction > 0){
-		start += maxDrinkerRows;
+		start += MAX_DRINKER_ROWS;
 	}
 	else if (direction < 0){
-		start -= maxDrinkerRows;
+		start -= MAX_DRINKER_ROWS;
 	}
 
 	//Store start
@@ -70,7 +70,7 @@ $.navDrinkersTab = function(direction){
 	//Show loading
 	$.showLoading(true);
 
-	$.generateDrinkersTable(table, col, dir, maxDrinkerRows, start);
+	$.generateDrinkersTable(table, col, dir, MAX_DRINKER_ROWS, start);
 };
 
 $.generateDrinkersTable = function(table, orderBy, sDir, num, start){

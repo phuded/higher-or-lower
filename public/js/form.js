@@ -120,7 +120,7 @@ $.deleteGame = function(id){
 
             //Refresh game list
             $.getGameList();
-            
+
             // Deleting current game
             if(GAME_ID && GAME_ID === id){
 
