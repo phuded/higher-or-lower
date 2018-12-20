@@ -120,6 +120,15 @@ $.deleteGame = function(id){
 
             //Refresh game list
             $.getGameList();
+            
+            // Deleting current game
+            if(GAME_ID && GAME_ID === id){
+
+                // Show cancel
+                $("#cancel").hide();
+
+                GAME_ID = null;
+            }
 
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -232,7 +241,7 @@ $.showGameList = function(show, selectedGameId, selectedGameName){
 
             if(selectedGameId != null){
 
-                gameId = selectedGameId;
+                GAME_ID = selectedGameId;
 
                 $("#selectedGameId").val(selectedGameName);
 
@@ -243,6 +252,6 @@ $.showGameList = function(show, selectedGameId, selectedGameName){
 
 $.clearGame = function(){
 
-    gameId = null;
+   // GAME_ID = null;
     $("#selectedGameId").val("");
 }

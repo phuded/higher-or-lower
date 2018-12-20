@@ -72,7 +72,7 @@ $.startGame = function(){
 	$("#cardDisplay").removeClass('green red');
 
 
-	if(!gameId || !$("#selectedGameId").val()){
+	if(!GAME_ID || !$("#selectedGameId").val()){
 
 		console.log("NEW GAME");
 
@@ -106,14 +106,14 @@ $.refreshGame = function(){
     // Clear Refresh
     $.clearRefresh();
 
-    if(!gameId){
+    if(!GAME_ID){
 
     	return;
 	}
 
     $.ajax({
         type: "GET",
-        url: "api/games/" + gameId,
+        url: "api/games/" + GAME_ID,
         dataType: "json",
         success: function(res){
 
@@ -172,7 +172,7 @@ $.createNewGame = function(players){
         success: function(game){
             //Updated!
 
-            gameId = game._id;
+            GAME_ID = game._id;
 
             currentCard = game.currentCard;
 
@@ -227,7 +227,7 @@ $.joinGame = function(players){
 
     $.ajax({
         type: "PUT",
-        url: "api/games/" + gameId + "/players",
+        url: "api/games/" + GAME_ID + "/players",
         data: {
             "players" : players
         },
@@ -235,7 +235,7 @@ $.joinGame = function(players){
         success: function(game){
             //Updated!
 
-            gameId = game._id;
+            GAME_ID = game._id;
 
             currentCard = game.currentCard;
 
@@ -304,7 +304,7 @@ $.playTurn = function(higherGuess){
 
 	$.ajax({
 		type: "PUT",
-		url: "api/games/" + gameId,
+		url: "api/games/" + GAME_ID,
 		data: {"bet": currentBet,
 			"guess" : higherGuess,
 			"playerName" : currentPlayer.name
@@ -580,4 +580,4 @@ var drinkType;
 //Images to preload
 var preloadImages =['images/allcards.png'];
 
-var gameId;
+var GAME_ID;
