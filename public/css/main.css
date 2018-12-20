@@ -158,6 +158,10 @@ span#drinkMessage{
 
 }
 
+.formPanel .ui-collapsible-heading {
+	font-size: 15px;
+}
+
 .formPanel .ui-collapsible-content{
 	padding: 10px 8px;
 }
