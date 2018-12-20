@@ -69,7 +69,7 @@
 							<tr>
 								<td class="tableButton"><a id="add" class="smallerButton" href="javascript:$.createNewPlayer(true, 1)" data-role="button" data-icon="plus" data-inline="true">New</a></td>
 								<td class="tableButton"><a id="search" class="smallerButton" href="javascript:$.showPlayerList(true, 1)" data-role="button" data-icon="search" data-inline="true" data-theme="a">Choose</a></td>
-								<td> <input id="selectedPlayerName" style="font-size: 0.9em;" type="text" MAXLENGTH=8" placeholder="None Specified" data-theme="d" DISABLED/></td>
+								<td> <input id="selectedPlayerName" style="font-size: 0.9em;" type="text" MAXLENGTH=8" placeholder="None Specified" data-theme="d" readonly/></td>
 							</tr>
 						</table>
 
@@ -82,7 +82,7 @@
 									<tr>
 										<td class="tableButton"><a id="chooseGame" class="smallerButton" href="javascript:$.showGameList(true)" data-role="button" data-icon="search" data-inline="true" data-theme="b">Choose</a></td>
 										<td class="tableButton"><a id="clearGame" class="smallerButton" href="javascript:$.clearGame()" data-role="button" data-icon="minus" data-inline="true">Unselect</a></td>
-										<td><input id="selectedGameId" style="font-size: 0.75em;" type="text" placeholder="None Selected" DISABLED/></td>
+										<td><input id="selectedGameId" style="font-size: 0.75em;" type="text" placeholder="None Selected" data-theme="d" readonly/></td>
 									</tr>
 
 								</table>
@@ -92,7 +92,7 @@
 							<div data-role="collapsible" data-collapsed="true" class="drinkOption" data-theme="a" data-content-theme="c">
 								<h3>Or Create a New Game</h3>
 
-								<input id="newGameName" type="text" placeholder="Optional: Enter Game Name"/>
+								<input id="newGameName" type="text" placeholder="Optional: Enter Game Name" data-theme="d"/>
 								<br/>
 
 								<span>1. What are you drinking?</span>
