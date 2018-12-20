@@ -13,6 +13,8 @@ $.openForm = function(){
 	//Reset to top panel
 	$('.formPanel .ui-collapsible-contain:eq(0)').trigger('expand');
 
+	$("#newGameName").val("");
+
 	// Show form
     $("#game-contents").hide();
     $("#form").fadeIn();

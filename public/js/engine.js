@@ -90,7 +90,7 @@ $.scheduleRefresh = function (){
 	
     $.clearRefresh();
 
-    refresh = setTimeout(function(){$.refreshGame()}, 4000);
+    refresh = setTimeout(function(){$.refreshGame()}, 3500);
 
 }
 
@@ -153,8 +153,16 @@ $.createNewGame = function(players){
     // Clear Refresh
     $.clearRefresh();
 
-    const date = new Date();
-    const gameName = players[0] + " [" + date.toLocaleDateString() + " " + date.toTimeString().substring(0, 5) + "]";
+    let gameName = $("#newGameName").val();
+
+    if(!gameName) {
+        const date = new Date();
+        gameName = players[0] + " [" + date.toLocaleDateString() + " " + date.toTimeString().substring(0, 5) + "]";
+    }
+    else{
+
+        gameName = gameName.replace(/'/g, "");
+    }
 
     $.ajax({
         type: "POST",
