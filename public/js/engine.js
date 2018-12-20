@@ -1,4 +1,4 @@
-var refresh = null;
+var REFRESH = null;
 
 $.prepareGame = function(){
 
@@ -90,15 +90,15 @@ $.scheduleRefresh = function (){
 	
     $.clearRefresh();
 
-    refresh = setTimeout(function(){$.refreshGame()}, 3500);
+    REFRESH = setTimeout(function(){$.refreshGame()}, 3500);
 
 }
 
 $.clearRefresh = function (){
 
-    clearTimeout(refresh);
+    clearTimeout(REFRESH);
 
-    refresh = null;
+    REFRESH = null;
 }
 
 $.refreshGame = function(){
