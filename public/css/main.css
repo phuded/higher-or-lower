@@ -164,6 +164,11 @@ span#drinkMessage{
 
 a.smallerButton{
 	font-size:0.7em;
+	margin: 0;
+}
+
+a.smallerButton .ui-btn-inner{
+	padding-right: 7px;
 }
 
 /* Toggle buttons */
@@ -193,6 +198,14 @@ a.smallerButton{
 	width:30px;
 	position:relative;
 	top:9px;
+}
+
+.gameForm table{
+	width: 98%;
+}
+
+.gameForm table td.tableButton{
+	width: 20%;
 }
 
 /*Player List*/
