@@ -392,14 +392,10 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 
                             }
 
-                            if (Math.random() >= 0.5){
-                                $("#pictureDisplay1").show();
-                                $("#pictureDisplay2").hide();
-                            }
-                            else{
-                                $("#pictureDisplay2").show();
-                                $("#pictureDisplay1").hide();
-                            }
+                            const randomNum = Math.floor(Math.random() * 5) + 1;
+
+                            $(".pictureDisplay").hide();
+                            $("#pictureDisplay" + randomNum).show();
 
                             //Show Lee
                             setTimeout('$.openDialog()',150);
