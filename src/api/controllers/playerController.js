@@ -8,7 +8,7 @@ export function getPlayers(req, res) {
 
 export function createPlayer(req, res) {
 
-    return sCreatePlayer(req, res);//sCreatePlayer(req, res);
+    return sCreatePlayer(req, res);
 };
 
 export function updatePlayer(req, res) {

@@ -85,7 +85,6 @@ export function createPlayer(req, res) {
         newPlayer.maxFingers = 0;
         newPlayer.maxCorrect = 0;
         newPlayer.maxIncorrect = 0;
-        newPlayer.lastPlayed = new Date();
 
         collection.insertOne(newPlayer, function(err, result) {
 
@@ -185,6 +184,7 @@ export function updatePlayer(req, res) {
 
             update.lastPlayed = new Date();
 
+            // Commented out as Last Played always updated
             // if(Object.getOwnPropertyNames(update).length === 0){
             //
             //     client.close();
