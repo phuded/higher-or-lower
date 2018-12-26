@@ -133,7 +133,7 @@ export function updatePlayer(req, res) {
 
     const currrentTimeStamp = new Date().getTime();
 
-    if((currrentTimeStamp - clientTimeStamp) > 1000){
+    if((currrentTimeStamp - clientTimeStamp) > 15000){
 
         return res.status(500).send({error: "Invalid request."});
     }
