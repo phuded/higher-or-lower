@@ -74,14 +74,10 @@ $.startGame = function(){
 
 	if(!GAME_ID || !$("#selectedGameId").val()){
 
-		console.log("NEW GAME");
-
         $.createNewGame(players);
 
 		return;
 	}
-
-    console.log("EXISTING GAME");
 
 	$.joinGame(players);
 };

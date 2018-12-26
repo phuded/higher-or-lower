@@ -3,6 +3,7 @@
     top:		50px;
     bottom:		47px;
     width: 		100%;*/
+    padding: 5px;
 }
 
 .tab-content{
@@ -73,7 +74,7 @@
 /* Betting buttons */
 #higher,#lower{
 	width: 160px;
-	font-size: 1.2em;
+	font-size: 1.15em;
 }
 
 /*Slider*/
@@ -102,7 +103,7 @@
 
 /*Bottom bar*/
 #footer{
-	height:47px;
+	height: 60px;
 	position: absolute;
 	bottom: 0;
 }
@@ -117,9 +118,20 @@
     width: 25%;
 }
 
+#footer table td a{
+    height: 40px;
+}
+
+#footer table td a > span{
+    padding-top: 12px;
+}
+
+#footer table td a > span > span.ui-icon{
+    margin-top: -7px;
+}
+
 #footer td{
 	font-size:0.9em;
-	border-left: 1px dotted #456F9A;
 }
 
 .spinnerSmall{
@@ -331,26 +343,26 @@ table.scoreTable tr td.incorrect{
 	font-size: 0.75em;
 }
 
-.navButtons,.reloadButton{
+.reloadButton{
 	width:300px;
 	margin-left:auto;
 	margin-right:auto;
 }
 
-.reloadButton>p{
+.reloadButton > p{
 	font-size:0.9em;
 }
 
-.navButtons>a,.reloadButton>a{
+.navButtons > a, .reloadButton > a{
 	float:right;
 	font-size: 0.8em;
 }
 
-.navButtons>a:first-child{
+.navButtons > a:first-child{
 	float:left;
 }
 
-.drinkers_header > span,.navButtons>a > span, .reloadButton>a > span  {
+.drinkers_header > span, .reloadButton>a > span  {
 	padding: 10px 5px 10px 20px !important;
 	white-space: normal;
 }
