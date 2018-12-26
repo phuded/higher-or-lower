@@ -340,7 +340,7 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 	//Card image
 	var cardImg = $("#card");
 	
-	//Not first card -flipping
+	//Not first card - flipping
 	if(correctGuess !== undefined){
 
 		//Hide slider if bet on any card is off
@@ -365,11 +365,13 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 				},
 				complete:function(){
 				
-					if(correctGuess){
+					if(correctGuess === true){
+
 						//Green background
 						$("#cardDisplay").addClass('green');
 					}
-					else{
+					else if(correctGuess === false){
+
 						//Red background
 						$("#cardDisplay").addClass('red');
 					
