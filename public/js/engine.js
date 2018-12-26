@@ -436,6 +436,8 @@ $.changePermissions = function(cardNum, cardsLeft){
         buttons.hide();
         slider.hide();
 
+        $("#playerName").html("<strong>Game Over!</strong>");
+
         return;
     }
 

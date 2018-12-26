@@ -11,16 +11,16 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
     var scoreTableBody = "";
 
 
-    var updatedPlayer = null;
+    var playerToUpdate = null;
 
     //Set players in array
     $(players).each(function(pIdx, player){
 
         const playerName = player.name;
 
-        if(playerName === CURRENT_PLAYER.name){
+        if((playerName === CURRENT_PLAYER.name) && (LOGGED_IN_PLAYER == CURRENT_PLAYER.name)){
 
-            updatedPlayer = player;
+            playerToUpdate = player;
 		}
 
         //Add in header row
@@ -56,15 +56,16 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
     // Reset scoretab
 	$(".scoreTable").show();
 
-	if(!skipHighScores) {
-        sendHighScores(updatedPlayer, fingersToDrink);
+	if(!skipHighScores && playerToUpdate) {
+
+        sendHighScores(playerToUpdate, fingersToDrink);
     }
 };
 
 
-function sendHighScores(updatedPlayer, fingersToDrink){
+function sendHighScores(playerToUpdate, fingersToDrink){
 
-    var playerName = updatedPlayer.name;
+    var playerName = playerToUpdate.name;
 
     //Check for winning streak
     var winningRun = 0;
@@ -72,14 +73,14 @@ function sendHighScores(updatedPlayer, fingersToDrink){
     //Losing streak
     var losingRun = 0;
 
-    var correctGuess = updatedPlayer.stats[updatedPlayer.stats.length - 1];
+    var correctGuess = playerToUpdate.stats[playerToUpdate.stats.length - 1];
 
     if(correctGuess){
 
         //Determine any winning streak
-        for(var i = updatedPlayer.stats.length; i--; i>=0){
+        for(var i = playerToUpdate.stats.length; i--; i>=0){
 
-            var prevTurn = updatedPlayer.stats[i];
+            var prevTurn = playerToUpdate.stats[i];
 
             if(prevTurn){
                 winningRun++;
@@ -92,9 +93,9 @@ function sendHighScores(updatedPlayer, fingersToDrink){
     else{
 
         //Determine any losing streak
-        for(i = updatedPlayer.stats.length; i--; i>=0){
+        for(i = playerToUpdate.stats.length; i--; i>=0){
 
-            var prevTurn = updatedPlayer.stats[i];
+            var prevTurn = playerToUpdate.stats[i];
 
             if(!prevTurn){
                 losingRun++;
