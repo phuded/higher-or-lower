@@ -1,6 +1,5 @@
 import {MongoClient, ObjectId} from "mongodb";
-import {Game, playTurn, checkIfPlayerInGame} from "../models/game";
-import GamePlayer from "../models/gamePlayer";
+import {Game, playTurn, addPlayerToGame, removePlayerFromGame} from "../models/game";
 
 function mongoConfig(){
 
@@ -203,7 +202,7 @@ export function updateGame(id, playerName, guess, bet, res) {
 
 
 
-export function updateGamePlayers(id, newPlayers, res) {
+export function updateGamePlayers(id, newPlayers, playersToRemove, res) {
 
     MongoClient.connect(mongoConfig().url, param, function (err, client) {
 
@@ -227,23 +226,48 @@ export function updateGamePlayers(id, newPlayers, res) {
 
             let gameUpdated = false;
 
-            newPlayers.forEach(function (newPlayer) {
+            if(newPlayers){
 
-                const inGame = checkIfPlayerInGame(game, newPlayer);
+                newPlayers.forEach(function (newPlayer) {
 
-                if(!inGame){
+                    const added = addPlayerToGame(game, newPlayer);
 
-                    gameUpdated = true;
+                    if(added){
 
-                    game.players.push(new GamePlayer(newPlayer))
-                }
-            });
+                        gameUpdated = true;
+                    }
+
+                });
+            }
+
+            if(playersToRemove){
+
+                playersToRemove.forEach(function (playerToRemove) {
+
+                    const removed = removePlayerFromGame(game, playerToRemove);
+
+                    if(removed){
+
+                        gameUpdated = true;
+                    }
+
+                });
+            }
 
             if(!gameUpdated){
 
                 client.close();
 
                 return res.status(200).send(game);
+            }
+
+            // No Players
+            if(game.players.length === 0){
+
+                client.close();
+
+                return deleteGame(id, res);
+
             }
 
             collection.findOneAndUpdate({_id: new ObjectId(id)}, {$set: game}, { upsert: false, returnOriginal: false }, function(err, result) {

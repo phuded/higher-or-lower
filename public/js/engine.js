@@ -209,7 +209,7 @@ $.createNewGame = function(players){
                 $.displayCard(CURRENT_CARD, game.cardsLeft);
 
                 //Reset bet counter
-                $("#totalNumFingers").text("0 " + DRINK_TYPE + "s");
+                $("#totalNumFingers").text("0");
 
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
@@ -271,7 +271,7 @@ $.joinGame = function(players){
                 $.displayCard(CURRENT_CARD, game.cardsLeft);
 
                 //Update fingers
-                $("#totalNumFingers").text(CURRENT_BET + " " + ((CURRENT_BET>1 || CURRENT_BET==0)? DRINK_TYPE + "s" : DRINK_TYPE));
+                $("#totalNumFingers").text(CURRENT_BET);
 
                 //Update the score on score tab
                 $.updateScore(game.players, game.fingersToDrink, true);
@@ -465,7 +465,7 @@ $.changePermissions = function(cardNum, cardsLeft){
 $.updateTurnScores = function(players, bet, fingersToDrink){
 
 	//Update fingers	
-	$("#totalNumFingers").text(bet + " " + ((bet>1 || bet==0)? DRINK_TYPE + "s" : DRINK_TYPE));
+	$("#totalNumFingers").text(bet);
 	
 	//Update the score on score tab
 	$.updateScore(players, fingersToDrink);
@@ -478,6 +478,34 @@ $.setNextPlayer = function(nextPlayer){
     CURRENT_PLAYER = nextPlayer;
 	//change text
 	$("#playerName").html("<strong>" + CURRENT_PLAYER.name + "</strong> guess Higher or Lower!");
+};
+
+//Leave the game
+$.leaveGame = function(){
+
+    $.ajax({
+        type: "PUT",
+        url: "api/games/" + GAME_ID + "/players",
+        data: {
+            "playersToRemove" : [LOGGED_IN_PLAYER]
+        },
+        dataType: "json",
+        success: function(res){
+
+            // Open
+            $.openForm();
+
+            // Hide cancel
+            $("#cancel").hide();
+
+            GAME_ID = null;
+
+            $.clearGame();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+        }
+    });
 };
 
 //Return card coords 

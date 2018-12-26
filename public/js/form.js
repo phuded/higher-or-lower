@@ -133,7 +133,7 @@ $.deleteGame = function(id){
             // Deleting current game
             if(GAME_ID && GAME_ID === id){
 
-                // Show cancel
+                // Hide cancel
                 $("#cancel").hide();
 
                 GAME_ID = null;

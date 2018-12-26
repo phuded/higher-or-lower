@@ -72,12 +72,12 @@ export function updateGamePlayers(req, res) {
 
     let turnBody = req.body;
 
-    if(!turnBody.players){
+    if(!turnBody.players && !turnBody.playersToRemove){
 
         return res.status(400).send({error: "Invalid parameters"});
     }
 
-    return sUpdateGamePlayers(id, turnBody.players, res);
+    return sUpdateGamePlayers(id, turnBody.players, turnBody.playersToRemove, res);
 };
 
 

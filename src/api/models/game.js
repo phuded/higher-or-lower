@@ -1,3 +1,5 @@
+import GamePlayer from "./gamePlayer";
+
 export function Game(name, owner, players, drinkType, remove, wholePack, betAnyCard){
 
     this._id;
@@ -132,7 +134,7 @@ export function playTurn(game, guess, bet){
     return true
 };
 
-export function checkIfPlayerInGame(game, playerName){
+export function addPlayerToGame(game, playerName){
 
     let inGame = false;
 
@@ -144,9 +146,63 @@ export function checkIfPlayerInGame(game, playerName){
         }
     });
 
-    return inGame;
+    if(!inGame){
+
+        // Add
+        game.players.push(new GamePlayer(playerName))
+    }
+
+    return !inGame;
 }
 
+
+export function removePlayerFromGame(game, playerName){
+
+    let inGame = false;
+
+    let pIndex;
+
+    game.players.forEach(function (player, idx) {
+
+        if(player.name == playerName){
+
+            inGame = true;
+
+            pIndex = idx;
+        }
+    });
+
+    if(inGame){
+
+        if(game.currentPlayerIdx === pIndex){
+
+            // Next player
+            if(game.currentPlayerIdx < (game.players.length -1)) {
+
+                game.currentPlayerIdx++;
+            }
+            else{
+                game.currentPlayerIdx = 0;
+            }
+
+            // Set player
+            game.currentPlayer = game.players[game.currentPlayerIdx];
+        }
+
+        // Remove player
+        game.players.splice(pIndex, 1);
+
+        // Ensure it is not more then length of array
+        if(game.currentPlayerIdx >= game.players.length){
+
+            game.currentPlayerIdx = game.players.length - 1;
+            game.currentPlayer = game.players[game.currentPlayerIdx];
+        }
+
+    }
+
+    return inGame;
+}
 
 function getCard(game){
 
