@@ -10,7 +10,6 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
     //Create scoretab var
     var scoreTableBody = "";
 
-
     var playerToUpdate = null;
 
     //Set players in array
@@ -52,9 +51,15 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
     //Append table to div
     table.html(scoreTableBody).trigger("create");
 
+    if(scoreTableBody){
 
-    // Reset scoretab
-	$(".scoreTable").show();
+        // Show score table
+        table.show();
+	}
+	else{
+
+	    table.hide();
+	}
 
 	if(!skipHighScores && playerToUpdate) {
 

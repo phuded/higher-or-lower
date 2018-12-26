@@ -210,6 +210,8 @@ $.createNewGame = function(players){
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
 
+                $("#gameTitle").text(game.name);
+
                 //Refresh
                 $.scheduleRefresh();
             });
@@ -274,6 +276,8 @@ $.joinGame = function(players){
 
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
+
+                $("#gameTitle").text(game.name);
 
                 //Refresh
                 $.scheduleRefresh();
@@ -500,7 +504,14 @@ $.leaveGame = function(){
 
             GAME_ID = null;
 
+            // Clear selected game
             $.clearGame();
+
+            // Reset scoretab
+            $(".scoreTable").hide();
+
+            //Remove game title
+            $("#gameTitle").text("");
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
 
