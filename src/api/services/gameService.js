@@ -167,7 +167,15 @@ export function updateGame(id, playerName, guess, bet, res) {
             }
 
             // Make changes
-            playTurn(game, guess, bet);
+            const gameUpdated = playTurn(game, guess, bet);
+
+            if(!gameUpdated){
+
+                client.close();
+
+                return res.status(400).send({error: "Cannot update game: " + id + ": Game has finished."});
+
+            }
 
             collection.findOneAndUpdate({_id: new ObjectId(id)}, {$set: game}, { upsert: false, returnOriginal: false }, function(err, result) {
 

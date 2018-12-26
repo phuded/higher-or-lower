@@ -57,13 +57,22 @@ $.getGameList = function(){
 
                 const name = game.name;
 
+                const cardsLeft = game.cardsLeft;
+
+                const noCards = cardsLeft === 0;
+
+                let html = "href='javascript:$.showGameList(false, &#39;" + id + "&#39;, &#39;" + name + "&#39;)'";
+
+                if(noCards){
+
+                    html = "style='text-decoration: line-through !important;'";
+                }
+
                 const owner = game.owner;
 
-                options += "<li><a href='javascript:$.showGameList(false, &#39;" + id + "&#39;, &#39;" + name + "&#39;)'>" + name + "</a>";
+                options += "<li><a " + html + " >" + name + "</a>";
 
-                console.log()
-
-                if(owner === $("#selectedPlayerName").val()) {
+                if(owner === $("#selectedPlayerName").val() || noCards) {
                     options += "<a href='javascript:$.deleteGame(&#39;" + id + "&#39;)' data-role='button' data-theme='c' data-inline='true' data-icon='minus'></a>";
                 }
 

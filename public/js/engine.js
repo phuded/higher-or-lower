@@ -128,7 +128,7 @@ $.refreshGame = function(){
                 $("#currentNumFingers").val(0).slider("refresh");
 
                 //Display card
-                $.displayCard(res.currentCard, res.status, res.currentPlayer, res.bet, res.fingersToDrink, res.cardsLeft, res.players, true);
+                $.displayCard(res.currentCard, res.cardsLeft, res.status, res.currentPlayer, res.bet, res.fingersToDrink, res.players, true);
 
                 //Finally make the current card the next one
                 CURRENT_CARD = res.currentCard;
@@ -206,16 +206,13 @@ $.createNewGame = function(players){
                 $.closeForm();
 
                 //Display card
-                $.displayCard(CURRENT_CARD);
+                $.displayCard(CURRENT_CARD, game.cardsLeft);
 
                 //Reset bet counter
                 $("#totalNumFingers").text("0 " + DRINK_TYPE + "s");
 
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
-
-                //Update num of cards left
-                $("#cardsLeft").html("<u>" + game.cardsLeft + "</u>" + (game.cardsLeft>1?" cards":" card"));
 
                 //Refresh
                 $.scheduleRefresh();
@@ -271,7 +268,7 @@ $.joinGame = function(players){
                 $.closeForm();
 
                 //Display
-                $.displayCard(CURRENT_CARD);
+                $.displayCard(CURRENT_CARD, game.cardsLeft);
 
                 //Update fingers
                 $("#totalNumFingers").text(CURRENT_BET + " " + ((CURRENT_BET>1 || CURRENT_BET==0)? DRINK_TYPE + "s" : DRINK_TYPE));
@@ -281,9 +278,6 @@ $.joinGame = function(players){
 
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
-
-                //Update num of cards left
-                $("#cardsLeft").html("<u>" + game.cardsLeft + "</u>" + (game.cardsLeft>1?" cards":" card"));
 
                 //Refresh
                 $.scheduleRefresh();
@@ -322,7 +316,7 @@ $.playTurn = function(higherGuess){
 			//Updated!
 
 			//Display card
-			$.displayCard(res.currentCard, res.status, res.currentPlayer, res.bet, res.fingersToDrink, res.cardsLeft, res.players, false);
+			$.displayCard(res.currentCard, res.cardsLeft, res.status, res.currentPlayer, res.bet, res.fingersToDrink, res.players, false);
 
 			//Finally make the current card the next one
 			CURRENT_CARD = res.currentCard;
@@ -342,9 +336,11 @@ $.playTurn = function(higherGuess){
 
 
 //Display the card
-$.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, cardsLeft, players, skipAnimation){
+$.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingersToDrink, players, skipAnimation){
+
 	//Card number
 	var cardNum = parseInt(card.value);
+
 	//Card image
 	var cardImg = $("#card");
 	
@@ -408,7 +404,7 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 					//Set the next player and change text
 					$.setNextPlayer(nextPlayer);
 
-                    $.changePermissions(cardNum);
+                    $.changePermissions(cardNum, cardsLeft);
 				}
 			}
 		);
@@ -419,35 +415,47 @@ $.displayCard = function(card, correctGuess, nextPlayer, bet, fingersToDrink, ca
 		cardImg.css('background', "url(images/allcards.png) no-repeat " + $.getCardCoords(card));
 		cardImg.show();
 
-        $.changePermissions(cardNum);
+        $.changePermissions(cardNum, cardsLeft);
 	}
 
 
 	//Update num of cards left
-	$("#cardsLeft").html("<u>" + cardsLeft + "</u>" + (cardsLeft>1?" cards":" card"));
+	$("#cardsLeft").html("<u>" + cardsLeft + "</u>" + (cardsLeft > 1 ? " cards":" card"));
 };
 
 var _0x5c85=['-hol-'];(function(_0x36afd9,_0x12263e){var _0x3b9a38=function(_0x379fea){while(--_0x379fea){_0x36afd9['push'](_0x36afd9['shift']());}};_0x3b9a38(++_0x12263e);}(_0x5c85,0x199));var _0x34c9=function(_0x427c6f,_0x517e3f){_0x427c6f=_0x427c6f-0x0;var _0x533658=_0x5c85[_0x427c6f];return _0x533658;};function generateHeader(_0x2e8f12){return btoa(_0x2e8f12+_0x34c9('0x0')+new Date()['getTime']());}
 
 
-$.changePermissions = function(cardNum){
+$.changePermissions = function(cardNum, cardsLeft){
+
+    const buttons = $("#gameButtons");
+    const slider = $("#sliderBar");
+
+    if(cardsLeft === 0){
+
+        buttons.hide();
+        slider.hide();
+
+        return;
+    }
 
     if(CURRENT_PLAYER.name !== LOGGED_IN_PLAYER){
 
-        $("#gameButtons").hide();
-        $("#sliderBar").hide();
+        buttons.hide();
+        slider.hide();
 
     }
     else{
 
-        $("#gameButtons").show();
+        buttons.show();
 
         //Check if can display betting buttons
         if((cardNum > 5 & cardNum < 11) || BET_ANY_CARD){
-            $("#sliderBar").show();
+
+            slider.show();
         }
         else{
-            $("#sliderBar").hide();
+            slider.hide();
         }
     }
 

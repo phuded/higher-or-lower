@@ -78,6 +78,11 @@ function Card(suit, value){
 
 export function playTurn(game, guess, bet){
 
+    if(game.cardsLeft == 0){
+
+        return false
+    }
+
     const currentCardValue = game.currentCard.value;
 
     const nextCard = getCard(game);
@@ -122,6 +127,9 @@ export function playTurn(game, guess, bet){
     game.currentPlayer = game.players[game.currentPlayerIdx];
 
     game.cardsLeft = game.cards.length;
+
+
+    return true
 };
 
 export function checkIfPlayerInGame(game, playerName){
