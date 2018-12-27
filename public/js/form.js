@@ -42,7 +42,7 @@ $.getGameList = function(){
     //Get Player List
     $.ajax({
         type: "GET",
-        url: "api/games",
+        url: "api/games?order-by=_id&dir=asc",
         success: function(json){
 
             const games = json.games;
