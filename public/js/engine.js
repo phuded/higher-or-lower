@@ -72,7 +72,7 @@ $.startGame = function(){
 	$("#cardDisplay").removeClass('green red');
 
 
-	if(!GAME_ID || !$("#selectedGameId").val()){
+	if(!GAME_ID || !$("#selectedGameName").val()){
 
         $.createNewGame(players);
 
@@ -499,13 +499,7 @@ $.leaveGame = function(){
             // Open
             $.openForm();
 
-            // Hide cancel
-            $("#cancel").hide();
-
-            GAME_ID = null;
-
-            // Clear selected game
-            $.clearGame();
+            $.clearCurrentGame();
 
             // Reset scoretab
             resetScoreTable();

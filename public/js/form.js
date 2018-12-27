@@ -133,12 +133,8 @@ $.deleteGame = function(id){
             // Deleting current game
             if(GAME_ID && GAME_ID === id){
 
-                // Hide cancel
-                $("#cancel").hide();
-
-                GAME_ID = null;
+                $.clearCurrentGame();
             }
-
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
 
@@ -252,15 +248,25 @@ $.showGameList = function(show, selectedGameId, selectedGameName){
 
                 GAME_ID = selectedGameId;
 
-                $("#selectedGameId").val(selectedGameName);
+                $("#selectedGameName").val(selectedGameName);
 
             }
         });
     }
 };
 
-$.clearGame = function(){
 
-   // GAME_ID = null;
-    $("#selectedGameId").val("");
+$.clearCurrentGame = function(){
+
+   // Hide cancel
+   $("#cancel").hide();
+
+   GAME_ID = null;
+
+   $.clearGameSelection();
+}
+
+$.clearGameSelection = function(){
+
+    $("#selectedGameName").val("");
 }
