@@ -126,11 +126,12 @@
 
 						</div>
 
-						<a href="javascript:$.startGame()" id="start" data-role="button" data-theme="b" data-inline="true" data-icon="check">Play!</a>
+						<a href="javascript:$.startGame()" id="start" class="formButton" data-role="button" data-theme="b" data-inline="true" data-icon="check">Create New Game</a>
 
-						<a href="javascript:$.closeForm()" id="cancel" data-role="button" data-theme="c" data-inline="true" data-icon="back" style="display:none;">Back to game</a>
+						<a href="javascript:$.closeForm()" id="cancel" class="formButton" data-role="button" data-theme="c" data-inline="true" data-icon="back" style="display:none;">Back to game</a>
 
 						<span class="game_spinner" style="display:none;"><img src="images/loading.gif"/>&nbsp;Loading</span>
+						<span id="errorMessage" style="display: none;">No Player Specified</span>
 
 					</div>
 

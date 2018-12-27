@@ -35,17 +35,23 @@ $.prepareGame = function(){
 
 
 $.startGame = function(){
+
+    const errorMessage = $("#errorMessage");
 	
 	var canPlay = true;
 		
 	//Check to ensure all player names are entered
 	if($("#selectedPlayerName").val() == ""){
 		canPlay = false;
+
+		errorMessage.show();
 	}
 
     if(!canPlay){
     	return;
     }
+
+    errorMessage.hide();
 
     //Set drink type
     $("input.drinkOption").each(function(){

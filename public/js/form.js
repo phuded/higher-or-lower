@@ -114,6 +114,9 @@ $.showPlayerList = function(show, player){
 
                 $.getGameList();
 
+
+                $("#errorMessage").hide();
+
             }
         });
     }
@@ -193,6 +196,8 @@ $.createNewPlayer = function(show, player){
 							$("#selectedPlayerName").val(playerName);
 
 							$.clearNewPlayerForm();
+
+							$("#errorMessage").hide();
 						});
 					},
 					error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -250,6 +255,8 @@ $.showGameList = function(show, selectedGameId, selectedGameName){
 
                 $("#selectedGameName").val(selectedGameName);
 
+                $("#start").html($("#start").html().replace("Create New", "Join"));
+
             }
         });
     }
@@ -269,4 +276,6 @@ $.clearCurrentGame = function(){
 $.clearGameSelection = function(){
 
     $("#selectedGameName").val("");
+
+    $("#start").html($("#start").html().replace("Join", "Create New"));
 }

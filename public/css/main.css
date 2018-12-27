@@ -165,10 +165,6 @@ span#drinkMessage{
 }
 
 /* Form*/
-.formPanel{
-	/*margin-top:-6px;*/
-
-}
 
 .formPanel .ui-collapsible-heading {
 	font-size: 15px;
@@ -183,7 +179,16 @@ a.smallerButton{
 	margin: 0;
 }
 
-a.smallerButton .ui-btn-inner{
+/* Start/cancel */
+a.formButton{
+	font-size: 0.9em;
+}
+
+a.formButton.ui-btn-corner-all, a.formButton span.ui-btn-corner-all{
+    border-radius: 3px;
+}
+
+a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 	padding-right: 7px;
 }
 
@@ -196,11 +201,6 @@ a.smallerButton .ui-btn-inner{
 
 #gameOptions label{
 	font-size:0.9em;
-}
-
-/*Start & Cancel buttons*/
-#start,#cancel{
-	padding: 1px 5px 1px 5px;
 }
 
 .game_spinner{
@@ -222,6 +222,11 @@ a.smallerButton .ui-btn-inner{
 
 .gameForm table td.tableButton{
 	width: 20%;
+}
+
+#errorMessage{
+    color:red;
+    vertical-align:super;
 }
 
 /*Player List*/
