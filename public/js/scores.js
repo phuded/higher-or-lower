@@ -5,7 +5,7 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
 
 	players = _players;
 
-	var table = $(".scoreTable");
+	var table = $("#scoreTable");
 
     //Create scoretab var
     var scoreTableBody = "";
@@ -51,7 +51,9 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
     //Append table to div
     table.html(scoreTableBody).trigger("create");
 
-    if(scoreTableBody){
+    const scoresVisible = $("#scoreStats").is(":visible");
+
+    if(scoreTableBody && !scoresVisible){
 
         // Show score table
         table.show();
@@ -66,6 +68,16 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
         sendHighScores(playerToUpdate, fingersToDrink);
     }
 };
+
+// Reset the score table
+function resetScoreTable(){
+
+    var table = $("#scoreTable");
+
+    table.html("");
+
+    table.hide();
+}
 
 
 function sendHighScores(playerToUpdate, fingersToDrink){
@@ -135,15 +147,16 @@ function sendHighScores(playerToUpdate, fingersToDrink){
 /*Show player stats*/
 $.showPlayerStats = function(pNum, show){
 
+    // Show table
 	if(!show){
 		$("#scoreStats").hide();
-		$(".scoreTable").fadeIn();
+		$("#scoreTable").fadeIn();
 
 		return;
 	}
 
 	//Hide scores
-	$(".scoreTable").hide();
+	$("#scoreTable").hide();
 
 	var player = players[pNum];
 

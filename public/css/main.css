@@ -244,7 +244,7 @@ a.smallerButton .ui-btn-inner{
 	padding:10px;
 }
 
-table.scoreTable{
+#scoreTable{
 	border:1px solid #6D7B8D;
 	border-bottom-left-radius: 0.6em;
     border-top-left-radius: 0.6em;
@@ -253,17 +253,17 @@ table.scoreTable{
 	padding:3px;
 }
 
-table.scoreTable tr th, table.scoreTable tr td{
+#scoreTable tr th, #scoreTable tr td{
 	padding:2px;
 }
 
-table.scoreTable tr th{
+#scoreTable tr th{
 	width:100px;
 	max-width:100px;
 }
 
 
-table.scoreTable tr td{
+#scoreTable tr td{
 	width:22px;
 	max-width:22px;
 	text-align:center;
@@ -271,11 +271,11 @@ table.scoreTable tr td{
 	font-size: 0.9em;
 }
 
-table.scoreTable tr td.correct{
+#scoreTable tr td.correct{
 	background-color:#66CC99;
 }
 
-table.scoreTable tr td.incorrect{
+#scoreTable tr td.incorrect{
 	background-color:#F78181;
 }
 

@@ -197,7 +197,7 @@ $.createNewGame = function(players){
                 $(".game_spinner").hide();
 
                 // Reset scoretab
-                $(".scoreTable").hide();
+                resetScoreTable();
 
                 $.closeForm();
 
@@ -261,7 +261,7 @@ $.joinGame = function(players){
                 $(".game_spinner").hide();
 
                 // Reset scoretab
-                $(".scoreTable").hide();
+                resetScoreTable();
 
                 $.closeForm();
 
@@ -508,7 +508,7 @@ $.leaveGame = function(){
             $.clearGame();
 
             // Reset scoretab
-            $(".scoreTable").hide();
+            resetScoreTable();
 
             //Remove game title
             $("#gameTitle").text("");

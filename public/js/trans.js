@@ -52,7 +52,7 @@ $.closeDialog = function(){
 
 //Slide
 $.slideTab = function(rev, tab){
-	$.mobile.changePage("#"+tab, {
+	$.mobile.changePage("#" + tab, {
 		transition: "slide",
 		reverse: rev,
 		changeHash: false
