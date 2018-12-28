@@ -4,9 +4,6 @@ $.openForm = function(){
     //Get player list
     $.getPlayerList();
 
-    //Get game list
-    $.getGameList();
-
 	//Clear Search
 	$("div#playerList input").val("");
 	$('div#playerList ul li').removeClass('ui-screen-hidden'); 

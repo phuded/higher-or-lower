@@ -37,7 +37,9 @@ $.getPlayerList = function(){
 /* Get List of players */
 $.getGameList = function(){
 
-    $("div#gameList ul").html("");
+    const gameList = $("#gameList ul");
+
+    gameList.html("");
 
     //Get Player List
     $.ajax({
@@ -79,10 +81,10 @@ $.getGameList = function(){
                 options += "</li>";
             }
 
-            $("div#gameList ul").append(options);
+            gameList.append(options);
 
             //Refresh View
-            $('#gameList ul').listview('refresh');
+            gameList.listview('refresh');
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             //Error
@@ -111,9 +113,6 @@ $.showPlayerList = function(show, player){
             if(player != null){
 
                 $("#selectedPlayerName").val(player);
-
-                $.getGameList();
-
 
                 $("#errorMessage").hide();
 
@@ -150,82 +149,96 @@ $.deleteGame = function(id){
 
 //Show form panels - create new player
 $.createNewPlayer = function(show, player){
-	var formContent = $(".gameForm");
-	var playerForm = $("#playerForm");
-	
+
+	const formContent = $(".gameForm");
+	const playerForm = $("#playerForm");
+
+	const errorMessage = $("#playerFormErrorMessage");
+
+	// Show Create Form
 	if(show){
+
 		formContent.fadeOut(function() {
 			playerForm.fadeIn('fast');
 		 });
+
+		 return;
 	}
-	else{
-		//Clear warning
-		playerForm.find("p").hide();
-		
-		//Call method to create player and display main form if 2nd argument true
-		if(player){
-			//Get username
-			var playerName = $("#pname").val();
-			
-			if((playerName.length > 0) && (playerName.indexOf("Player ") == -1)){
 
-				var fName = $("#fname").val();
-				var surname = $("#surname").val();
-				
-				//Add new player
-				$.ajax({
-					type: "POST",
-					url: "api/players",
-					data: {	name: playerName,
-							firstName: fName,
-							surname: surname
-					},
-					dataType: "json",
-					success: function(json){
+    //Clear warning
+    errorMessage.hide();
 
-						//Added!
-						//Refresh player & game list
-						$.getPlayerList();
-                        $.getGameList();
+    // Cancel
+    if(!player){
 
-						//Show previous screen
-						playerForm.fadeOut(function() {
+        //Cancel and show main form
+        playerForm.fadeOut(function() {
 
-							formContent.fadeIn('fast');
+            formContent.fadeIn('fast');
+            //Clear form
+            $.clearNewPlayerForm();
+        });
+    }
 
-							$("#selectedPlayerName").val(playerName);
+    //Call method to create player and display main form if 2nd argument true
+    var pName = $("#pname");
 
-							$.clearNewPlayerForm();
+    //Get username
+    var playerName = pName.val();
 
-							$("#errorMessage").hide();
-						});
-					},
-					error: function(XMLHttpRequest, textStatus, errorThrown) {
+    const playerNameValid = (playerName.length > 0) && (playerName.indexOf("Player ") == -1);
 
-						// Error!
-                        //Already in use - clear name and show warning
-                        $("#pname").val("");
-                        playerForm.find("p").show();
+    if(!playerNameValid){
 
-                        return;
-					}
-				});
-			}
-			else{
-				//Invalid in use - clear name and show warning
-				$("#pname").val("");
-				playerForm.find("p").show();
-			}
-		}
-		else{
-			//Cancel and show main form
-			playerForm.fadeOut(function() {
-				formContent.fadeIn('fast');
-				//Clear form
-				$.clearNewPlayerForm();
-			});
-		}
-	}
+        //Invalid in use - clear name and show warning
+        pName.val("");
+        errorMessage.show();
+
+        return
+    }
+
+    var fName = $("#fname").val();
+    var surname = $("#surname").val();
+
+    //Add new player
+    $.ajax({
+        type: "POST",
+        url: "api/players",
+        data: {	name: playerName,
+                firstName: fName,
+                surname: surname
+        },
+        dataType: "json",
+        success: function(json){
+
+            //Added!
+            //Refresh player list
+            $.getPlayerList();
+
+            //Show previous screen
+            playerForm.fadeOut(function() {
+
+                formContent.fadeIn('fast');
+
+                $("#selectedPlayerName").val(playerName);
+
+                $.clearNewPlayerForm();
+
+                // Remove main form error
+                $("#errorMessage").hide();
+            });
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+            // Error!
+            //Already in use - clear name and show warning
+            pName.val("");
+            errorMessage.show();
+
+            return;
+        }
+    });
+
 };
 
 /*Clear new player form */
@@ -241,25 +254,32 @@ $.showGameList = function(show, selectedGameId, selectedGameName){
     var gameList = $("#gameList");
 
     if(show){
+
+        // Load the game list
+        $.getGameList();
+
         formContent.fadeOut(function() {
             gameList.fadeIn('fast');
         });
+
+        return;
     }
-    else{
-        gameList.fadeOut(function() {
-            formContent.fadeIn('fast');
 
-            if(selectedGameId != null){
+    gameList.fadeOut(function() {
 
-                GAME_ID = selectedGameId;
+        formContent.fadeIn('fast');
 
-                $("#selectedGameName").val(selectedGameName);
+        if(selectedGameId != null){
 
-                $("#start").html($("#start").html().replace("Create New", "Join"));
+            GAME_ID = selectedGameId;
 
-            }
-        });
-    }
+            $("#selectedGameName").val(selectedGameName);
+
+            $("#start").html($("#start").html().replace("Create New", "Join"));
+
+        }
+    });
+
 };
 
 

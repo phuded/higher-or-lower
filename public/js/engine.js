@@ -5,9 +5,6 @@ $.prepareGame = function(){
 	//Get player list
     $.getPlayerList();
 
-    //Get game list
-    $.getGameList();
-	
 	$('#drink').live('pageshow',function(event){
 		var fingers = $("#numFingers");
 		fingers.animate({fontSize:'3.0em'}, 400);
@@ -72,6 +69,7 @@ $.startGame = function(){
 	//Set players in array
 	players.push(selectedPlayerName);
 
+    // Set the logged in player!
     LOGGED_IN_PLAYER = selectedPlayerName;
 
 	//Hide any current card
@@ -194,9 +192,6 @@ $.createNewGame = function(players){
 
             CURRENT_BET = game.bet;
 
-            //Refresh game list
-            $.getGameList();
-
             //Preload images & close dialogue
             $.preLoadImages(PRELOAD_IMAGES,function() {
                 //Hide loading
@@ -257,9 +252,6 @@ $.joinGame = function(players){
             $.setNextPlayer(game.currentPlayer);
 
             CURRENT_BET = game.bet;
-
-            //Refresh game list
-            $.getGameList();
 
             //Preload images & close dialogue
             $.preLoadImages(PRELOAD_IMAGES,function() {

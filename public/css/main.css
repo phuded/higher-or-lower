@@ -236,12 +236,12 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 }
 
 /*Player Form*/
-#playerForm>span{
+#playerForm > span{
 	font-size:1.2em;
 	font-weight:bold;
 }
 
-#playerForm p{
+#playerForm #playerFormErrorMessage{
 	color:red;
 }
 
