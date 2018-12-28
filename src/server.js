@@ -15,10 +15,13 @@ routes(app); //register the route
 
 app.listen(port);
 
-global.config = config;
+const env = process.env.NODE_ENV;
 
-console.log("Started on port: " + port);
+global.config = config[env];
+
+console.log("Started on port: " + port + " - env: " + env);
 
 app.use(function(req, res) {
     res.status(404).send({url: req.originalUrl + ' not found'})
 });
+

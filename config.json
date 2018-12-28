@@ -1,6 +1,14 @@
 {
-  "url": "mongodb://localhost:27017",
-  "dbString": "higherorlower",
-  "playerCollectionString": "player",
-  "gameCollectionString": "game"
+  "development": {
+    "url": "mongodb://localhost:27017",
+    "dbString": "higherorlower",
+    "playerCollectionString": "player",
+    "gameCollectionString": "game"
+  },
+  "production": {
+    "url": "mongodb://172.31.27.248:27017",
+    "dbString": "higherorlower",
+    "playerCollectionString": "player",
+    "gameCollectionString": "game"
+  }
 }

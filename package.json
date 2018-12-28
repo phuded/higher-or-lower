@@ -4,14 +4,15 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "start": "nodemon --exec babel-node src/server.js",
+    "start": "cross-env NODE_ENV=development nodemon --exec babel-node src/server.js",
     "build": "babel src --out-dir dist",
-    "serve": "node dist/server.js"
+    "serve": "cross-env NODE_ENV=production node dist/server.js"
   },
   "keywords": [],
   "author": "Matt Carter",
   "license": "ISC",
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "nodemon": "^1.18.7"
   },
   "dependencies": {
