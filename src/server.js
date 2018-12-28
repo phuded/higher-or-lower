@@ -15,7 +15,12 @@ routes(app); //register the route
 
 app.listen(port);
 
-const env = process.env.NODE_ENV;
+let env = process.env.NODE_ENV;
+
+if(!env){
+
+    env = "production";
+}
 
 global.config = config[env];
 
