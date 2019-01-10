@@ -224,6 +224,12 @@ export function updateGamePlayers(id, newPlayers, playersToRemove, res) {
 
             }
 
+            if (!game) {
+
+                return res.status(404).send({error: "Cannot find game with ID: " + id});
+
+            }
+
             let gameUpdated = false;
 
             if(newPlayers){

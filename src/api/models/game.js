@@ -130,13 +130,17 @@ export function playTurn(game, guess, bet){
 
     game.cardsLeft = game.cards.length;
 
-
     return true
 };
 
 export function addPlayerToGame(game, playerName){
 
     let inGame = false;
+
+    if(!game){
+
+        return inGame;
+    }
 
     game.players.forEach(function (player) {
 
@@ -159,6 +163,11 @@ export function addPlayerToGame(game, playerName){
 export function removePlayerFromGame(game, playerName){
 
     let inGame = false;
+
+    if(!game){
+
+        return inGame;
+    }
 
     let pIndex;
 
