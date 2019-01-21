@@ -1,5 +1,5 @@
 import {getPlayers as sGetPlayers, createPlayer as sCreatePlayer, updatePlayer as sUpdatePlayer, deletePlayer as sDeletePlayer} from "../services/playerService";
-
+import regeneratorRuntime from "regenerator-runtime";
 
 export async function getPlayers(req, res) {
 

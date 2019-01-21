@@ -1,4 +1,5 @@
 import {getGames as sGetGames, getGame as sGetGame, createGame as sCreateGame, updateGame as sUpdateGame, updateGamePlayers as sUpdateGamePlayers, deleteGame as sDeleteGame} from "../services/gameService";
+import regeneratorRuntime from "regenerator-runtime";
 
 export async function getGame(req, res) {
 

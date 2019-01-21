@@ -1,5 +1,5 @@
 import Game, {Card, GamePlayer} from "../models/game";
-import Player from "../models/player";
+import regeneratorRuntime from "regenerator-runtime";
 
 export async function getGames(req, res) {
 
