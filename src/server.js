@@ -2,7 +2,7 @@ import bodyParser from "body-parser";
 import express from "express";
 import routes from "./api/routes/routes";
 import path from "path";
-import config from "../config.json";
+import db from "./db";
 const app = express();
 const port = 8080;
 
@@ -15,16 +15,7 @@ routes(app); //register the route
 
 app.listen(port);
 
-let env = process.env.NODE_ENV;
-
-if(!env){
-
-    env = "production";
-}
-
-global.config = config[env];
-
-console.log("Started on port: " + port + " - env: " + env);
+console.log("Started on port: " + port);
 
 app.use(function(req, res) {
     res.status(404).send({url: req.originalUrl + ' not found'})

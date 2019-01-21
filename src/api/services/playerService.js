@@ -1,18 +1,8 @@
-import {MongoClient} from "mongodb";
 import atob from "atob";
-
-function mongoConfig(){
-
-    return { url: global.config.url,
-             dbString: global.config.dbString,
-             collectionString: global.config.playerCollectionString
-    };
-}
-
-const param = { useNewUrlParser: true };
+import Player from "../models/player";
 
 
-export function getPlayers(req, res) {
+export async function getPlayers(req, res) {
 
     const orderBy = req.query["order-by"] ? req.query["order-by"] : "name";
 
@@ -24,88 +14,34 @@ export function getPlayers(req, res) {
     const start = req.query.start ? parseInt(req.query.start) : 0;
     const num = req.query.num ? parseInt(req.query.num) : 1000;
 
-    MongoClient.connect(mongoConfig().url, param, function (err, client) {
+    const count = await Player.countDocuments({});
 
-        if (err) {
+    const players = await Player.find({}).sort(sort).skip(start).limit(num);
 
-            console.log("Cannot connect to the DB: " + err);
+    const response = {total: count, players: players};
 
-            return res.status(500).send({error: "Cannot connect to the DB: " + err});
-
-        }
-
-        const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
-
-        collection.countDocuments({}, function(err, numPlayers) {
-
-            if (err) {
-
-                client.close();
-
-                return res.status(500).send({error: "Cannot execute count query: " + err});
-            }
-
-            collection.find({}, {sort: sort, skip: start, limit: num}).toArray(function(err, results) {
-
-                client.close();
-
-                if (err) {
-
-                    return res.status(500).send({error: "Cannot find players: " + err});
-
-                }
-
-                const response = {total: numPlayers, players: results};
-
-                return res.status(200).send(response);
-            });
-
-        });
-
-    });
-};
+    return res.send(response);
+}
 
 
-export function createPlayer(req, res) {
+export async function createPlayer(req, res) {
 
     const newPlayer = req.body;
 
-    MongoClient.connect(mongoConfig().url, param, function (err, client) {
+    let result;
 
-        if (err) {
+    try {
+        result = await Player.create(newPlayer);
+    }
+    catch (e) {
 
-            console.log("Cannot connect to the DB: " + err);
+        return res.status(500).send({error: e.errmsg});
+    }
 
-            return res.status(500).send({error: "Cannot connect to the DB: " + err});
-
-        }
-
-        const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
-
-        newPlayer.maxFingers = 0;
-        newPlayer.maxCorrect = 0;
-        newPlayer.maxIncorrect = 0;
-
-        collection.insertOne(newPlayer, function(err, result) {
-
-            client.close();
-
-            if (err) {
-
-                return res.status(500).send({error: "Cannot create player: " + newPlayer.name + ": " + err});
-
-            }
-
-            return res.status(200).send(result.ops[0]);
-
-        });
-
-
-    });
-
+    return res.send(result);
 };
 
-export function updatePlayer(req, res) {
+export async function updatePlayer(req, res) {
 
     const name = req.params.name;
 
@@ -144,108 +80,50 @@ export function updatePlayer(req, res) {
     playerUpdate.maxIncorrect = parseInt(playerUpdate.maxIncorrect);
     playerUpdate.maxFingers = parseInt(playerUpdate.maxFingers);
 
-    MongoClient.connect(mongoConfig().url, param, function (err, client) {
+    let foundPlayer;
 
-        if (err) {
+    try {
 
-            console.log("Cannot connect to the DB: " + err);
+        foundPlayer = await Player.findOne({name: name});
+    }
+    catch (e) {
 
-            return res.status(500).send({error: "Cannot connect to the DB: " + err});
+        return res.status(404).send({error: "Cannot update player: " + name + ": Not found"});
+    }
 
-        }
+    if(playerUpdate.maxCorrect > foundPlayer.maxCorrect){
 
-        const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
+        foundPlayer.maxCorrect = playerUpdate.maxCorrect;
+    }
 
-        collection.findOne({name: name}, function(err, result) {
+    if(playerUpdate.maxIncorrect > foundPlayer.maxIncorrect){
 
-            if(!result || err){
+        foundPlayer.maxIncorrect = playerUpdate.maxIncorrect;
+    }
 
-                client.close();
+    if(playerUpdate.maxFingers > foundPlayer.maxFingers){
 
-                return res.status(404).send({error: "Cannot update player: " + name + ": Not found"});
-            }
+        foundPlayer.maxFingers = playerUpdate.maxFingers;
+    }
 
-            const update = {};
+    foundPlayer.lastPlayed = new Date();
 
-            if(playerUpdate.maxCorrect > result.maxCorrect){
+    await foundPlayer.save();
 
-                update.maxCorrect = playerUpdate.maxCorrect;
-            }
-
-            if(playerUpdate.maxIncorrect > result.maxIncorrect){
-
-                update.maxIncorrect = playerUpdate.maxIncorrect;
-            }
-
-            if(playerUpdate.maxFingers > result.maxFingers){
-
-                update.maxFingers = playerUpdate.maxFingers;
-            }
-
-            update.lastPlayed = new Date();
-
-            // Commented out as Last Played always updated
-            // if(Object.getOwnPropertyNames(update).length === 0){
-            //
-            //     client.close();
-            //
-            //     return res.status(200).send(result);
-            // }
-
-            collection.findOneAndUpdate({name: name}, {$set: update}, { upsert: false, returnOriginal: false }, function(err, result) {
-
-                client.close();
-
-                if (err) {
-
-                    return res.status(500).send({error: "Cannot update player: " + name + ": " + err});
-
-                }
-
-                return res.status(200).send(result.value);
-            });
-
-        });
-
-    });
-
+    return res.send(foundPlayer);
 };
 
 
-export function deletePlayer(req, res) {
+export async function deletePlayer(req, res) {
 
     const name = req.params.name;
 
-    MongoClient.connect(mongoConfig().url, param, function (err, client) {
+    const result = await Player.deleteOne({name: name});
 
-        if (err) {
+    if(result.deletedCount == 0){
 
-            console.log("Cannot connect to the DB: " + err);
+        return res.status(500).send();
+    }
 
-            return res.status(500).send({error: "Cannot connect to the DB: " + err});
-
-        }
-
-        const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
-
-        collection.findOneAndDelete({name: name}, function(err, result) {
-
-            client.close();
-
-            if (err) {
-
-                return res.status(500).send({error: "Cannot delete player: " + name + ": " + err});
-
-            }
-
-            if(!result.value){
-
-                return res.status(404).send({error: "Cannot delete player: " + name + ": Not found"});
-            }
-
-            return res.status(200).send();
-        });
-
-    });
-
+    return res.send();
 };
