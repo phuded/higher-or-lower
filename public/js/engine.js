@@ -172,6 +172,7 @@ $.createNewGame = function(players){
             "players" : players,
 			"owner": players[0],
             "drinkType": DRINK_TYPE,
+            "playAsAnyone": playAsAnyoneChecked(),
             "remove": removeCardChecked(),
             "wholePack": useWholePackChecked(),
             "betAnyCard": betAnyCardChecked()
@@ -186,6 +187,8 @@ $.createNewGame = function(players){
 
             // Set bet on any card
             BET_ANY_CARD = game.betAnyCard;
+
+            PLAY_AS_ANYONE = game.playAsAnyone;
 
             //Set the next player and change text
             $.setNextPlayer(game.currentPlayer);
@@ -246,6 +249,8 @@ $.joinGame = function(players){
             // Set bet on any card
             BET_ANY_CARD = game.betAnyCard;
 
+            PLAY_AS_ANYONE = game.playAsAnyone;
+
             DRINK_TYPE = game.drinkType;
 
             //Set the next player and change text
@@ -305,7 +310,8 @@ $.playTurn = function(higherGuess){
 	$.ajax({
 		type: "PUT",
 		url: "api/games/" + GAME_ID,
-		data: {"bet": currentBet,
+		data: {
+		    "bet": currentBet,
 			"guess" : higherGuess,
 			"playerName" : CURRENT_PLAYER.name
 		},
@@ -425,7 +431,11 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 
 var _0x5c85=['-hol-'];(function(_0x36afd9,_0x12263e){var _0x3b9a38=function(_0x379fea){while(--_0x379fea){_0x36afd9['push'](_0x36afd9['shift']());}};_0x3b9a38(++_0x12263e);}(_0x5c85,0x199));var _0x34c9=function(_0x427c6f,_0x517e3f){_0x427c6f=_0x427c6f-0x0;var _0x533658=_0x5c85[_0x427c6f];return _0x533658;};function generateHeader(_0x2e8f12){return btoa(_0x2e8f12+_0x34c9('0x0')+new Date()['getTime']());}
 
-
+/**
+ * Set the permissions for the game
+ * @param cardNum
+ * @param cardsLeft
+ */
 $.changePermissions = function(cardNum, cardsLeft){
 
     const buttons = $("#gameButtons");
@@ -441,7 +451,7 @@ $.changePermissions = function(cardNum, cardsLeft){
         return;
     }
 
-    if(CURRENT_PLAYER.name !== LOGGED_IN_PLAYER){
+    if(!PLAY_AS_ANYONE && (CURRENT_PLAYER.name !== LOGGED_IN_PLAYER)){
 
         buttons.hide();
         slider.hide();
@@ -565,6 +575,19 @@ $.preLoadImages = function(imageList, callback) {
 		pic = undefined;
 };
 
+function playAsAnyoneChecked(){
+
+    const playAsAnyone = $("#playAsAnyone").attr('checked');
+
+    if(playAsAnyone === "checked"){
+
+        return true;
+    }
+
+    return false;
+};
+
+
 function removeCardChecked(){
 
    const remove = $("#removeCards").attr('checked');
@@ -579,9 +602,9 @@ function removeCardChecked(){
 
 function useWholePackChecked(){
 
-    const remove = $("#wholePack").attr('checked');
+    const wholePack = $("#wholePack").attr('checked');
 
-    if(remove === "checked"){
+    if(wholePack === "checked"){
 
         return true;
     }
@@ -591,9 +614,9 @@ function useWholePackChecked(){
 
 function betAnyCardChecked(){
 
-    const remove = $("#fullBetting").attr('checked');
+    const fullBetting = $("#fullBetting").attr('checked');
 
-    if(remove === "checked"){
+    if(fullBetting === "checked"){
 
         return true;
     }
@@ -613,6 +636,8 @@ var CURRENT_PLAYER;
 var CURRENT_BET = 0;
 
 var BET_ANY_CARD = false;
+
+var PLAY_AS_ANYONE = false;
 
 //Drink type
 var DRINK_TYPE;

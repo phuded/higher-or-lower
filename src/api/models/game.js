@@ -1,6 +1,6 @@
 import GamePlayer from "./gamePlayer";
 
-export function Game(name, owner, players, drinkType, remove, wholePack, betAnyCard){
+export function Game(name, owner, players, drinkType, playAsAnyone, remove, wholePack, betAnyCard){
 
     this._id;
 
@@ -17,6 +17,8 @@ export function Game(name, owner, players, drinkType, remove, wholePack, betAnyC
     this.status = null;
 
     this.cards = newPack(wholePack);
+
+    this.playAsAnyone = playAsAnyone;
 
     this.remove = remove;
 
@@ -42,6 +44,7 @@ export function Game(name, owner, players, drinkType, remove, wholePack, betAnyC
             owner: this.owner,
             players: this.players,
             currentPlayer: this.currentPlayer,
+            playAsAnyone: this.playAsAnyone,
             remove: this.remove,
             wholePack: this.wholePack,
             betAnyCard: this.betAnyCard,

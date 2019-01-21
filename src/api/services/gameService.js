@@ -113,7 +113,7 @@ export function createGame(gameBody, res) {
 
         const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
 
-        const game = new Game(gameBody.name, gameBody.owner, gameBody.players, gameBody.drinkType, (gameBody.remove == "true"), (gameBody.wholePack == "true"), (gameBody.betAnyCard == "true"));
+        const game = new Game(gameBody.name, gameBody.owner, gameBody.players, gameBody.drinkType, (gameBody.playAsAnyone == "true"), (gameBody.remove == "true"), (gameBody.wholePack == "true"), (gameBody.betAnyCard == "true"));
 
         collection.insertOne(game, function(err, result) {
 
@@ -158,7 +158,7 @@ export function updateGame(id, playerName, guess, bet, res) {
 
             const currentPlayer = game.currentPlayer.name;
 
-            if(currentPlayer != playerName){
+            if(!game.playAsAnyone && (currentPlayer != playerName)){
 
                 client.close();
 
