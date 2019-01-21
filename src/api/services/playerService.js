@@ -68,7 +68,9 @@ export async function updatePlayer(req, res) {
 
     const currrentTimeStamp = new Date().getTime();
 
-    if((currrentTimeStamp - clientTimeStamp) > 15000){
+    const diff = Math.abs(currrentTimeStamp - clientTimeStamp);
+
+    if(diff > 300000){
 
         return res.status(500).send({error: "Invalid request."});
     }
