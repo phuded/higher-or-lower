@@ -1,7 +1,6 @@
 import {getGames as sGetGames, getGame as sGetGame, createGame as sCreateGame, updateGame as sUpdateGame, updateGamePlayers as sUpdateGamePlayers, deleteGame as sDeleteGame} from "../services/gameService";
-import GamePlayer from "../models/gamePlayer";
 
-export function getGame(req, res) {
+export async function getGame(req, res) {
 
     const id = req.params.id;
 
@@ -14,35 +13,26 @@ export function getGame(req, res) {
 
 };
 
-export function getGames(req, res) {
+export async function getGames(req, res) {
 
     return sGetGames(req, res);
 
 };
 
-export function createGame(req, res) {
+export async function createGame(req, res) {
 
     let gameBody = req.body;
 
-    if(!gameBody.name || !gameBody.owner || !gameBody.players || !gameBody.drinkType || (gameBody.playAsAnyone == null) || (gameBody.remove == null) || (gameBody.wholePack == null) || (gameBody.betAnyCard == null)){
+    if(!gameBody.name || !gameBody.owner || !gameBody.players || !gameBody.drinkType || (gameBody.playAsAnyone == null) || (gameBody.removeCards == null) || (gameBody.wholePack == null) || (gameBody.betAnyCard == null)){
 
         return res.status(400).send({error: "Invalid parameters"});
     }
-
-    const players = [];
-
-    gameBody.players.forEach(function (playerName) {
-
-        players.push(new GamePlayer(playerName));
-    });
-
-    gameBody.players = players;
 
     return sCreateGame(gameBody, res);
 
 };
 
-export function updateGame(req, res) {
+export async function updateGame(req, res) {
 
     const id = req.params.id;
 
@@ -61,7 +51,7 @@ export function updateGame(req, res) {
     return sUpdateGame(id, turnBody.playerName, (turnBody.guess == "true"), parseInt(turnBody.bet), res);
 };
 
-export function updateGamePlayers(req, res) {
+export async function updateGamePlayers(req, res) {
 
     const id = req.params.id;
 
@@ -81,7 +71,7 @@ export function updateGamePlayers(req, res) {
 };
 
 
-export function deleteGame(req, res) {
+export async function deleteGame(req, res) {
 
     const id = req.params.id;
 

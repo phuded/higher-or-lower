@@ -1,18 +1,7 @@
-import {MongoClient, ObjectId} from "mongodb";
-import {Game, playTurn, addPlayerToGame, removePlayerFromGame} from "../models/game";
+import Game, {Card, GamePlayer} from "../models/game";
+import Player from "../models/player";
 
-function mongoConfig(){
-
-    return { url: global.config.url,
-             dbString: global.config.dbString,
-             collectionString: global.config.gameCollectionString
-    };
-}
-
-const param = { useNewUrlParser: true };
-
-
-export function getGames(req, res) {
+export async function getGames(req, res) {
 
     const orderBy = req.query["order-by"] ? req.query["order-by"] : "name";
 
@@ -24,314 +13,352 @@ export function getGames(req, res) {
     const start = req.query.start ? parseInt(req.query.start) : 0;
     const num = req.query.num ? parseInt(req.query.num) : 1000;
 
-    MongoClient.connect(mongoConfig().url, param, function (err, client) {
+    const count = await Game.countDocuments({});
 
-        if (err) {
+    const games = await Game.find({}).sort(sort).skip(start).limit(num);
 
-            console.log("Cannot connect to the DB: " + err);
+    const response = {total: count, games: games};
 
-            return res.status(500).send({error: "Cannot connect to the DB: " + err});
-
-        }
-
-        const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
-
-        collection.countDocuments({}, function(err, numGames) {
-
-            if (err) {
-
-                client.close();
-
-                return res.status(500).send({error: "Cannot execute count query: " + err});
-            }
-
-            collection.find({}, {projection: {cards: 0}}).sort(sort).skip(start).limit(num).toArray(function(err, results) {
-
-                client.close();
-
-                if (err) {
-
-                    return res.status(500).send({error: "Cannot find games: " + err});
-
-                }
-
-                const response = {total: numGames, games: results};
-
-                return res.status(200).send(response);
-            });
-
-        });
-
-    });
+    return res.send(response);
 };
 
-export function getGame(id, res) {
+export async function getGame(id, res) {
 
-    MongoClient.connect(mongoConfig().url, param, function (err, client) {
+    let game;
 
-        if (err) {
+    try {
+        game = await Game.findById(id);
+    }
+    catch (e) {
 
-            console.log("Cannot connect to the DB: " + err);
+        return res.status(500).send({error: e.message});
+    }
 
-            return res.status(500).send({error: "Cannot connect to the DB: " + err});
+    if(!game){
 
-        }
+        return res.status(404).send();
 
-        const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
+    }
 
-        collection.findOne({_id: new ObjectId(id)}, {projection: {cards: 0}}, function(err, result) {
-
-            client.close();
-
-            if (err || !result) {
-
-                return res.status(404).send({error: "Cannot find game with ID: " + id + ": " + err});
-
-            }
-
-            return res.status(200).send(result);
-
-        });
-
-
-    });
+    return res.send(game);
 
 };
 
+export async function createGame(gameBody, res) {
 
-export function createGame(gameBody, res) {
+    let newGame = new Game(gameBody);
 
-    MongoClient.connect(mongoConfig().url, param, function (err, client) {
+    const players = [];
 
-        if (err) {
+    gameBody.players.forEach(function (playerName) {
 
-            console.log("Cannot connect to the DB: " + err);
-
-            return res.status(500).send({error: "Cannot connect to the DB: " + err});
-
-        }
-
-        const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
-
-        const game = new Game(gameBody.name, gameBody.owner, gameBody.players, gameBody.drinkType, (gameBody.playAsAnyone == "true"), (gameBody.remove == "true"), (gameBody.wholePack == "true"), (gameBody.betAnyCard == "true"));
-
-        collection.insertOne(game, function(err, result) {
-
-            client.close();
-
-            if (err) {
-
-                return res.status(500).send({error: "Cannot create new game: " + game + ": " + err});
-
-            }
-
-            return res.status(200).send(result.ops[0]);
-
-        });
-
-
+        players.push(new GamePlayer({name: playerName}));
     });
+
+    newGame.players = players;
+
+    newGame.currentPlayer = newGame.players[0];
+
+    newGame.cards = newPack(newGame.wholePack);
+
+    setCard(newGame);
+
+    newGame.cardsLeft = newGame.cards.length;
+
+    let result;
+
+    try {
+        result = await newGame.save();
+    }
+    catch (e) {
+
+        return res.status(500).send({error: e.errmsg});
+    }
+
+    return res.send(result);
 
 };
 
-export function updateGame(id, playerName, guess, bet, res) {
+export async function updateGame(id, playerName, guess, bet, res) {
 
-    MongoClient.connect(mongoConfig().url, param, function (err, client) {
+    let game;
 
-        if (err) {
+    try {
 
-            console.log("Cannot connect to the DB: " + err);
+        game = await Game.findById(id);
+    }
+    catch (e) {
 
-            return res.status(500).send({error: "Cannot connect to the DB: " + err});
+        return res.status(404).send({error: "Cannot update game: " + id + ": Not found"});
+    }
 
-        }
+    const currentPlayer = game.currentPlayer.name;
 
-        const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
+    if(!game.playAsAnyone && (currentPlayer != playerName)){
 
-        collection.findOne({_id: new ObjectId(id)}, function(err, game) {
+        return res.status(400).send({error: "Cannot update game: " + id + ": Invalid current player: " + playerName});
+    }
 
-            if (err) {
+    // Make changes
+    const gameUpdated = playTurn(game, guess, bet);
 
-                return res.status(404).send({error: "Cannot find game with ID: " + id + ": " + err});
+    if(!gameUpdated){
 
-            }
+        return res.status(400).send({error: "Cannot update game: " + id + ": Game has finished."});
 
-            const currentPlayer = game.currentPlayer.name;
+    }
 
-            if(!game.playAsAnyone && (currentPlayer != playerName)){
+    await game.save();
 
-                client.close();
-
-                return res.status(400).send({error: "Cannot update game: " + id + ": Invalid current player: " + playerName});
-            }
-
-            // Make changes
-            const gameUpdated = playTurn(game, guess, bet);
-
-            if(!gameUpdated){
-
-                client.close();
-
-                return res.status(400).send({error: "Cannot update game: " + id + ": Game has finished."});
-
-            }
-
-            collection.findOneAndUpdate({_id: new ObjectId(id)}, {$set: game}, { upsert: false, returnOriginal: false }, function(err, result) {
-
-                client.close();
-
-                if (err) {
-
-                    return res.status(500).send({error: "Cannot update game: " + id + ": " + err});
-
-                }
-
-                const response = result.value;
-
-                delete response.cards;
-
-                return res.status(200).send(response);
-            });
-
-        });
-
-
-    });
-
+    return res.send(game);
 };
 
 
 
-export function updateGamePlayers(id, newPlayers, playersToRemove, res) {
+export async function updateGamePlayers(id, newPlayers, playersToRemove, res) {
 
-    MongoClient.connect(mongoConfig().url, param, function (err, client) {
+    let game;
 
-        if (err) {
+    try {
 
-            console.log("Cannot connect to the DB: " + err);
+        game = await Game.findById(id);
+    }
+    catch (e) {
 
-            return res.status(500).send({error: "Cannot connect to the DB: " + err});
+        return res.status(404).send({error: "Cannot update game: " + id + ": Not found"});
+    }
 
-        }
+    let gameUpdated = false;
 
-        const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
+    if(newPlayers){
 
-        collection.findOne({_id: new ObjectId(id)}, function(err, game) {
+        newPlayers.forEach(function (newPlayer) {
 
-            if (err) {
+            const added = addPlayerToGame(game, newPlayer);
 
-                return res.status(404).send({error: "Cannot find game with ID: " + id + ": " + err});
+            if(added){
 
+                gameUpdated = true;
             }
-
-            if (!game) {
-
-                return res.status(404).send({error: "Cannot find game with ID: " + id});
-
-            }
-
-            let gameUpdated = false;
-
-            if(newPlayers){
-
-                newPlayers.forEach(function (newPlayer) {
-
-                    const added = addPlayerToGame(game, newPlayer);
-
-                    if(added){
-
-                        gameUpdated = true;
-                    }
-
-                });
-            }
-
-            if(playersToRemove){
-
-                playersToRemove.forEach(function (playerToRemove) {
-
-                    const removed = removePlayerFromGame(game, playerToRemove);
-
-                    if(removed){
-
-                        gameUpdated = true;
-                    }
-
-                });
-            }
-
-            if(!gameUpdated){
-
-                client.close();
-
-                return res.status(200).send(game);
-            }
-
-            // No Players
-            if(game.players.length === 0){
-
-                client.close();
-
-                return deleteGame(id, res);
-
-            }
-
-            collection.findOneAndUpdate({_id: new ObjectId(id)}, {$set: game}, { upsert: false, returnOriginal: false }, function(err, result) {
-
-                client.close();
-
-                if (err) {
-
-                    return res.status(500).send({error: "Cannot update game: " + id + ": " + err});
-
-                }
-
-                const response = result.value;
-
-                delete response.cards;
-
-                return res.status(200).send(response);
-            });
 
         });
+    }
 
+    if(playersToRemove){
 
-    });
+        playersToRemove.forEach(function (playerToRemove) {
 
+            const removed = removePlayerFromGame(game, playerToRemove);
+
+            if(removed){
+
+                gameUpdated = true;
+            }
+
+        });
+    }
+
+    if(!gameUpdated){
+
+        return res.status(200).send(game);
+    }
+
+    // No Players
+    if(game.players.length === 0){
+
+        return deleteGame(id, res);
+
+    }
+
+    await game.save();
+
+    return res.send(game);
 };
 
-export function deleteGame(id, res) {
+export async function deleteGame(id, res) {
 
-     MongoClient.connect(mongoConfig().url, param, function (err, client) {
+    const result = await Game.findByIdAndDelete(id);
 
-         if (err) {
+    if(result.deletedCount == 0){
 
-             console.log("Cannot connect to the DB: " + err);
+        return res.status(500).send();
+    }
 
-             return res.status(500).send({error: "Cannot connect to the DB: " + err});
-
-         }
-
-         const collection = client.db(mongoConfig().dbString).collection(mongoConfig().collectionString);
-
-         collection.findOneAndDelete({_id: new ObjectId(id)}, function(err, result) {
-
-             client.close();
-
-             if (err) {
-
-                 return res.status(500).send({error: "Cannot delete game: " + id + ": " + err});
-
-             }
-
-             if(!result.value){
-
-                 return res.status(404).send({error: "Cannot delete game: " + id + ": Not found"});
-             }
-
-             return res.status(200).send();
-         });
-
-     });
-
+    return res.send();
  };
+
+
+function newPack(wholePack){
+
+    let cards = [];
+
+    for(let i = 2; i < 15; i++){
+
+        cards.push(new Card({suit: "hearts", value: i}));
+
+        if(wholePack) {
+            cards.push(new Card({suit: "diamonds", value: i}));
+            cards.push(new Card({suit: "clubs", value: i}));
+            cards.push(new Card({suit: "spades", value: i}));
+        }
+    }
+
+    return cards;
+}
+
+function playTurn(game, guess, bet){
+
+    if(game.cardsLeft == 0){
+
+        return false
+    }
+
+    const currentCardValue = game.currentCard.value;
+
+    const nextCard = setCard(game);
+
+    const guessedHigher = guess && (nextCard.value >= currentCardValue);
+    const guessedLower = !guess && (currentCardValue >= nextCard.value);
+
+    let status = false;
+
+    let fingersToDrink = 0;
+
+    if(guessedHigher || guessedLower){
+
+        status = true;
+
+        game.bet += bet;
+    }
+    else{
+
+        fingersToDrink = game.bet + bet;
+
+        game.bet = 0
+
+    }
+
+    game.fingersToDrink = fingersToDrink;
+
+    game.status = status;
+
+    game.players[game.currentPlayerIdx].stats.push(status);
+
+    // Next player
+    if(game.currentPlayerIdx < (game.players.length -1)) {
+
+        game.currentPlayerIdx++;
+    }
+    else{
+        game.currentPlayerIdx = 0;
+    }
+
+    // Set player
+    game.currentPlayer = game.players[game.currentPlayerIdx];
+
+    game.cardsLeft = game.cards.length;
+
+    return true
+};
+
+function addPlayerToGame(game, playerName){
+
+    let inGame = false;
+
+    if(!game){
+
+        return inGame;
+    }
+
+    game.players.forEach(function (player) {
+
+        if(player.name == playerName){
+
+            inGame = true;
+        }
+    });
+
+    if(!inGame){
+
+        // Add
+        game.players.push(new GamePlayer({name: playerName}))
+    }
+
+    return !inGame;
+}
+
+
+function removePlayerFromGame(game, playerName){
+
+    let inGame = false;
+
+    if(!game){
+
+        return inGame;
+    }
+
+    let pIndex = -1;
+
+    game.players.forEach(function (player, idx) {
+
+        if(player.name == playerName){
+
+            inGame = true;
+
+            pIndex = idx;
+        }
+    });
+
+    if(inGame){
+
+        if(game.currentPlayerIdx === pIndex){
+
+            // Next player
+            if(game.currentPlayerIdx < (game.players.length -1)) {
+
+                game.currentPlayerIdx++;
+            }
+            else{
+                game.currentPlayerIdx = 0;
+            }
+
+            // Set player
+            game.currentPlayer = game.players[game.currentPlayerIdx];
+        }
+
+        // Remove player
+        game.players.splice(pIndex, 1);
+
+        // Ensure it is not more then length of array
+        if(game.currentPlayerIdx >= game.players.length){
+
+            game.currentPlayerIdx = game.players.length - 1;
+            game.currentPlayer = game.players[game.currentPlayerIdx];
+        }
+
+    }
+
+    return inGame;
+}
+
+function setCard(game){
+
+    const card = game.cards[Math.floor(Math.random() * game.cards.length)];
+
+    if(game.removeCards){
+
+        game.cards.pull(card);
+
+    }
+
+    game.currentCard = card;
+
+    return card;
+};
+
+// function sanitiseGame(game){
+//
+//     delete game.cards;
+//
+//     return game;
+// }

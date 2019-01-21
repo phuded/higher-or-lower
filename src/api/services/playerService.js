@@ -1,7 +1,6 @@
 import atob from "atob";
 import Player from "../models/player";
 
-
 export async function getPlayers(req, res) {
 
     const orderBy = req.query["order-by"] ? req.query["order-by"] : "name";

@@ -173,7 +173,7 @@ $.createNewGame = function(players){
 			"owner": players[0],
             "drinkType": DRINK_TYPE,
             "playAsAnyone": playAsAnyoneChecked(),
-            "remove": removeCardChecked(),
+            "removeCards": removeCardChecked(),
             "wholePack": useWholePackChecked(),
             "betAnyCard": betAnyCardChecked()
         },
