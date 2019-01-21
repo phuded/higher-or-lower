@@ -1,6 +1,5 @@
 import atob from "atob";
 import Player from "../models/player";
-import regeneratorRuntime from "regenerator-runtime";
 
 export async function getPlayers(req, res) {
 

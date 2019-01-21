@@ -19,12 +19,12 @@
     "@babel/cli": "^7.2.0",
     "@babel/core": "^7.2.0",
     "@babel/node": "^7.2.0",
+    "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.2.0",
     "atob": "^2.1.2",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "mongoose": "^5.4.5",
-    "path": "^0.12.7",
-    "regenerator-runtime": "^0.13.1"
+    "path": "^0.12.7"
   }
 }

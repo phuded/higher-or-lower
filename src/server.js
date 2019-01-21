@@ -4,6 +4,7 @@ import routes from "./api/routes/routes";
 import path from "path";
 import config from "../config.json";
 import mongoose from "mongoose";
+import "@babel/polyfill";
 
 const app = express();
 const port = 8080;
