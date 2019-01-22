@@ -13,13 +13,13 @@ export async function getPlayers(req, res) {
     const start = req.query.start ? parseInt(req.query.start) : 0;
     const num = req.query.num ? parseInt(req.query.num) : 1000;
 
-    const count = await Player.countDocuments({});
+    const countPromise = Player.countDocuments({});
 
-    const players = await Player.find({}).sort(sort).skip(start).limit(num);
+    const playersPromise = Player.find({}).sort(sort).skip(start).limit(num);
 
-    const response = {total: count, players: players};
+    const data = await Promise.all([playersPromise, countPromise]);
 
-    return res.send(response);
+    return res.send({players: data[0], total: data[1]});
 }
 
 
