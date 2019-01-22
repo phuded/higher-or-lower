@@ -1,9 +1,10 @@
+var REFRESH = null;
 
 $.prepareGame = function(){
 
 	//Get player list
-	$.getPlayerList();
-	
+    $.getPlayerList();
+
 	$('#drink').live('pageshow',function(event){
 		var fingers = $("#numFingers");
 		fingers.animate({fontSize:'3.0em'}, 400);
@@ -31,126 +32,327 @@ $.prepareGame = function(){
 
 
 $.startGame = function(){
+
+    const errorMessage = $("#errorMessage");
 	
 	var canPlay = true;
 		
 	//Check to ensure all player names are entered
-	$("#playerRows tr").each(function(){
-		if($(this).children("td:eq(0)").children("input").val() == ""){
-			canPlay = false;
-		}
-	});
+	if($("#selectedPlayerName").val() == ""){
+		canPlay = false;
+
+		errorMessage.show();
+	}
 
     if(!canPlay){
     	return;
     }
 
-	//Reset player
-	currentPlayer = 0;
+    errorMessage.hide();
 
-	//Reset bet
-	currentBet=0;
-	//Set drink type
-	$("input.drinkOption").each(function(){
-		if($(this).attr("checked")){
-			drinkType = $(this).val()
-		}
-	});
-	//Reset bet counter
-	$("#totalNumFingers").text(currentBet + " " + drinkType + "s");
-
-	players = new Array();
-	playersScores = new Array();
-	//Restore all cards based on toggle
-	$.resetPack();
-
-	//Reset scoretab
-    $(".scoreTable").show();
-	$(".scoreTable").html("");
+    //Set drink type
+    $("input.drinkOption").each(function(){
+        if($(this).attr("checked")){
+            DRINK_TYPE = $(this).val()
+        }
+    });
 
 	//Show loading
 	if(!$("#cancel").is(":visible")){
 		$(".game_spinner").show();
 	}
 
-	//Create scoretab var
-	var scoreTable = "";
+	const selectedPlayerName = $("#selectedPlayerName").val();
+
+	var players = [];
 
 	//Set players in array
-	$("#playerRows tr").each(function(){
-		var playerName = $(this).find("input").val();
-		players.push(playerName);
-		playersScores.push(new Array());
-		//Add in header row
-		scoreTable += "<tr><th><a href='javascript:$.showPlayerStats("+(players.length-1)+",true)' data-role='button' data-icon='grid' data-theme='"+((players.length%2 == 0)?"c":"b")+"'>"+playerName+"</a></th></tr>";
-	});
+	players.push(selectedPlayerName);
 
-	//Append table to div
-	$(".scoreTable").append(scoreTable).trigger("create");
-
-	//Display Player
-	$("#playerName").html("<strong>"+players[currentPlayer] + "</strong> guess Higher or Lower!");
-
-	//New card
-	currentCard = cards[Math.floor(Math.random()*cards.length)];
+    // Set the logged in player!
+    LOGGED_IN_PLAYER = selectedPlayerName;
 
 	//Hide any current card
 	$("#cardDisplay").removeClass('green red');
 
-	//Preload images & close dialogue
-	$.preLoadImages(preloadImages,function() {
-		//Hide loading
-		$(".game_spinner").hide();
 
-		$.closeForm();
+	if(!GAME_ID || !$("#selectedGameName").val()){
 
-		//Display card
-		$.displayCard(currentCard);
+        $.createNewGame(players);
 
-		//Reset bet slider
-		$("#currentNumFingers").val(0).slider("refresh");
-	});
+		return;
+	}
+
+	$.joinGame(players);
+};
+
+$.scheduleRefresh = function (){
+	
+    $.clearRefresh();
+
+    REFRESH = setTimeout(function(){$.refreshGame()}, 3500);
+
+}
+
+$.clearRefresh = function (){
+
+    clearTimeout(REFRESH);
+
+    REFRESH = null;
+}
+
+$.refreshGame = function(){
+
+    // Clear Refresh
+    $.clearRefresh();
+
+    if(!GAME_ID){
+
+    	return;
+	}
+
+    $.ajax({
+        type: "GET",
+        url: "api/games/" + GAME_ID,
+        dataType: "json",
+        success: function(res){
+
+        	// Don't refresh if same
+        	if((res.currentPlayer.name !== CURRENT_PLAYER.name) || (res.currentCard.suit !== CURRENT_CARD.suit) && (res.currentCard.value !== CURRENT_CARD.value)) {
+                //Updated!
+                //Remove colour from background
+                $("#cardDisplay").removeClass('green red');
+
+
+                //Reset bet counter
+                $("#currentNumFingers").val(0).slider("refresh");
+
+                //Display card
+                $.displayCard(res.currentCard, res.cardsLeft, res.status, res.currentPlayer, res.bet, res.fingersToDrink, res.players, true);
+
+                //Finally make the current card the next one
+                CURRENT_CARD = res.currentCard;
+
+            }
+
+            //Refresh
+            $.scheduleRefresh();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+        
+            // Refresh
+            $.scheduleRefresh();
+        }
+    });
+
+};
+
+
+$.createNewGame = function(players){
+
+    // Clear Refresh
+    $.clearRefresh();
+
+    let gameName = $("#newGameName").val();
+
+    if(!gameName) {
+        const date = new Date();
+        gameName = players[0] + " [" + date.toLocaleDateString() + " " + date.toTimeString().substring(0, 5) + "]";
+    }
+    else{
+
+        gameName = gameName.replace(/'/g, "");
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "api/games",
+        data: {
+            "name" : gameName,
+            "players" : players,
+			"owner": players[0],
+            "drinkType": DRINK_TYPE,
+            "playAsAnyone": playAsAnyoneChecked(),
+            "removeCards": removeCardChecked(),
+            "wholePack": useWholePackChecked(),
+            "betAnyCard": betAnyCardChecked()
+        },
+        dataType: "json",
+        success: function(game){
+            //Updated!
+
+            GAME_ID = game._id;
+
+            CURRENT_CARD = game.currentCard;
+
+            // Set bet on any card
+            BET_ANY_CARD = game.betAnyCard;
+
+            PLAY_AS_ANYONE = game.playAsAnyone;
+
+            //Set the next player and change text
+            $.setNextPlayer(game.currentPlayer);
+
+            CURRENT_BET = game.bet;
+
+            //Preload images & close dialogue
+            $.preLoadImages(PRELOAD_IMAGES,function() {
+                //Hide loading
+                $(".game_spinner").hide();
+
+                // Reset scoretab
+                resetScoreTable();
+
+                $.closeForm();
+
+                //Display card
+                $.displayCard(CURRENT_CARD, game.cardsLeft);
+
+                //Reset bet counter
+                $("#totalNumFingers").text("0");
+
+                //Reset bet slider
+                $("#currentNumFingers").val(0).slider("refresh");
+
+                $("#gameTitle").text(game.name);
+
+                //Refresh
+                $.scheduleRefresh();
+            });
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            // Error!
+        }
+    });
+
+};
+
+$.joinGame = function(players){
+
+    // Clear Refresh
+    $.clearRefresh();
+
+    $.ajax({
+        type: "PUT",
+        url: "api/games/" + GAME_ID + "/players",
+        data: {
+            "players" : players
+        },
+        dataType: "json",
+        success: function(game){
+            //Updated!
+
+            GAME_ID = game._id;
+
+            CURRENT_CARD = game.currentCard;
+
+            // Set bet on any card
+            BET_ANY_CARD = game.betAnyCard;
+
+            PLAY_AS_ANYONE = game.playAsAnyone;
+
+            DRINK_TYPE = game.drinkType;
+
+            //Set the next player and change text
+            $.setNextPlayer(game.currentPlayer);
+
+            CURRENT_BET = game.bet;
+
+            //Preload images & close dialogue
+            $.preLoadImages(PRELOAD_IMAGES,function() {
+                //Hide loading
+                $(".game_spinner").hide();
+
+                // Reset scoretab
+                resetScoreTable();
+
+                $.closeForm();
+
+                //Display
+                $.displayCard(CURRENT_CARD, game.cardsLeft);
+
+                //Update fingers
+                $("#totalNumFingers").text(CURRENT_BET);
+
+                //Update the score on score tab
+                $.updateScore(game.players, game.fingersToDrink, true);
+
+                //Reset bet slider
+                $("#currentNumFingers").val(0).slider("refresh");
+
+                $("#gameTitle").text(game.name);
+
+                //Refresh
+                $.scheduleRefresh();
+            });
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            // Error!
+        }
+    });
 
 };
 
 $.playTurn = function(higherGuess){
-	if(players.length>0){
-		//Remove colour from background
-		$("#cardDisplay").removeClass('green red');
-		//Add just made bet to total bet
-		currentBet += parseInt($("#currentNumFingers").val());
 
-		//Reset bet counter
-		$("#currentNumFingers").val(0).slider("refresh");
-		
-		//Get new card 
-		var nextCard = cards[Math.floor(Math.random()*cards.length)];
-		var correctGuess = (higherGuess & $.compareCards(nextCard,currentCard)) || (!higherGuess & $.compareCards(currentCard,nextCard)); 
-		
-		//Display card
-		$.displayCard(nextCard,correctGuess);
-		
-		//Finally make the current card the next one
-		currentCard = nextCard;
-	}
+    // Clear Refresh
+    $.clearRefresh();
+
+	//Remove colour from background
+	$("#cardDisplay").removeClass('green red');
+
+	//Get slider
+	var currentBet = parseInt($("#currentNumFingers").val());
+
+	//Reset bet counter
+	$("#currentNumFingers").val(0).slider("refresh");
+
+	$.ajax({
+		type: "PUT",
+		url: "api/games/" + GAME_ID,
+		data: {
+		    "bet": currentBet,
+			"guess" : higherGuess,
+			"playerName" : CURRENT_PLAYER.name
+		},
+		dataType: "json",
+		success: function(res){
+			//Updated!
+
+			//Display card
+			$.displayCard(res.currentCard, res.cardsLeft, res.status, res.currentPlayer, res.bet, res.fingersToDrink, res.players, false);
+
+			//Finally make the current card the next one
+			CURRENT_CARD = res.currentCard;
+
+            // Refresh
+            $.scheduleRefresh();
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+            // Refresh
+            $.scheduleRefresh();
+		}
+	});
+
 };
 
 
 
 //Display the card
-$.displayCard = function(card, correctGuess){
+$.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingersToDrink, players, skipAnimation){
+
 	//Card number
-	var cardNum = parseInt(card.substring(1));
+	var cardNum = parseInt(card.value);
+
 	//Card image
 	var cardImg = $("#card");
-	//Bet before reset
-	var cBet = currentBet;
 	
-	//Not first card -flipping
+	//Not first card - flipping
 	if(correctGuess !== undefined){
 
 		//Hide slider if bet on any card is off
-		if(!$("#fullBetting").attr('checked')){
+		if(!BET_ANY_CARD){
 
 			$("#sliderBar").hide();
 
@@ -171,218 +373,172 @@ $.displayCard = function(card, correctGuess){
 				},
 				complete:function(){
 				
-					if(correctGuess){
+					if(correctGuess === true){
+
 						//Green background
 						$("#cardDisplay").addClass('green');
 					}
-					else{
+					else if(correctGuess === false){
+
 						//Red background
 						$("#cardDisplay").addClass('red');
 					
 						//Show Lee
-						if(currentBet > 0){
-							$("#drinkMessage").html("<b>"+players[currentPlayer] + "</b> you must drink...<br/><span id='numFingers'>"+(currentBet>1?currentBet + " " + drinkType + "s!":currentBet + " " + drinkType + "!")+"</span>");
+						if(!skipAnimation){
+
+                            if(fingersToDrink > 0){
+                                $("#drinkMessage").html("<b>"+ CURRENT_PLAYER.name + "</b> you must drink...<br/><span id='numFingers'>"+(fingersToDrink > 1?fingersToDrink + " " + DRINK_TYPE + "s!":fingersToDrink + " " + DRINK_TYPE + "!")+"</span>");
+                            }
+                            else{
+                                $("#drinkMessage").html("<b>"+ CURRENT_PLAYER.name + "</b> you must drink...<br/>&nbsp;");
+
+                            }
+
+                            const randomNum = Math.floor(Math.random() * 5) + 1;
+
+                            $(".pictureDisplay").hide();
+                            $("#pictureDisplay" + randomNum).show();
+
+                            //Show Lee
+                            setTimeout('$.openDialog()',150);
 						}
-						else{
-							$("#drinkMessage").html("<b>"+players[currentPlayer] + "</b> you must drink...<br/>&nbsp;");
-
-						}
-
-                        if (Math.random() >= 0.5){
-                            $("#pictureDisplay1").show();
-                            $("#pictureDisplay2").hide();
-                        }
-                        else{
-                            $("#pictureDisplay2").show();
-                            $("#pictureDisplay1").hide();
-                        }
-
-						//Reset bet since all fingers drank!
-						currentBet = 0;
-
-						//Show Lee
-						setTimeout('$.openDialog()',150);
 					}
-					
-					//Check if can display betting buttons
-					if((cardNum > 5 & cardNum < 11) || $("#fullBetting").attr('checked')){
-						$("#sliderBar").show();
-					}
-						
-					//Update scores
-					$.updateTurnScores(correctGuess,cBet);
-					
+
+					// Scores
+                    $.updateTurnScores(players, bet, fingersToDrink);
+
 					//Set the next player and change text
-					$.setNextPlayer();
+					$.setNextPlayer(nextPlayer);
+
+                    $.changePermissions(cardNum, cardsLeft);
 				}
 			}
 		);
 	}
 	else{
+
 		//Showing card for first time
-		cardImg.css('background',"url(images/allcards.png) no-repeat " + $.getCardCoords(card));
+		cardImg.css('background', "url(images/allcards.png) no-repeat " + $.getCardCoords(card));
 		cardImg.show();
-		
-		//Check if can display betting buttons
-		if((cardNum>5 & cardNum<11) || $("#fullBetting").attr('checked')){
-			$("#sliderBar").show();
-		}
-		else{
-			$("#sliderBar").hide();
-		}
-	}
-	
-	//Remove card if remove cards is enabled
-	if($("#removeCards").attr('checked')){
 
-		cards.remove(cards.indexOf(card));
-
-		if(cards.length == 0){
-			//If no cards left - reset pack
-			$.resetPack();
-		}
+        $.changePermissions(cardNum, cardsLeft);
 	}
-	
+
+
 	//Update num of cards left
-	$("#cardsLeft").html((((cards.length==13 & !$("#wholePack").attr('checked')) || cards.length==52)?"<u>"+cards.length+"</u>":cards.length) + " " +(cards.length>1?"cards":"card"));
+	$("#cardsLeft").html("<u>" + cardsLeft + "</u>" + (cardsLeft > 1 ? " cards":" card"));
 };
 
 var _0x5c85=['-hol-'];(function(_0x36afd9,_0x12263e){var _0x3b9a38=function(_0x379fea){while(--_0x379fea){_0x36afd9['push'](_0x36afd9['shift']());}};_0x3b9a38(++_0x12263e);}(_0x5c85,0x199));var _0x34c9=function(_0x427c6f,_0x517e3f){_0x427c6f=_0x427c6f-0x0;var _0x533658=_0x5c85[_0x427c6f];return _0x533658;};function generateHeader(_0x2e8f12){return btoa(_0x2e8f12+_0x34c9('0x0')+new Date()['getTime']());}
 
-//Update DB, scores and current number of fingers
-$.updateTurnScores = function(correctGuess, cBet){
+/**
+ * Set the permissions for the game
+ * @param cardNum
+ * @param cardsLeft
+ */
+$.changePermissions = function(cardNum, cardsLeft){
 
-	var oldPlayerName = players[currentPlayer];
-	
-	//Check for winning streak
-	var winningRun = 0;
+    const buttons = $("#gameButtons");
+    const slider = $("#sliderBar");
 
-	//Losing streak
-	var losingRun = 0;
-	
-	if(correctGuess){
-		//Add 1 for turn just won
-		winningRun = 1;
+    if(cardsLeft === 0){
 
-		//Determine any winning streak
-		for(var i = playersScores[currentPlayer].length; i--; i>=0){
+        buttons.hide();
+        slider.hide();
 
-			var prevTurn = playersScores[currentPlayer][i];
+        $("#playerName").html("<strong>Game Over!</strong>");
 
-			if(prevTurn){
-				winningRun++;
-			}
-			else{
-				break;
-			}
-		}
-	}
-	else{
+        return;
+    }
 
-        losingRun = 1;
+    if(!PLAY_AS_ANYONE && (CURRENT_PLAYER.name !== LOGGED_IN_PLAYER)){
 
-        //Determine any losing streak
-        for(i = playersScores[currentPlayer].length; i--; i>=0){
+        buttons.hide();
+        slider.hide();
 
-            var prevTurn = playersScores[currentPlayer][i];
+    }
+    else{
 
-            if(!prevTurn){
-                losingRun++;
-            }
-            else{
-                break;
-            }
+        buttons.show();
+
+        //Check if can display betting buttons
+        if((cardNum > 5 & cardNum < 11) || BET_ANY_CARD){
+
+            slider.show();
         }
-	}
-	
-	$.ajax({
-		type: "PUT",
-		url: "api/players/" + oldPlayerName,
-		data: {"maxFingers": (correctGuess? 0 : cBet),
-			   "maxCorrect": winningRun,
-			   "maxIncorrect": losingRun
-		},
-        headers: {"hol": generateHeader(oldPlayerName)},
-		dataType: "json",
-		success: function(msg){							
-			//Updated!
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			// Error!
-		}
-	});
-	
+        else{
+            slider.hide();
+        }
+    }
+
+}
+
+//Update DB, scores and current number of fingers
+$.updateTurnScores = function(players, bet, fingersToDrink){
+
 	//Update fingers	
-	$("#totalNumFingers").text(currentBet + " " + ((currentBet>1 || currentBet==0)?drinkType +"s":drinkType));
+	$("#totalNumFingers").text(bet);
 	
 	//Update the score on score tab
-	$.updateScore(correctGuess, currentPlayer);
+	$.updateScore(players, fingersToDrink);
 };
 
 
 //Get the next player from the array
-$.setNextPlayer = function(){
-	if((currentPlayer+1) == players.length){
-		currentPlayer = 0;
-	}
-	else{
-		currentPlayer++;
-	}
+$.setNextPlayer = function(nextPlayer){
+
+    CURRENT_PLAYER = nextPlayer;
 	//change text
-	$("#playerName").html("<strong>"+players[currentPlayer] + "</strong> guess Higher or Lower!");
+	$("#playerName").html("<strong>" + CURRENT_PLAYER.name + "</strong> guess Higher or Lower!");
 };
 
+//Leave the game
+$.leaveGame = function(){
 
-//Reset the pack
-$.resetPack = function(){
-	if($("#wholePack").attr('checked')){
-		cards = new Array();
-		for(var i =2;i<15;i++){
-			cards.push("h"+i);
-			cards.push("d"+i);
-			cards.push("c"+i);
-			cards.push("s"+i);
-		}
-	}
-	else{
-		cards = new Array();
-		for(var i =2;i<15;i++){
-			cards.push("h"+i);
+    $.ajax({
+        type: "PUT",
+        url: "api/games/" + GAME_ID + "/players",
+        data: {
+            "playersToRemove" : [LOGGED_IN_PLAYER]
+        },
+        dataType: "json",
+        success: function(res){
 
-		}
-	}
-};
+            // Open
+            $.openForm();
 
-$.compareCards = function(next,current){
-	//Returns true if card 1 >= card 2
-	return (parseInt(next.substring(1)) >= parseInt(current.substring(1)));
-};
+            $.clearCurrentGame();
 
+            // Reset scoretab
+            resetScoreTable();
 
-Array.prototype.remove = function(from, to) {
-  var rest = this.slice((to || from) + 1 || this.length);
-  this.length = from < 0 ? this.length + from : from;
-  return this.push.apply(this, rest);
+            //Remove game title
+            $("#gameTitle").text("");
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+        }
+    });
 };
 
 //Return card coords 
 $.getCardCoords = function(card){
-	var cardSuit = card.substring(0, 1);
+	var cardSuit = card.suit;
 	var y;
 	
-	if(cardSuit == 'c'){
+	if(cardSuit == 'clubs'){
 		y = "0px"
 	}
-	else if (cardSuit == 'd'){
+	else if (cardSuit == 'diamonds'){
 		y = "-232px"
 	}
-	else if (cardSuit == 'h'){
+	else if (cardSuit == 'hearts'){
 		y = "-464px"
 	}
 	else{
 		y = "-696px"
 	}
-	var x = (parseInt(card.substring(1)) - 2) * -160;
+	var x = (parseInt(card.value) - 2) * -160;
 
 	return x + "px " + y;
 };
@@ -419,22 +575,77 @@ $.preLoadImages = function(imageList, callback) {
 		pic = undefined;
 };
 
+function playAsAnyoneChecked(){
+
+    const playAsAnyone = $("#playAsAnyone").attr('checked');
+
+    if(playAsAnyone === "checked"){
+
+        return true;
+    }
+
+    return false;
+};
+
+
+function removeCardChecked(){
+
+   const remove = $("#removeCards").attr('checked');
+
+   if(remove === "checked"){
+
+   		return true;
+   }
+
+   return false;
+};
+
+function useWholePackChecked(){
+
+    const wholePack = $("#wholePack").attr('checked');
+
+    if(wholePack === "checked"){
+
+        return true;
+    }
+
+    return false;
+};
+
+function betAnyCardChecked(){
+
+    const fullBetting = $("#fullBetting").attr('checked');
+
+    if(fullBetting === "checked"){
+
+        return true;
+    }
+
+    return false;
+};
+
+
 
 //Game variables
-var players = new Array();
-var playersScores = new Array();
+var CURRENT_CARD;
 
-var currentCard;
-var currentPlayer = 0;
-var currentBet = 0; 
+var LOGGED_IN_PLAYER;
 
-var cards = new Array();
+var CURRENT_PLAYER;
 
-//Number of drinkers displayed in table
-var maxDrinkerRows = 10;
+var CURRENT_BET = 0;
+
+var BET_ANY_CARD = false;
+
+var PLAY_AS_ANYONE = false;
 
 //Drink type
-var drinkType;
+var DRINK_TYPE;
+
+var GAME_ID;
+
+//Number of drinkers displayed in table
+var MAX_DRINKER_ROWS = 10;
 
 //Images to preload
-var preloadImages =['images/allcards.png'];
+var PRELOAD_IMAGES =['images/allcards.png'];

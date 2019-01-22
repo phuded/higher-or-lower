@@ -3,6 +3,7 @@
     top:		50px;
     bottom:		47px;
     width: 		100%;*/
+    padding: 5px;
 }
 
 .tab-content{
@@ -72,8 +73,8 @@
 
 /* Betting buttons */
 #higher,#lower{
-	width: 165px;
-	font-size: 1.2em;
+	width: 160px;
+	font-size: 1.15em;
 }
 
 /*Slider*/
@@ -102,7 +103,7 @@
 
 /*Bottom bar*/
 #footer{
-	height:47px;
+	height: 60px;
 	position: absolute;
 	bottom: 0;
 }
@@ -114,12 +115,23 @@
 }
 
 #footer table td{
-    width: 33%;
+    width: 25%;
+}
+
+#footer table td a{
+    height: 40px;
+}
+
+#footer table td a > span{
+    padding-top: 12px;
+}
+
+#footer table td a > span > span.ui-icon{
+    margin-top: -7px;
 }
 
 #footer td{
 	font-size:0.9em;
-	border-left: 1px dotted #456F9A;
 }
 
 .spinnerSmall{
@@ -153,51 +165,37 @@ span#drinkMessage{
 }
 
 /* Form*/
-.formPanel{
-	margin-top:-6px;
 
+.formPanel .ui-collapsible-heading {
+	font-size: 15px;
 }
 
 .formPanel .ui-collapsible-content{
 	padding: 10px 8px;
 }
 
-/*Add/remove buttons*/
-a#addPlayer, a#delPlayer{
+a.smallerButton{
 	font-size:0.7em;
-	margin-left:0;
-	margin-bottom:10px;
+	margin: 0;
 }
 
-/*Player Rows*/
-#playerRows{
-	width: 100%;
-	margin-left: -3px;
+/* Start/cancel */
+a.formButton{
+	font-size: 0.9em;
+	margin-top: 15px;
 }
 
-#playerRows a{
-    font-size: 0.7em;
-    margin: .4em 1px .4em 5px;
+a.formButton.ui-btn-corner-all, a.formButton span.ui-btn-corner-all{
+    border-radius: 3px;
 }
 
-#playerRows td.icon a span.ui-btn-inner{
-    padding: .5em 3px .5em 23px;
+a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
+	padding-right: 7px;
 }
 
-#playerRows td.icon a span.ui-btn-inner span.ui-icon{
-    left: 3px;
-}
-
-#playerRows tr td.icon{
-	width:20%;
-}
-
-#playerRows tr td.icon-del{
-	width:15%;
-}
-
-#playerRows tr td:nth-child(2){
-	padding-left: 5px;
+#errorMessage{
+    color:red;
+    vertical-align:middle;
 }
 
 /* Toggle buttons */
@@ -209,11 +207,6 @@ a#addPlayer, a#delPlayer{
 
 #gameOptions label{
 	font-size:0.9em;
-}
-
-/*Start & Cancel buttons*/
-#start,#cancel{
-	padding: 1px 5px 1px 5px;
 }
 
 .game_spinner{
@@ -229,18 +222,26 @@ a#addPlayer, a#delPlayer{
 	top:9px;
 }
 
+.gameForm table{
+	width: 98%;
+}
+
+.gameForm table td.tableButton{
+	width: 20%;
+}
+
 /*Player List*/
 #playerList li{
 	font-size:0.9em;
 }
 
 /*Player Form*/
-#playerForm>span{
+#playerForm > span{
 	font-size:1.2em;
 	font-weight:bold;
 }
 
-#playerForm p{
+#playerForm #playerFormErrorMessage{
 	color:red;
 }
 
@@ -249,7 +250,7 @@ a#addPlayer, a#delPlayer{
 	padding:10px;
 }
 
-table.scoreTable{
+#scoreTable{
 	border:1px solid #6D7B8D;
 	border-bottom-left-radius: 0.6em;
     border-top-left-radius: 0.6em;
@@ -258,17 +259,17 @@ table.scoreTable{
 	padding:3px;
 }
 
-table.scoreTable tr th, table.scoreTable tr td{
+#scoreTable tr th, #scoreTable tr td{
 	padding:2px;
 }
 
-table.scoreTable tr th{
+#scoreTable tr th{
 	width:100px;
 	max-width:100px;
 }
 
 
-table.scoreTable tr td{
+#scoreTable tr td{
 	width:22px;
 	max-width:22px;
 	text-align:center;
@@ -276,11 +277,11 @@ table.scoreTable tr td{
 	font-size: 0.9em;
 }
 
-table.scoreTable tr td.correct{
+#scoreTable tr td.correct{
 	background-color:#66CC99;
 }
 
-table.scoreTable tr td.incorrect{
+#scoreTable tr td.incorrect{
 	background-color:#F78181;
 }
 
@@ -348,26 +349,26 @@ table.scoreTable tr td.incorrect{
 	font-size: 0.75em;
 }
 
-.navButtons,.reloadButton{
+.reloadButton{
 	width:300px;
 	margin-left:auto;
 	margin-right:auto;
 }
 
-.reloadButton>p{
+.reloadButton > p{
 	font-size:0.9em;
 }
 
-.navButtons>a,.reloadButton>a{
+.navButtons > a, .reloadButton > a{
 	float:right;
 	font-size: 0.8em;
 }
 
-.navButtons>a:first-child{
+.navButtons > a:first-child{
 	float:left;
 }
 
-.drinkers_header > span,.navButtons>a > span, .reloadButton>a > span  {
+.drinkers_header > span, .reloadButton>a > span  {
 	padding: 10px 5px 10px 20px !important;
 	white-space: normal;
 }

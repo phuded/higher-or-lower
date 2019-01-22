@@ -1,10 +1,16 @@
 //Custom function for closing the form
 $.openForm = function(){
+
+    //Get player list
+    $.getPlayerList();
+
 	//Clear Search
 	$("div#playerList input").val("");
 	$('div#playerList ul li').removeClass('ui-screen-hidden'); 
 	//Reset to top panel
 	$('.formPanel .ui-collapsible-contain:eq(0)').trigger('expand');
+
+	$("#newGameName").val("");
 
 	// Show form
     $("#game-contents").hide();
@@ -43,7 +49,7 @@ $.closeDialog = function(){
 
 //Slide
 $.slideTab = function(rev, tab){
-	$.mobile.changePage("#"+tab, {
+	$.mobile.changePage("#" + tab, {
 		transition: "slide",
 		reverse: rev,
 		changeHash: false

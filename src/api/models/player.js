@@ -1,9 +1,13 @@
+import mongoose from "mongoose";
 
-//TODO: Use at somepoint
-export default function Player(name, description){
+let playerSchema = new mongoose.Schema({
+  name: {type: String, require: true, unique: true},
+  firstName: String,
+  surname: String,
+  maxFingers: { type: Number, default: 0 },
+  maxCorrect: { type: Number, default: 0 },
+  maxIncorrect: { type: Number, default: 0 },
+  lastPlayed: Date
+});
 
-    this.name = name;
-
-    this.description = description;
-
-};
+export default mongoose.model("Player", playerSchema);

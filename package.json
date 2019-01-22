@@ -1,10 +1,10 @@
 {
   "name": "higher-or-lower",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "start": "nodemon --exec babel-node src/server.js",
+    "start": "cross-env NODE_ENV=development nodemon --exec babel-node src/server.js",
     "build": "babel src --out-dir dist",
     "serve": "node dist/server.js"
   },
@@ -12,17 +12,19 @@
   "author": "Matt Carter",
   "license": "ISC",
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "nodemon": "^1.18.7"
   },
   "dependencies": {
     "@babel/cli": "^7.2.0",
     "@babel/core": "^7.2.0",
     "@babel/node": "^7.2.0",
+    "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.2.0",
     "atob": "^2.1.2",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "mongodb": "^3.1.10",
+    "mongoose": "^5.4.5",
     "path": "^0.12.7"
   }
 }

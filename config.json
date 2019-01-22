@@ -1,5 +1,10 @@
 {
-  "url": "mongodb://172.31.27.248:27017",
-  "dbString": "higherorlower",
-  "collectionString": "player"
+  "development": {
+    "url": "mongodb://localhost:27017",
+    "dbString": "higherorlower"
+  },
+  "production": {
+    "url": "mongodb://172.31.27.248:27017",
+    "dbString": "higherorlower"
+  }
 }

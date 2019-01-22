@@ -39,7 +39,7 @@
 	<body>
 
 		<!-- GAME -->
-		<div data-role="page" id="game" data-theme="b" data-title="Higher-Lower">
+		<div data-role="page" id="game" data-theme="b" data-title="Higher or Lower">
 			<div data-role="header" data-theme="a">
 					<div id="game_navbar" data-role="navbar">
 						<ul>
@@ -52,7 +52,7 @@
 
 
 			<!-- Dialogue Form -->
-			<div id="form" data-title="Higher-Lower" data-theme="b">
+			<div id="form" data-title="Higher or Lower" data-theme="b">
 
 				<div id="newGameForm" data-role="content" class="tab-content">
 
@@ -60,33 +60,42 @@
 
 						<h3 style="margin-block-start: 0.4em;"><img src="images/beer.png" style="height: 33px; vertical-align: middle; margin-right: 8px;"/>New Game</h3>
 
+
+						<p><b>Select your Player</b></p>
+						<span style="font-size: 0.8em;">Choose an existing player or register a new player:</span>
+						<br/>
+
+						<table>
+							<tr>
+								<td class="tableButton"><a id="search" class="smallerButton" href="javascript:$.showPlayerList(true, 1)" data-role="button" data-icon="search" data-inline="true" data-theme="a">Choose</a></td>
+								<td class="tableButton"><a id="add" class="smallerButton" href="javascript:$.createNewPlayer(true, 1)" data-role="button" data-icon="plus" data-inline="true">New</a></td>
+								<td> <input id="selectedPlayerName" style="font-size: 0.9em;" type="text" MAXLENGTH=8" placeholder="None Specified" data-theme="d" readonly/></td>
+							</tr>
+						</table>
+
 						<div data-role="collapsible-set" class="formPanel">
-							<div data-role="collapsible" data-collapsed="false" data-theme="c" data-content-theme="d">
-								<h3>1. Add Players</h3>
-								<a id="addPlayer" href="javascript:$.addPlayerRow()" data-role="button" data-icon="plus" data-inline="true" data-theme="a">Add Player (+1)</a>
-								<a id="delPlayer" href="javascript:$.delPlayerRow()" data-role="button" data-icon="minus" data-inline="true" data-theme="c">Remove Player (-1)</a>
-								<br/>
-								<span style="font-size: 0.8em;">Play as a guest, register a new player or choose existing:</span>
-								<table id="playerRows">
-									<tr id="player_1">
-										<td>
-											<input type="text" value="Guest 1" MAXLENGTH=8"/>
-										</td>
-										<td class="icon">
-											<a id="add_1" href="javascript:$.createNewPlayer(true, 1)" data-role="button" data-icon="plus">New</a>
-										</td>
-										<td class="icon">
-											<a id="search_1" href="javascript:$.showPlayerList(true, 1)" data-role="button" data-icon="search">Choose</a>
-										</td>
-										<td class="icon-del">
-											<a id="del_1" href="javascript:$.delPlayerRow(1)" data-role="button" data-icon="minus" data-iconpos="notext" style="display:none;">Remove</a>
-										</td>
+
+							<div data-role="collapsible" data-collapsed="false" class="drinkOption" data-theme="b" data-content-theme="c">
+								<h3>Choose an Existing Game</h3>
+
+								<table>
+									<tr>
+										<td class="tableButton"><a id="chooseGame" class="smallerButton" href="javascript:$.showGameList(true)" data-role="button" data-icon="search" data-inline="true" data-theme="a">Choose</a></td>
+										<td class="tableButton"><a id="clearGame" class="smallerButton" href="javascript:$.clearGameSelection()" data-role="button" data-icon="minus" data-inline="true">Unselect</a></td>
+										<td><input id="selectedGameName" style="font-size: 0.75em;" type="text" placeholder="None Selected" data-theme="d" readonly/></td>
 									</tr>
+
 								</table>
+
 							</div>
-							<div data-role="collapsible" data-collapsed="true" class="drinkOption" data-theme="c" data-content-theme="d">
-								<h3>2. Choose your drink</h3>
-								<span><b>What are you drinking?</b></span>
+
+							<div data-role="collapsible" data-collapsed="true" class="drinkOption" data-theme="a" data-content-theme="c">
+								<h3>Or Create a New Game</h3>
+
+								<input id="newGameName" type="text" placeholder="Optional: Enter Game Name" data-theme="d"/>
+								<br/>
+
+								<span>1. What are you drinking?</span>
 								<fieldset data-role="controlgroup">
 									<input type="radio" name="drink_choice" id="drink_beer_bottle" value="swig" class="drinkOption" checked="checked" />
 									<label for="drink_beer_bottle">Bottled Beer</label>
@@ -103,11 +112,11 @@
 									<input type="radio" name="drink_choice" id="drink_wine" value="sip"  class="drinkOption"/>
 									<label for="drink_wine">Wine</label>
 								</fieldset>
-							</div>
 
-							<div data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="d">
-								<h3>3. Select Game Options</h3>
+								<span>2. Select Game Options</span>
 								<fieldset id="gameOptions" data-role="controlgroup" data-role="fieldcontain">
+									<input type="checkbox" name="playAsAnyone" id="playAsAnyone" class="gameFlag"/>
+									<label for="playAsAnyone">Play as anyone</label>
 									<input type="checkbox" name="fullBetting" id="fullBetting" class="gameFlag"/>
 									<label for="fullBetting">Bet on any card</label>
 									<input type="checkbox" name="removeCards" id="removeCards" class="gameFlag" />
@@ -116,14 +125,22 @@
 									<label for="wholePack">Use the whole pack</label>
 								</fieldset>
 							</div>
+
 						</div>
 
-						<a href="javascript:$.startGame()" id="start" data-role="button" data-theme="b" data-inline="true" data-icon="check">Play!</a>
+						<a href="javascript:$.startGame()" id="start" class="formButton" data-role="button" data-theme="b" data-inline="true" data-icon="check">Create New Game</a>
 
-						<a href="javascript:$.closeForm()" id="cancel" data-role="button" data-theme="c" data-inline="true" data-icon="back" style="display:none;">Back to game</a>
+						<a href="javascript:$.closeForm()" id="cancel" class="formButton" data-role="button" data-theme="c" data-inline="true" data-icon="back" style="display:none;">Back to game</a>
 
 						<span class="game_spinner" style="display:none;"><img src="images/loading.gif"/>&nbsp;Loading</span>
+						<span id="errorMessage" style="display: none;">No Player Selected</span>
 
+					</div>
+
+					<!--Hidden game list -->
+					<div id="gameList" style="display:none;">
+						<ul data-role="listview" data-filter="true" data-inset="true" data-theme="c"></ul>
+						<a href="javascript:$.showGameList(false, null, null)" id="backFromListGame" data-role="button" data-theme="c" data-inline="true" data-icon="back">Back</a>
 					</div>
 
 					<!--Hidden player list -->
@@ -151,7 +168,7 @@
 						<br/>
 						<a href="javascript:$.createNewPlayer(false, true)" id="createPlayer" data-role="button" data-theme="b" data-inline="true" data-icon="check">Create</a>
 						<a href="javascript:$.createNewPlayer(false, false)" id="cancelPlayer" data-role="button" data-theme="c" data-inline="true" data-icon="back">Cancel</a>
-						<p style="display:none;">User name already in use or invalid!</p>
+						<p id="playerFormErrorMessage" style="display:none;">User name already in use or invalid!</p>
 					</div>
 
 					<!-- Download required icons -->
@@ -186,13 +203,14 @@
 					<div data-role="controlgroup" data-type="horizontal">
 						<table>
 							<tr>
-								<td>
-									<a href="javascript:$.openForm()" data-role="button" data-transition="fade" data-icon="plus" data-theme="a" id="newGame">New Game</a>
+								<td style="width: 50%;">
+									<a href="javascript:$.openForm()" data-role="button" data-transition="fade" data-icon="back" data-theme="a" id="newGame">Back</a>
+									<a href="javascript:$.leaveGame()" data-role="button" data-transition="fade" data-icon="minus" data-theme="c" id="leaveGame">Quit Game</a>
 								</td>
-								<td>
+								<td style="border-left: 1px dotted #456F9A;">
 									<span>Bet: <span id="totalNumFingers"></span></span>
 								</td>
-								<td>
+								<td style="border-left: 1px dotted #456F9A;">
 									<span id="cardsLeft"></span>
 								</td>
 							</tr>
@@ -215,7 +233,8 @@
 			</div>
 
 			<div id="scoreTab" class="tab-content" data-role="content">
-				<table class="scoreTable" style="display: none;"></table>
+				<h3 id="gameTitle" style="margin-block-start: 0.4em;"></h3>
+				<table id="scoreTable" style="display: none;"></table>
 				<div id="scoreStats" style="display:none;">
 					<h3 id="stats_name" style="color:#155678;"></h3>
 					<p id="stats_guesses"><b>Guesses made: </b><span></span></p>
@@ -276,6 +295,9 @@
 			<div id="pictureContainer" data-role="content" data-theme="b">
 				<img id="pictureDisplay1" class="pictureDisplay ui-corner-all" src="images/drink1.jpg" title="You must drink!" style="display:none;"/>
 				<img id="pictureDisplay2" class="pictureDisplay ui-corner-all" src="images/drink2.jpg" title="You must drink!" style="display:none;"/>
+				<img id="pictureDisplay3" class="pictureDisplay ui-corner-all" src="images/drink3.jpg" title="You must drink!" style="display:none;"/>
+				<img id="pictureDisplay4" class="pictureDisplay ui-corner-all" src="images/drink4.jpg" title="You must drink!" style="display:none;"/>
+				<img id="pictureDisplay5" class="pictureDisplay ui-corner-all" src="images/drink5.jpg" title="You must drink!" style="display:none;"/>
 				<div>
 					<span id="drinkMessage"></span>
 				</div>

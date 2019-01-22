@@ -1,49 +1,169 @@
+var players;
+
 //Update the score for a player
-$.updateScore = function(correct, oldPlayer){
-	//Add score to array and score tab
-	playersScores[oldPlayer].push(correct);
-	
-	//Get the row object for the old player
-	var playerScoreRow = $("#scoreTab table tr:eq(" + oldPlayer + ")");
+$.updateScore = function(_players, fingersToDrink, skipHighScores){
 
-	$.addScoreCol(playerScoreRow,correct,oldPlayer);
-};
+	players = _players;
 
-//Add a new column to the score tab
-$.addScoreCol = function(playerScoreRow, correct, playerId){
-	//If table is full - delete first row before adding latest
-	
-	var numCols = 8;
-	
-	if(playerScoreRow.children("td").size() == numCols){
+	var table = $("#scoreTable");
 
-		playerScoreRow.find("td:eq(0)").remove();
-	}
+    //Create scoretab var
+    var scoreTableBody = "";
 
-	if(correct){
-		playerScoreRow.append("<td class='correct'>" + playersScores[playerId].length)
+    var playerToUpdate = null;
+
+    //Set players in array
+    $(players).each(function(pIdx, player){
+
+        const playerName = player.name;
+
+        if((playerName === CURRENT_PLAYER.name) && (LOGGED_IN_PLAYER == CURRENT_PLAYER.name)){
+
+            playerToUpdate = player;
+		}
+
+        //Add in header row
+        scoreTableBody += "<tr><th><a href='javascript:$.showPlayerStats(" + pIdx + ", true)' data-role='button' data-icon='grid' data-theme='"+((pIdx%2 == 0)?"c":"b")+"'>" + playerName + "</a></th>";
+
+        var numStats = player.stats.length;
+
+        $(player.stats).slice(-8).each(function(idx, stat) {
+
+            var num = idx + 1;
+
+        	if(numStats > 8 ){
+
+                num += (numStats - 8);
+
+            }
+
+            if (stat) {
+                scoreTableBody += "<td class='correct'>" + num + "</td>";
+            }
+            else {
+                scoreTableBody += "<td class='incorrect'>" + num + "</td>";
+            }
+        });
+
+        scoreTableBody += "</tr>";
+    });
+
+    //Append table to div
+    table.html(scoreTableBody).trigger("create");
+
+    const scoresVisible = $("#scoreStats").is(":visible");
+
+    if(scoreTableBody && !scoresVisible){
+
+        // Show score table
+        table.show();
 	}
 	else{
-		playerScoreRow.append("<td class='incorrect'>" + playersScores[playerId].length)
+
+	    table.hide();
 	}
+
+	if(!skipHighScores && playerToUpdate) {
+
+        sendHighScores(playerToUpdate, fingersToDrink);
+    }
 };
+
+// Reset the score table
+function resetScoreTable(){
+
+    var table = $("#scoreTable");
+
+    table.html("");
+
+    table.hide();
+}
+
+
+function sendHighScores(playerToUpdate, fingersToDrink){
+
+    var playerName = playerToUpdate.name;
+
+    //Check for winning streak
+    var winningRun = 0;
+
+    //Losing streak
+    var losingRun = 0;
+
+    var correctGuess = playerToUpdate.stats[playerToUpdate.stats.length - 1];
+
+    if(correctGuess){
+
+        //Determine any winning streak
+        for(var i = playerToUpdate.stats.length; i--; i>=0){
+
+            var prevTurn = playerToUpdate.stats[i];
+
+            if(prevTurn){
+                winningRun++;
+            }
+            else{
+                break;
+            }
+        }
+    }
+    else{
+
+        //Determine any losing streak
+        for(i = playerToUpdate.stats.length; i--; i>=0){
+
+            var prevTurn = playerToUpdate.stats[i];
+
+            if(!prevTurn){
+                losingRun++;
+            }
+            else{
+                break;
+            }
+        }
+    }
+
+    $.ajax({
+        type: "PUT",
+        url: "api/players/" + playerName,
+        data: { "maxFingers": fingersToDrink,
+				"maxCorrect": winningRun,
+				"maxIncorrect": losingRun
+        },
+        headers: {"hol": generateHeader(playerName)},
+        dataType: "json",
+        success: function(msg){
+            //Updated!
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            // Error!
+        }
+    });
+
+}
+
+
 
 /*Show player stats*/
 $.showPlayerStats = function(pNum, show){
 
+    // Show table
 	if(!show){
 		$("#scoreStats").hide();
-		$(".scoreTable").fadeIn();
+		$("#scoreTable").fadeIn();
 
 		return;
 	}
 
 	//Hide scores
-	$(".scoreTable").hide();
-	//Set player name
-	$("#stats_name").text(players[pNum]);
+	$("#scoreTable").hide();
 
-	var numGuesses = playersScores[pNum].length;
+	var player = players[pNum];
+
+	//Set player name
+	$("#stats_name").text(player.name);
+
+	var numGuesses = player.stats.length;
 
 	var correct = 0;
 	var correctStreak = 0;
@@ -52,7 +172,7 @@ $.showPlayerStats = function(pNum, show){
 	var incorrectStreak = 0;
 	var bestIncorrectStreak = 0;
 
-	$.each(playersScores[pNum],function(i, correctGuess){
+	$.each(player.stats ,function(i, correctGuess){
 		if(correctGuess){
 			//Increase number which are correct
 			correct++;

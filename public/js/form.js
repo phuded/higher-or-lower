@@ -2,36 +2,94 @@
 /* Get List of players */
 $.getPlayerList = function(){
 
-	$("div#playerList ul").html("");
+    $("div#playerList ul").html("");
 
-	//Get Player List
-	$.ajax({
-		type: "GET",
-		url: "api/players",
-		success: function(json){
+    //Get Player List
+    $.ajax({
+        type: "GET",
+        url: "api/players",
+        success: function(json){
 
-			const players = json.players;
+            const players = json.players;
 
-			var options = ''; 
+            var options = '';
 
-			for (var i = 0; i < players.length; i++) {
+            for (var i = 0; i < players.length; i++) {
 
                 const name = players[i].name;
 
-				const wName = players[i].fname ?" ("+players[i].fname.substring(0, 1) + "." + players[i].surname + ")" : "";
+                const wName = players[i].fname ?" ("+players[i].fname.substring(0, 1) + "." + players[i].surname + ")" : "";
 
-				options += "<li><a href='javascript:$.showPlayerList(false, &#39;" + name + "&#39;)'>" + name + wName + "</a></li>";
-			}
+                options += "<li><a href='javascript:$.showPlayerList(false, &#39;" + name + "&#39;)'>" + name + wName + "</a></li>";
+            }
 
-			$("div#playerList ul").append(options);
-			
-			//Refresh View
-			$('#playerList ul').listview('refresh');	
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			//Error
-		}
-	});
+            $("div#playerList ul").append(options);
+
+            //Refresh View
+            $('#playerList ul').listview('refresh');
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            //Error
+        }
+    });
+};
+
+/* Get List of players */
+$.getGameList = function(){
+
+    const gameList = $("#gameList ul");
+
+    gameList.html("");
+
+    //Get Player List
+    $.ajax({
+        type: "GET",
+        url: "api/games?order-by=_id&dir=asc",
+        success: function(json){
+
+            const games = json.games;
+
+            var options = '';
+
+            for (var i = 0; i < games.length; i++) {
+
+                const game = games[i];
+
+                const id = game._id;
+
+                const name = game.name;
+
+                const cardsLeft = game.cardsLeft;
+
+                const noCards = cardsLeft === 0;
+
+                let html = "href='javascript:$.showGameList(false, &#39;" + id + "&#39;, &#39;" + name + "&#39;)'";
+
+                if(noCards){
+
+                    html = "style='text-decoration: line-through !important;'";
+                }
+
+                const owner = game.owner;
+
+                options += "<li><a " + html + " >" + name + "</a>";
+
+                if(owner === $("#selectedPlayerName").val() || noCards) {
+                    options += "<a href='javascript:$.deleteGame(&#39;" + id + "&#39;)' data-role='button' data-theme='c' data-inline='true' data-icon='minus'></a>";
+                }
+
+                options += "</li>";
+            }
+
+            gameList.append(options);
+
+            //Refresh View
+            gameList.listview('refresh');
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            //Error
+        }
+    });
 };
 
 /*TRANSITIONS*/
@@ -39,110 +97,148 @@ $.getPlayerList = function(){
 //Show form panels - list 
 $.showPlayerList = function(show, player){
 
-	var formContent = $(".gameForm");
-	var playerList = $("#playerList");
-	
-	if(show){
-		formContent.fadeOut(function() {
-			playerList.fadeIn('fast');
-		 });		
+    var formContent = $(".gameForm");
+    var playerList = $("#playerList");
 
-		playerList.data("playerNum", player);
-	}
-	else{	
-		playerList.fadeOut(function() {
-			formContent.fadeIn('fast');
+    if(show){
+        formContent.fadeOut(function() {
+            playerList.fadeIn('fast');
+        });
 
-			if(player != null){
+    }
+    else{
+        playerList.fadeOut(function() {
+            formContent.fadeIn('fast');
 
-                var num = playerList.data("playerNum");
-                $("tr#player_"+num+" input").val(player);
+            if(player != null){
 
-			}
-		 });
-	}
+                $("#selectedPlayerName").val(player);
+
+                $("#errorMessage").hide();
+
+            }
+        });
+    }
 };
 
-//Show form panels - create new player
+$.deleteGame = function(id){
 
+    $.ajax({
+        type: "DELETE",
+        url: "api/games/" + id,
+        dataType: "json",
+        success: function(json){
+
+            //Refresh game list
+            $.getGameList();
+
+            // Deleting current game
+            if(GAME_ID && GAME_ID === id){
+
+                $.clearCurrentGame();
+            }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+
+        }
+    });
+
+}
+
+
+//Show form panels - create new player
 $.createNewPlayer = function(show, player){
-	var formContent = $(".gameForm");
-	var playerForm = $("#playerForm");
-	
+
+	const formContent = $(".gameForm");
+	const playerForm = $("#playerForm");
+
+	const errorMessage = $("#playerFormErrorMessage");
+
+	// Show Create Form
 	if(show){
+
 		formContent.fadeOut(function() {
 			playerForm.fadeIn('fast');
-		 });		
+		 });
 
-		playerForm.data("playerNum",player);
+		 return;
 	}
-	else{
-		//Clear warning
-		playerForm.find("p").hide();
-		
-		//Call method to create player and display main form if 2nd argument true
-		if(player){
-			//Get username
-			var playerName = $("#pname").val();
-			
-			if((playerName.length > 0) && (playerName.indexOf("Player ") == -1)){
 
-				var fName = $("#fname").val();
-				var surname = $("#surname").val();
-				
-				//Add new player
-				$.ajax({
-					type: "POST",
-					url: "api/players",
-					data: {	name: playerName,
-							firstName: fName,
-							surname: surname
-					},
-					dataType: "json",
-					success: function(json){
+    //Clear warning
+    errorMessage.hide();
 
-						//Added!
-						//Refresh player list
-						$.getPlayerList();
+    // Cancel
+    if(!player){
 
-						//Show previous screen
-						playerForm.fadeOut(function() {
+        //Cancel and show main form
+        playerForm.fadeOut(function() {
 
-							formContent.fadeIn('fast');
+            formContent.fadeIn('fast');
+            //Clear form
+            $.clearNewPlayerForm();
+        });
+    }
 
-							var num = playerForm.data("playerNum");
+    //Call method to create player and display main form if 2nd argument true
+    var pName = $("#pname");
 
-							$("tr#player_"+num+" input").val(playerName);
+    //Get username
+    var playerName = pName.val();
 
-							$.clearNewPlayerForm();
-						});
-					},
-					error: function(XMLHttpRequest, textStatus, errorThrown) {
+    const playerNameValid = (playerName.length > 0) && (playerName.indexOf("Player ") == -1);
 
-						// Error!
-                        //Already in use - clear name and show warning
-                        $("#pname").val("");
-                        playerForm.find("p").show();
+    if(!playerNameValid){
 
-                        return;
-					}
-				});
-			}
-			else{
-				//Invalid in use - clear name and show warning
-				$("#pname").val("");
-				playerForm.find("p").show();
-			}
-		}
-		else{
-			//Cancel and show main form
-			playerForm.fadeOut(function() {
-				formContent.fadeIn('fast');
-				//Clear form
-				$.clearNewPlayerForm();
-			});
-		}
-	}
+        //Invalid in use - clear name and show warning
+        pName.val("");
+        errorMessage.show();
+
+        return
+    }
+
+    var fName = $("#fname").val();
+    var surname = $("#surname").val();
+
+    //Add new player
+    $.ajax({
+        type: "POST",
+        url: "api/players",
+        data: {	name: playerName,
+                firstName: fName,
+                surname: surname
+        },
+        dataType: "json",
+        success: function(json){
+
+            //Added!
+            //Refresh player list
+            $.getPlayerList();
+
+            //Show previous screen
+            playerForm.fadeOut(function() {
+
+                formContent.fadeIn('fast');
+
+                $("#selectedPlayerName").val(playerName);
+
+                $.clearNewPlayerForm();
+
+                // Remove main form error
+                $("#errorMessage").hide();
+            });
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+            // Error!
+            //Already in use - clear name and show warning
+            pName.val("");
+            errorMessage.show();
+
+            return;
+        }
+    });
+
 };
 
 /*Clear new player form */
@@ -151,65 +247,55 @@ $.clearNewPlayerForm = function(){
 	$(".playerFormField").val("");
 };
 
-/*Add or remove rows on form */
 
-$.addPlayerRow = function(){
+$.showGameList = function(show, selectedGameId, selectedGameName){
 
-	var numPlayers = $("#playerRows tr").size();
-	var nextPlayer = numPlayers + 1;
-	
-	if(numPlayers < 6){
-		var newPlayerRow = $.createRow(nextPlayer, "Guest "+nextPlayer);
-		//Apply styling
-		$(newPlayerRow).appendTo("#playerRows").trigger("create");
-	}
-	
-	numPlayers = $("#playerRows tr").size();
-	
-	if(numPlayers > 1){
-		$("#playerRows tr:eq(0) td:eq(3) a").show();
-	}
-};
-		
-$.delPlayerRow = function(rowNum){	
-	var lastNum = $("#playerRows tr").size();
-	//If there is more than one player
-	if(lastNum>1){
-		if(rowNum){
-			$("#playerRows #player_"+rowNum).remove();
-			//Loop through all other players
-			for (var i = rowNum+1;i<=lastNum;i++){
-				var row = $("#playerRows #player_"+i);
-				var name = row.find('input').val();
+    var formContent = $(".gameForm");
+    var gameList = $("#gameList");
 
-				if(name == "Player "+i){
-					name = "Player "+(i-1);
-				}
-				row.remove();
+    if(show){
 
-				$($.createRow(i-1,name)).appendTo("#playerRows").trigger("create");
-			}
-		}
-		else{
-			$("#playerRows #player_"+lastNum).remove();
-		}
-	}
-	
-	lastNum = $("#playerRows tr").size();
-	if(lastNum == 1){
-		$("#playerRows tr:eq(0) td:eq(3) a").hide();
-	}
+        // Load the game list
+        $.getGameList();
+
+        formContent.fadeOut(function() {
+            gameList.fadeIn('fast');
+        });
+
+        return;
+    }
+
+    gameList.fadeOut(function() {
+
+        formContent.fadeIn('fast');
+
+        if(selectedGameId != null){
+
+            GAME_ID = selectedGameId;
+
+            $("#selectedGameName").val(selectedGameName);
+
+            $("#start").html($("#start").html().replace("Create New", "Join"));
+
+        }
+    });
+
 };
 
-$.createRow = function (playerNumber,name){
 
-	var newPlayerRow = "<tr id='player_"+playerNumber+"'><td><input type='text' value='"+name+"' MAXLENGTH=8/></td>";
-		
-	newPlayerRow += "<td class='icon'><a id='add_"+playerNumber+"' href='javascript:$.createNewPlayer(true," + playerNumber + ")' data-role='button' data-icon='plus'>New</a></td>";
-	newPlayerRow += "<td class='icon'><a id='search_"+playerNumber+"' href='javascript:$.showPlayerList(true, " + playerNumber + ")' data-role='button' data-icon='search'>Choose</a></td>";
-	newPlayerRow += "<td class='icon-del'><a id='del_"+playerNumber+"' href='javascript:$.delPlayerRow(" + playerNumber + ")' data-role='button' data-icon='minus' data-iconpos='notext'>Remove</a></td>";
-	
-	newPlayerRow += "</tr>"
+$.clearCurrentGame = function(){
 
-	return newPlayerRow;
-};
+   // Hide cancel
+   $("#cancel").hide();
+
+   GAME_ID = null;
+
+   $.clearGameSelection();
+}
+
+$.clearGameSelection = function(){
+
+    $("#selectedGameName").val("");
+
+    $("#start").html($("#start").html().replace("Join", "Create New"));
+}
