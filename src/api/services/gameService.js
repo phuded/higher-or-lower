@@ -1,5 +1,20 @@
 import Game, {Card, GamePlayer} from "../models/game";
 
+function notifyClients(gameId, game, playerName){
+
+    // Web Socket Push to relevant clients
+    let clients = global.clients[gameId];
+
+    if(clients){
+
+        for (let i = 0; i < clients.length; i++) {
+
+            clients[i].send(JSON.stringify({game: game, prevPlayer: playerName}));
+        }
+    }
+
+}
+
 export async function getGames(req, res) {
 
     const orderBy = req.query["order-by"] ? req.query["order-by"] : "name";
@@ -109,6 +124,9 @@ export async function updateGame(id, playerName, guess, bet, res) {
 
     await game.save();
 
+    // Notify via WS
+    notifyClients(id, game, playerName);
+
     return res.send(game);
 };
 
@@ -126,6 +144,8 @@ export async function updateGamePlayers(id, newPlayers, playersToRemove, res) {
 
         return res.status(404).send({error: "Cannot update game: " + id + ": Not found"});
     }
+
+    const playerName = game.currentPlayer.name;
 
     let gameUpdated = false;
 
@@ -170,6 +190,9 @@ export async function updateGamePlayers(id, newPlayers, playersToRemove, res) {
     }
 
     await game.save();
+
+    // Notify via WS
+    notifyClients(id, game, null);
 
     return res.send(game);
 };
@@ -354,10 +377,3 @@ function setCard(game){
 
     return card;
 };
-
-// function sanitiseGame(game){
-//
-//     delete game.cards;
-//
-//     return game;
-// }

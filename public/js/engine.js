@@ -1,5 +1,3 @@
-var REFRESH = null;
-
 $.prepareGame = function(){
 
 	//Get player list
@@ -26,8 +24,75 @@ $.prepareGame = function(){
 	//Show loading on drinkers tab close
 	$('#game, #scores').live('pageshow',function(event){
 		$.showLoading(true);
-	});	
+	});
+};
 
+$.websocketListen = function () {
+
+    if(WS_CONNECTION){
+
+        WS_CONNECTION.close();
+    }
+
+    // if user is running mozilla then use it's built-in WebSocket
+    window.WebSocket = window.WebSocket || window.MozWebSocket;
+
+    const url = "ws://" +  location.host  + "/" + GAME_ID;
+
+    WS_CONNECTION = new WebSocket(url);
+
+    WS_CONNECTION.onopen = function () {
+        // connection is opened and ready to use
+
+        console.log("Listening on: " + url);
+    };
+
+    WS_CONNECTION.onerror = function (error) {
+        // an error occurred when sending/receiving data
+    };
+
+    WS_CONNECTION.onmessage = function (message) {
+
+        try {
+
+            const res = JSON.parse(message.data);
+
+            const prevPlayer = res.prevPlayer;
+
+            console.log("prevPlayer", prevPlayer);
+            console.log("LOGGED_IN_PLAYER", LOGGED_IN_PLAYER);
+
+            const game = res.game;
+
+            // Don't refresh if same
+            if((game.currentPlayer.name !== CURRENT_PLAYER.name) || (game.currentCard.suit !== CURRENT_CARD.suit) || (game.currentCard.value !== CURRENT_CARD.value)) {
+
+                //Updated!
+
+                //Remove colour from background
+                $("#cardDisplay").removeClass('green red');
+
+
+                //Reset bet counter
+                $("#currentNumFingers").val(0).slider("refresh");
+
+                const skipAnimation = prevPlayer !=  LOGGED_IN_PLAYER;
+
+                //Display card
+                $.displayCard(game.currentCard, game.cardsLeft, game.status, game.currentPlayer, game.bet, game.fingersToDrink, game.players, skipAnimation);
+
+                //Finally make the current card the next one
+                CURRENT_CARD = game.currentCard;
+
+            }
+
+        } catch (e) {
+            console.log('This doesn\'t look like a valid JSON: ', message.data);
+            return;
+        }
+
+        // handle incoming message
+    };
 };
 
 
@@ -86,72 +151,8 @@ $.startGame = function(){
 	$.joinGame(players);
 };
 
-$.scheduleRefresh = function (){
-	
-    $.clearRefresh();
-
-    REFRESH = setTimeout(function(){$.refreshGame()}, 3500);
-
-}
-
-$.clearRefresh = function (){
-
-    clearTimeout(REFRESH);
-
-    REFRESH = null;
-}
-
-$.refreshGame = function(){
-
-    // Clear Refresh
-    $.clearRefresh();
-
-    if(!GAME_ID){
-
-    	return;
-	}
-
-    $.ajax({
-        type: "GET",
-        url: "api/games/" + GAME_ID,
-        dataType: "json",
-        success: function(res){
-
-        	// Don't refresh if same
-        	if((res.currentPlayer.name !== CURRENT_PLAYER.name) || (res.currentCard.suit !== CURRENT_CARD.suit) && (res.currentCard.value !== CURRENT_CARD.value)) {
-                //Updated!
-                //Remove colour from background
-                $("#cardDisplay").removeClass('green red');
-
-
-                //Reset bet counter
-                $("#currentNumFingers").val(0).slider("refresh");
-
-                //Display card
-                $.displayCard(res.currentCard, res.cardsLeft, res.status, res.currentPlayer, res.bet, res.fingersToDrink, res.players, true);
-
-                //Finally make the current card the next one
-                CURRENT_CARD = res.currentCard;
-
-            }
-
-            //Refresh
-            $.scheduleRefresh();
-        },
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
-        
-            // Refresh
-            $.scheduleRefresh();
-        }
-    });
-
-};
-
 
 $.createNewGame = function(players){
-
-    // Clear Refresh
-    $.clearRefresh();
 
     let gameName = $("#newGameName").val();
 
@@ -182,6 +183,8 @@ $.createNewGame = function(players){
             //Updated!
 
             GAME_ID = game._id;
+
+            $.websocketListen();
 
             CURRENT_CARD = game.currentCard;
 
@@ -216,8 +219,6 @@ $.createNewGame = function(players){
 
                 $("#gameTitle").text(game.name);
 
-                //Refresh
-                $.scheduleRefresh();
             });
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -228,9 +229,6 @@ $.createNewGame = function(players){
 };
 
 $.joinGame = function(players){
-
-    // Clear Refresh
-    $.clearRefresh();
 
     $.ajax({
         type: "PUT",
@@ -243,6 +241,8 @@ $.joinGame = function(players){
             //Updated!
 
             GAME_ID = game._id;
+
+            $.websocketListen();
 
             CURRENT_CARD = game.currentCard;
 
@@ -282,8 +282,6 @@ $.joinGame = function(players){
 
                 $("#gameTitle").text(game.name);
 
-                //Refresh
-                $.scheduleRefresh();
             });
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -294,9 +292,6 @@ $.joinGame = function(players){
 };
 
 $.playTurn = function(higherGuess){
-
-    // Clear Refresh
-    $.clearRefresh();
 
 	//Remove colour from background
 	$("#cardDisplay").removeClass('green red');
@@ -317,21 +312,10 @@ $.playTurn = function(higherGuess){
 		},
 		dataType: "json",
 		success: function(res){
-			//Updated!
-
-			//Display card
-			$.displayCard(res.currentCard, res.cardsLeft, res.status, res.currentPlayer, res.bet, res.fingersToDrink, res.players, false);
-
-			//Finally make the current card the next one
-			CURRENT_CARD = res.currentCard;
-
-            // Refresh
-            $.scheduleRefresh();
+            //Nothing
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
-
-            // Refresh
-            $.scheduleRefresh();
+            //Nothing
 		}
 	});
 
@@ -504,6 +488,10 @@ $.leaveGame = function(){
         dataType: "json",
         success: function(res){
 
+            if(WS_CONNECTION) {
+                WS_CONNECTION.close();
+            }
+
             // Open
             $.openForm();
 
@@ -649,3 +637,6 @@ var MAX_DRINKER_ROWS = 10;
 
 //Images to preload
 var PRELOAD_IMAGES =['images/allcards.png'];
+
+// Websocket connection
+var WS_CONNECTION;
