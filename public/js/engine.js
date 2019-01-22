@@ -37,7 +37,16 @@ $.websocketListen = function () {
     // if user is running mozilla then use it's built-in WebSocket
     window.WebSocket = window.WebSocket || window.MozWebSocket;
 
-    const url = "ws://" +  location.host  + "/" + GAME_ID;
+    const protocol = location.protocol;
+
+    let wsProtocol = "ws";
+
+    if(protocol === "https:"){
+
+        wsProtocol = "wss";
+    }
+
+    const url = wsProtocol + "://" +  location.host  + "/" + GAME_ID;
 
     WS_CONNECTION = new WebSocket(url);
 
@@ -58,10 +67,7 @@ $.websocketListen = function () {
             const res = JSON.parse(message.data);
 
             const prevPlayer = res.prevPlayer;
-
-            console.log("prevPlayer", prevPlayer);
-            console.log("LOGGED_IN_PLAYER", LOGGED_IN_PLAYER);
-
+            
             const game = res.game;
 
             // Don't refresh if same
