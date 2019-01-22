@@ -145,8 +145,6 @@ export async function updateGamePlayers(id, newPlayers, playersToRemove, res) {
         return res.status(404).send({error: "Cannot update game: " + id + ": Not found"});
     }
 
-    const playerName = game.currentPlayer.name;
-
     let gameUpdated = false;
 
     if(newPlayers){
