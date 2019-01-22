@@ -77,7 +77,7 @@ wsServer.on('request', function(request) {
         index = clients[gameId].push(connection) - 1;
     }
 
-    console.log("Added WS client:" + gameId +  " " + index);
+    console.log("Added WS client for game:" + gameId +  " - " + index);
 
     // // This is the most important callback for us, we'll handle
     // // all messages from users here.
@@ -95,6 +95,8 @@ wsServer.on('request', function(request) {
     // });
 
     connection.on('close', function(connection) {
+
+        console.log("Removed WS client for game:" + gameId +  " - " + index);
 
         // close user connection
         clients[gameId].splice(index, 1);
