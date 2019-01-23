@@ -46,7 +46,7 @@ $.websocketListen = function () {
         wsProtocol = "wss";
     }
 
-    const url = wsProtocol + "://" +  location.host  + "/" + GAME_ID;
+    const url = wsProtocol + "://" +  location.host  + "/ws/" + GAME_ID;
 
     WS_CONNECTION = new WebSocket(url);
 
@@ -78,7 +78,6 @@ $.websocketListen = function () {
                 //Remove colour from background
                 $("#cardDisplay").removeClass('green red');
 
-
                 //Reset bet counter
                 $("#currentNumFingers").val(0).slider("refresh");
 
@@ -93,11 +92,11 @@ $.websocketListen = function () {
             }
 
         } catch (e) {
-            console.log('This doesn\'t look like a valid JSON: ', message.data);
-            return;
+
+            console.log("Invalid data: ", message.data);
+
         }
 
-        // handle incoming message
     };
 };
 
@@ -494,6 +493,7 @@ $.leaveGame = function(){
         dataType: "json",
         success: function(res){
 
+            // Close connection
             if(WS_CONNECTION) {
                 WS_CONNECTION.close();
             }

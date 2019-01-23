@@ -6,7 +6,6 @@ import config from "../config.json";
 import mongoose from "mongoose";
 import http from "http";
 import WebSocketServer from "websocket";
-
 import "@babel/polyfill";
 
 const app = express();
@@ -20,6 +19,12 @@ app.use(express.static(path.join(__dirname, '../public')))
 //register the route
 routes(app);
 
+// Generic 404 response for invalid URLs
+app.use(function(req, res) {
+    res.status(404).send({url: req.originalUrl + ' not found'})
+});
+
+// WS Clients
 global.clients = {};
 
 const server = http.createServer();
@@ -49,11 +54,7 @@ mongoose.connection.once('open', function() {
     console.log("Started on port: " + port);
 });
 
-app.use(function(req, res) {
-    res.status(404).send({url: req.originalUrl + ' not found'})
-});
-
-// create the Web Socket server
+// Create the Web Socket server
 const wsServer = new WebSocketServer.server({
     httpServer: server
 });
@@ -63,7 +64,7 @@ wsServer.on('request', function(request) {
 
     const clients = global.clients;
 
-    const gameId = request.resourceURL.path.substr(1);
+    const gameId = request.resourceURL.path.substr(4);
 
     const connection = request.accept(null, request.origin);
 
