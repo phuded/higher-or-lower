@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 let gamePlayerSchema = new mongoose.Schema({
     name: String,
-    active: {type: Boolean, default: true},
     stats: [Boolean]
 });
 
@@ -15,7 +14,8 @@ let gameSchema = new mongoose.Schema({
     name: {type: String, require: true},
     owner: String,
     players: [gamePlayerSchema],
-    currentPlayerName: String,
+    currentPlayerIdx: {type: Number, default: 0},
+    currentPlayer: gamePlayerSchema,
     status: {type: Boolean, default: null},
     cards: [cardSchema],
     playAsAnyone: Boolean,
