@@ -71,7 +71,7 @@ $.websocketListen = function () {
             const game = res.game;
 
             // Don't refresh if same
-            if((game.currentPlayer.name !== CURRENT_PLAYER.name) || (game.currentCard.suit !== CURRENT_CARD.suit) || (game.currentCard.value !== CURRENT_CARD.value)) {
+            if((game.currentPlayerName !== CURRENT_PLAYER) || (game.currentCard.suit !== CURRENT_CARD.suit) || (game.currentCard.value !== CURRENT_CARD.value)) {
 
                 //Updated!
 
@@ -84,7 +84,7 @@ $.websocketListen = function () {
                 const skipAnimation = prevPlayer !=  LOGGED_IN_PLAYER;
 
                 //Display card
-                $.displayCard(game.currentCard, game.cardsLeft, game.status, game.currentPlayer, game.bet, game.fingersToDrink, game.players, skipAnimation);
+                $.displayCard(game.currentCard, game.cardsLeft, game.status, game.currentPlayerName, game.bet, game.fingersToDrink, game.players, skipAnimation);
 
                 //Finally make the current card the next one
                 CURRENT_CARD = game.currentCard;
@@ -199,7 +199,7 @@ $.createNewGame = function(players){
             PLAY_AS_ANYONE = game.playAsAnyone;
 
             //Set the next player and change text
-            $.setNextPlayer(game.currentPlayer);
+            $.setNextPlayer(game.currentPlayerName);
 
             CURRENT_BET = game.bet;
 
@@ -259,7 +259,7 @@ $.joinGame = function(players){
             DRINK_TYPE = game.drinkType;
 
             //Set the next player and change text
-            $.setNextPlayer(game.currentPlayer);
+            $.setNextPlayer(game.currentPlayerName);
 
             CURRENT_BET = game.bet;
 
@@ -313,7 +313,7 @@ $.playTurn = function(higherGuess){
 		data: {
 		    "bet": currentBet,
 			"guess" : higherGuess,
-			"playerName" : CURRENT_PLAYER.name
+			"playerName" : CURRENT_PLAYER
 		},
 		dataType: "json",
 		success: function(res){
@@ -376,10 +376,10 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 						if(!skipAnimation){
 
                             if(fingersToDrink > 0){
-                                $("#drinkMessage").html("<b>"+ CURRENT_PLAYER.name + "</b> you must drink...<br/><span id='numFingers'>"+(fingersToDrink > 1?fingersToDrink + " " + DRINK_TYPE + "s!":fingersToDrink + " " + DRINK_TYPE + "!")+"</span>");
+                                $("#drinkMessage").html("<b>"+ CURRENT_PLAYER + "</b> you must drink...<br/><span id='numFingers'>"+(fingersToDrink > 1?fingersToDrink + " " + DRINK_TYPE + "s!":fingersToDrink + " " + DRINK_TYPE + "!")+"</span>");
                             }
                             else{
-                                $("#drinkMessage").html("<b>"+ CURRENT_PLAYER.name + "</b> you must drink...<br/>&nbsp;");
+                                $("#drinkMessage").html("<b>"+ CURRENT_PLAYER + "</b> you must drink...<br/>&nbsp;");
 
                             }
 
@@ -440,7 +440,7 @@ $.changePermissions = function(cardNum, cardsLeft){
         return;
     }
 
-    if(!PLAY_AS_ANYONE && (CURRENT_PLAYER.name !== LOGGED_IN_PLAYER)){
+    if(!PLAY_AS_ANYONE && (CURRENT_PLAYER !== LOGGED_IN_PLAYER)){
 
         buttons.hide();
         slider.hide();
@@ -478,7 +478,7 @@ $.setNextPlayer = function(nextPlayer){
 
     CURRENT_PLAYER = nextPlayer;
 	//change text
-	$("#playerName").html("<strong>" + CURRENT_PLAYER.name + "</strong> guess Higher or Lower!");
+	$("#playerName").html("<strong>" + CURRENT_PLAYER + "</strong> guess Higher or Lower!");
 };
 
 //Leave the game

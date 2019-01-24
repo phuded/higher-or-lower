@@ -71,7 +71,7 @@ export async function createGame(gameBody, res) {
 
     newGame.players = players;
 
-    newGame.currentPlayer = newGame.players[0];
+    newGame.currentPlayerName = newGame.players[0].name;
 
     newGame.cards = newPack(newGame.wholePack);
 
@@ -106,9 +106,9 @@ export async function updateGame(id, playerName, guess, bet, res) {
         return res.status(404).send({error: "Cannot update game: " + id + ": Not found"});
     }
 
-    const currentPlayer = game.currentPlayer.name;
+    const currentPlayerName = game.currentPlayerName;
 
-    if(!game.playAsAnyone && (currentPlayer != playerName)){
+    if(!game.playAsAnyone && (currentPlayerName != playerName)){
 
         return res.status(400).send({error: "Cannot update game: " + id + ": Invalid current player: " + playerName});
     }
@@ -151,9 +151,9 @@ export async function updateGamePlayers(id, newPlayers, playersToRemove, res) {
 
         newPlayers.forEach(function (newPlayer) {
 
-            const added = addPlayerToGame(game, newPlayer);
+            const updated = addPlayerToGame(game, newPlayer);
 
-            if(added){
+            if(updated){
 
                 gameUpdated = true;
             }
@@ -165,9 +165,9 @@ export async function updateGamePlayers(id, newPlayers, playersToRemove, res) {
 
         playersToRemove.forEach(function (playerToRemove) {
 
-            const removed = removePlayerFromGame(game, playerToRemove);
+            const updated = removePlayerFromGame(game, playerToRemove);
 
-            if(removed){
+            if(updated){
 
                 gameUpdated = true;
             }
@@ -180,11 +180,23 @@ export async function updateGamePlayers(id, newPlayers, playersToRemove, res) {
         return res.status(200).send(game);
     }
 
+    const allActivePlayers = getAllActivePlayers(game.players);
+
     // No Players
-    if(game.players.length === 0){
+    if(!allActivePlayers || allActivePlayers.length == 0){
 
         return deleteGame(id, res);
 
+    }
+
+    const isCurrentPlayerActive = game.players.find(player => (player.name == game.currentPlayerName)).active;
+
+    if(!isCurrentPlayerActive) {
+
+        const nextPlayer = getNextPlayer(game.currentPlayerName, allActivePlayers);
+
+        // Set next player
+        game.currentPlayerName = nextPlayer.name;
     }
 
     await game.save();
@@ -228,6 +240,7 @@ function newPack(wholePack){
 
 function playTurn(game, guess, bet){
 
+    // Game is finished
     if(game.cardsLeft == 0){
 
         return false
@@ -242,6 +255,7 @@ function playTurn(game, guess, bet){
 
     let status = false;
 
+    // Reset fingers to drink
     let fingersToDrink = 0;
 
     if(guessedHigher || guessedLower){
@@ -252,8 +266,10 @@ function playTurn(game, guess, bet){
     }
     else{
 
+        // Set fingers to drink as current bet plus latest bet
         fingersToDrink = game.bet + bet;
 
+        // Reset bet
         game.bet = 0
 
     }
@@ -262,103 +278,107 @@ function playTurn(game, guess, bet){
 
     game.status = status;
 
-    game.players[game.currentPlayerIdx].stats.push(status);
+    // Add stats
+    setStat(game.currentPlayerName, game.players, status);
 
-    // Next player
-    if(game.currentPlayerIdx < (game.players.length -1)) {
+    const allActivePlayers = getAllActivePlayers(game.players);
 
-        game.currentPlayerIdx++;
-    }
-    else{
-        game.currentPlayerIdx = 0;
-    }
+    const nextPlayer = getNextPlayer(game.currentPlayerName, allActivePlayers);
 
-    // Set player
-    game.currentPlayer = game.players[game.currentPlayerIdx];
+    // Set next player
+    game.currentPlayerName = nextPlayer.name;
 
+    // Set cards left over
     game.cardsLeft = game.cards.length;
 
     return true
 };
 
+function setStat(currentPlayerName, players, status){
+
+    players.find(player => (player.name == currentPlayerName)).stats.push(status);
+}
+
+
+function getAllActivePlayers(players){
+
+    return players.filter(player => player.active);
+}
+
+function getNextPlayer(currentPlayerName, allActivePlayers){
+
+    const currentPlayerIndex = allActivePlayers.findIndex(player => (player.name === currentPlayerName));
+
+    let nextPlayerIndex = 0;
+
+    if(currentPlayerIndex >= 0 && currentPlayerIndex < allActivePlayers.length - 1){
+
+        nextPlayerIndex = currentPlayerIndex + 1;
+    }
+
+    return allActivePlayers[nextPlayerIndex];
+}
+
+
 function addPlayerToGame(game, playerName){
 
-    let inGame = false;
+    let playerInGame = false;
+
+    let updated = false;
 
     if(!game){
 
-        return inGame;
+        return updated;
     }
 
     game.players.forEach(function (player) {
 
-        if(player.name == playerName){
+        if(player.name == playerName) {
 
-            inGame = true;
+            // Already in game
+            playerInGame = true;
+
+            if (!player.active){
+
+                updated = true;
+
+                player.active = true;
+            }
         }
     });
 
-    if(!inGame){
+    if(!playerInGame){
+
+        updated = true;
 
         // Add
-        game.players.push(new GamePlayer({name: playerName}))
+        game.players.push(new GamePlayer({name: playerName, active: true}))
     }
 
-    return !inGame;
+    return updated;
 }
 
 
 function removePlayerFromGame(game, playerName){
 
-    let inGame = false;
+    let updated = false;
 
     if(!game){
 
-        return inGame;
+        return updated;
     }
 
-    let pIndex = -1;
+    game.players.forEach(function (player) {
 
-    game.players.forEach(function (player, idx) {
+        if((player.name === playerName) && player.active){
 
-        if(player.name == playerName){
+            updated = true;
 
-            inGame = true;
-
-            pIndex = idx;
+            player.active = false;
         }
     });
 
-    if(inGame){
-
-        if(game.currentPlayerIdx === pIndex){
-
-            // Next player
-            if(game.currentPlayerIdx < (game.players.length -1)) {
-
-                game.currentPlayerIdx++;
-            }
-            else{
-                game.currentPlayerIdx = 0;
-            }
-
-            // Set player
-            game.currentPlayer = game.players[game.currentPlayerIdx];
-        }
-
-        // Remove player
-        game.players.splice(pIndex, 1);
-
-        // Ensure it is not more then length of array
-        if(game.currentPlayerIdx >= game.players.length){
-
-            game.currentPlayerIdx = game.players.length - 1;
-            game.currentPlayer = game.players[game.currentPlayerIdx];
-        }
-
-    }
-
-    return inGame;
+    return updated;
 }
 
 function setCard(game){

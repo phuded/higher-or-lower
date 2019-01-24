@@ -18,7 +18,7 @@ $.getPlayerList = function(){
 
                 const name = players[i].name;
 
-                const wName = players[i].fname ?" ("+players[i].fname.substring(0, 1) + "." + players[i].surname + ")" : "";
+                const wName = players[i].fname ?" (" + players[i].fname.substring(0, 1) + "." + players[i].surname + ")" : "";
 
                 options += "<li><a href='javascript:$.showPlayerList(false, &#39;" + name + "&#39;)'>" + name + wName + "</a></li>";
             }
