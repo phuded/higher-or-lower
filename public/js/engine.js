@@ -223,7 +223,7 @@ $.createNewGame = function(players){
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
 
-                $("#gameTitle").text(game.name);
+                $("#gameTitle").text(game.name + " [Created by: " + game.owner + "]");
 
             });
         },
@@ -283,7 +283,7 @@ $.joinGame = function(players){
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
 
-                $("#gameTitle").text(game.name);
+                $("#gameTitle").text(game.name + " [Created by: " + game.owner + "]");
 
             });
         },
