@@ -278,7 +278,7 @@ $.joinGame = function(players){
                 $.displayCard(CURRENT_CARD, game.cardsLeft);
 
                 // Scores - skip updates as just joining
-                $.updateTurnScores(game.players, CURRENT_BET, game.fingersToDrink, true)
+                $.updateTurnScores(game.players, CURRENT_BET, game.fingersToDrink, true);
 
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
