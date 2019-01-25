@@ -82,10 +82,19 @@ $.websocketListen = function () {
                 $("#currentNumFingers").val(0).slider("refresh");
 
                 // Only show animation for logged in player
-                const skipAnimation = prevPlayer !=  LOGGED_IN_PLAYER;
+                let showPopup = (prevPlayer ==  LOGGED_IN_PLAYER);
+
+                let showNotification = !showPopup;
+
+                if(!prevPlayer){
+
+                    showPopup = false;
+                    showNotification = false;
+
+                }
 
                 //Display card
-                $.displayCard(game.currentCard, game.cardsLeft, game.status, game.currentPlayerName, game.bet, game.fingersToDrink, game.players, skipAnimation);
+                $.displayCard(game.currentCard, game.cardsLeft, game.status, game.currentPlayerName, game.bet, game.fingersToDrink, game.players, showPopup, showNotification);
 
                 //Finally make the current card the next one
                 CURRENT_CARD = game.currentCard;
@@ -94,8 +103,7 @@ $.websocketListen = function () {
 
         } catch (e) {
 
-            console.log("Invalid data: ", message.data);
-
+            console.log("Invalid data: ", message.data, e);
         }
 
     };
@@ -327,7 +335,7 @@ $.playTurn = function(higherGuess){
 
 
 //Display the card
-$.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingersToDrink, players, skipAnimation){
+$.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingersToDrink, players, showPopup, showNotification){
 
 	//Card number
 	var cardNum = parseInt(card.value);
@@ -369,12 +377,14 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 
 						//Red background
 						$("#cardDisplay").addClass('red');
-					
+
+						const drinkDetails = (fingersToDrink > 1)? fingersToDrink + " " + DRINK_TYPE + "s!" : fingersToDrink + " " + DRINK_TYPE + "!";
+
 						//Show Lee
-						if(!skipAnimation){
+						if(showPopup){
 
                             if(fingersToDrink > 0){
-                                $("#drinkMessage").html("<b>"+ CURRENT_PLAYER + "</b> you must drink...<br/><span id='numFingers'>"+(fingersToDrink > 1?fingersToDrink + " " + DRINK_TYPE + "s!":fingersToDrink + " " + DRINK_TYPE + "!")+"</span>");
+                                $("#drinkMessage").html("<b>"+ CURRENT_PLAYER + "</b> you must drink...<br/><span id='numFingers'>" + drinkDetails +"</span>");
                             }
                             else{
                                 $("#drinkMessage").html("<b>"+ CURRENT_PLAYER + "</b> you must drink...<br/>&nbsp;");
@@ -384,10 +394,21 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
                             const randomNum = Math.floor(Math.random() * 5) + 1;
 
                             $(".pictureDisplay").hide();
+
                             $("#pictureDisplay" + randomNum).show();
 
                             //Show Lee
                             setTimeout('$.openDialog()',150);
+						}
+						else if(showNotification){
+
+                            if(fingersToDrink > 0){
+                               $.notify(CURRENT_PLAYER + " drinks " + drinkDetails);
+
+                            }
+						    else{
+						        $.notify(CURRENT_PLAYER + " drinks!");
+						    }
 						}
 					}
 
