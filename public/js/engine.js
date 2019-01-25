@@ -70,11 +70,17 @@ $.websocketListen = function () {
             
             const game = res.game;
 
+
+            const differentCardValue = game.currentCard.value !== CURRENT_CARD.value;
+            const differentCardSuit = game.currentCard.suit !== CURRENT_CARD.suit;
+            const differentCard = differentCardValue || differentCardSuit;
+
+            const differentPlayer = game.currentPlayerName !== CURRENT_PLAYER;
+
             // Don't refresh if same
-            if((game.currentPlayerName !== CURRENT_PLAYER) || (game.currentCard.suit !== CURRENT_CARD.suit) || (game.currentCard.value !== CURRENT_CARD.value)) {
+            if(differentPlayer || differentCard) {
 
                 //Updated!
-
                 //Remove colour from background
                 $("#cardDisplay").removeClass('green red');
 
@@ -86,6 +92,7 @@ $.websocketListen = function () {
 
                 let showNotification = !showPopup;
 
+                // Player has been removed - no notification or pop up
                 if(!prevPlayer){
 
                     showPopup = false;
