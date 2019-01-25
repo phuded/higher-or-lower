@@ -119,23 +119,27 @@ $.generateDrinkersTable = function(table, orderBy, sDir, num, start){
 
 //Show loading & nav buttons on drinkers tab
 $.showLoading = function(show, error){
+
 	if(show){
 		var table = $("#drinkersTab table");
 		table.find("tr:gt(0)").remove();
 		$(".navButtons").hide();
 		$(".reloadButton").hide();
 		$(".spinner").show();
+
+		return;
 	}
-	else{
-		$(".spinner").hide();
-		
-		if (error){
-			$(".navButtons").hide();
-			$(".reloadButton").show();
-		}
-		else{
-			$(".navButtons").show();
-			$(".reloadButton").hide();
-		}
-	}
+
+    $(".spinner").hide();
+
+    if (error){
+        $(".navButtons").hide();
+        $(".reloadButton").show();
+
+        return
+    }
+
+    $(".navButtons").show();
+    $(".reloadButton").hide();
+
 };

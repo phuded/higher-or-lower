@@ -17,13 +17,27 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
 
         const playerName = player.name;
 
-        if((playerName === CURRENT_PLAYER.name) && (LOGGED_IN_PLAYER == CURRENT_PLAYER.name)){
+        // To ensure player is updated even when not logged in
+        if((playerName === CURRENT_PLAYER) && ((LOGGED_IN_PLAYER == CURRENT_PLAYER) || PLAY_AS_ANYONE)){
 
             playerToUpdate = player;
 		}
 
         //Add in header row
-        scoreTableBody += "<tr><th><a href='javascript:$.showPlayerStats(" + pIdx + ", true)' data-role='button' data-icon='grid' data-theme='"+((pIdx%2 == 0)?"c":"b")+"'>" + playerName + "</a></th>";
+        scoreTableBody += "<tr><th><a href='javascript:$.showPlayerStats(" + pIdx + ", true)' data-role='button' data-icon='grid' ";
+
+        if(playerName === LOGGED_IN_PLAYER){
+
+            scoreTableBody += "data-theme='b' style='text-decoration: underline;'>" + playerName + "</a></th>";
+        }
+        else if(!player.active){
+
+            scoreTableBody += "data-theme='c' style='text-decoration: line-through;'>" + playerName + "</a></th>";
+        }
+        else{
+
+            scoreTableBody += "data-theme='c'>" + playerName + "</a></th>";
+        }
 
         var numStats = player.stats.length;
 

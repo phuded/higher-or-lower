@@ -230,6 +230,15 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 	width: 20%;
 }
 
+/*Game List*/
+#gameList li{
+    font-size: 12px;
+}
+
+#gameList li .ui-li-link-alt .ui-btn{
+    margin: -14px 0 0 0;
+}
+
 /*Player List*/
 #playerList li{
 	font-size:0.9em;

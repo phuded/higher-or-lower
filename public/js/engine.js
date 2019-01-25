@@ -81,6 +81,7 @@ $.websocketListen = function () {
                 //Reset bet counter
                 $("#currentNumFingers").val(0).slider("refresh");
 
+                // Only show animation for logged in player
                 const skipAnimation = prevPlayer !=  LOGGED_IN_PLAYER;
 
                 //Display card
@@ -163,7 +164,7 @@ $.createNewGame = function(players){
 
     if(!gameName) {
         const date = new Date();
-        gameName = players[0] + " [" + date.toLocaleDateString() + " " + date.toTimeString().substring(0, 5) + "]";
+        gameName = date.toLocaleDateString() + " " + date.toTimeString().substring(0, 5);
     }
     else{
 
@@ -276,11 +277,8 @@ $.joinGame = function(players){
                 //Display
                 $.displayCard(CURRENT_CARD, game.cardsLeft);
 
-                //Update fingers
-                $("#totalNumFingers").text(CURRENT_BET);
-
-                //Update the score on score tab
-                $.updateScore(game.players, game.fingersToDrink, true);
+                // Scores - skip updates as just joining
+                $.updateTurnScores(game.players, CURRENT_BET, game.fingersToDrink, true)
 
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
@@ -394,7 +392,7 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 					}
 
 					// Scores
-                    $.updateTurnScores(players, bet, fingersToDrink);
+                    $.updateTurnScores(players, bet, fingersToDrink, false);
 
 					//Set the next player and change text
 					$.setNextPlayer(nextPlayer);
@@ -463,13 +461,13 @@ $.changePermissions = function(cardNum, cardsLeft){
 }
 
 //Update DB, scores and current number of fingers
-$.updateTurnScores = function(players, bet, fingersToDrink){
+$.updateTurnScores = function(players, bet, fingersToDrink, skipHighScores){
 
 	//Update fingers	
 	$("#totalNumFingers").text(bet);
 	
 	//Update the score on score tab
-	$.updateScore(players, fingersToDrink);
+	$.updateScore(players, fingersToDrink, skipHighScores);
 };
 
 

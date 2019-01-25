@@ -57,7 +57,9 @@ $.getGameList = function(){
 
                 const id = game._id;
 
-                const name = game.name;
+                const owner = game.owner;
+
+                const name = game.name + " [Created by: " + owner + "]";
 
                 const cardsLeft = game.cardsLeft;
 
@@ -70,12 +72,10 @@ $.getGameList = function(){
                     html = "style='text-decoration: line-through !important;'";
                 }
 
-                const owner = game.owner;
-
                 options += "<li><a " + html + " >" + name + "</a>";
 
                 if(owner === $("#selectedPlayerName").val() || noCards) {
-                    options += "<a href='javascript:$.deleteGame(&#39;" + id + "&#39;)' data-role='button' data-theme='c' data-inline='true' data-icon='minus'></a>";
+                    options += "<a href='javascript:$.deleteGame(&#39;" + id + "&#39;)' data-role='button' data-theme='b' data-inline='true' data-icon='minus'></a>";
                 }
 
                 options += "</li>";
