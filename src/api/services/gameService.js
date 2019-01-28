@@ -1,6 +1,6 @@
 import Game, {Card, GamePlayer} from "../models/game";
 
-function notifyClients(gameId, game, playerName){
+function notifyClients(gameId, game, playerName, playerUpdates){
 
     // Web Socket Push to relevant clients
     let clients = global.clients[gameId];
@@ -9,7 +9,7 @@ function notifyClients(gameId, game, playerName){
 
         for (let i = 0; i < clients.length; i++) {
 
-            clients[i].send(JSON.stringify({game: game, prevPlayer: playerName}));
+            clients[i].send(JSON.stringify({game: game, prevPlayer: playerName, playerUpdates: playerUpdates}));
         }
     }
 
@@ -125,7 +125,7 @@ export async function updateGame(id, playerName, guess, bet, res) {
     await game.save();
 
     // Notify via WS
-    notifyClients(id, game, playerName);
+    notifyClients(id, game, playerName, null);
 
     return res.send(game);
 };
@@ -147,6 +147,8 @@ export async function updateGamePlayers(id, newPlayers, playersToRemove, res) {
 
     let gameUpdated = false;
 
+    const playerUpdates = {added: [], removed: []};
+
     if(newPlayers){
 
         newPlayers.forEach(function (newPlayer) {
@@ -156,6 +158,8 @@ export async function updateGamePlayers(id, newPlayers, playersToRemove, res) {
             if(updated){
 
                 gameUpdated = true;
+
+                playerUpdates.added.push(newPlayer);
             }
 
         });
@@ -170,6 +174,8 @@ export async function updateGamePlayers(id, newPlayers, playersToRemove, res) {
             if(updated){
 
                 gameUpdated = true;
+
+                playerUpdates.removed.push(playerToRemove);
             }
 
         });
@@ -202,7 +208,7 @@ export async function updateGamePlayers(id, newPlayers, playersToRemove, res) {
     await game.save();
 
     // Notify via WS
-    notifyClients(id, game, null);
+    notifyClients(id, game, null, playerUpdates);
 
     return res.send(game);
 };

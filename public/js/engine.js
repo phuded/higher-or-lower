@@ -67,9 +67,29 @@ $.websocketListen = function () {
             const res = JSON.parse(message.data);
 
             const prevPlayer = res.prevPlayer;
+
+            const playerUpdates = res.playerUpdates;
+
+            if(playerUpdates){
+
+                $.each( playerUpdates.added, function(index, added) {
+
+                    if(added !== LOGGED_IN_PLAYER){
+
+                        $.notify(added + " has joined the game.", "success");
+                    }
+                });
+
+                $.each( playerUpdates.removed, function(index, removed) {
+
+                    if(removed !== LOGGED_IN_PLAYER){
+
+                        $.notify(removed + " has left the game.");
+                    }
+                });
+            }
             
             const game = res.game;
-
 
             const differentCardValue = game.currentCard.value !== CURRENT_CARD.value;
             const differentCardSuit = game.currentCard.suit !== CURRENT_CARD.suit;
@@ -88,7 +108,7 @@ $.websocketListen = function () {
                 $("#currentNumFingers").val(0).slider("refresh");
 
                 // Only show animation for logged in player
-                let showPopup = (prevPlayer ==  LOGGED_IN_PLAYER);
+                let showPopup = (prevPlayer ===  LOGGED_IN_PLAYER);
 
                 let showNotification = !showPopup;
 
