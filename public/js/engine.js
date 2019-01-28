@@ -112,7 +112,7 @@ $.websocketListen = function () {
 
                 let showNotification = !showPopup;
 
-                // Player has been removed - no notification or pop up
+                // Player has been removed and current turn changed - no notification or pop up (if last go was incorrect)
                 if(!prevPlayer){
 
                     showPopup = false;
