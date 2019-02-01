@@ -380,13 +380,15 @@ $.playTurn = function(higherGuess){
 $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingersToDrink, players, showPopup, showNotification){
 
 	//Card number
-	var cardNum = parseInt(card.value);
+	const cardNum = parseInt(card.value);
 
 	//Card image
-	var cardImg = $("#card");
+    const cardImg = $("#card");
 	
 	//Not first card - flipping
 	if(correctGuess !== undefined){
+
+        $("#gameButtons").hide();
 
 		//Hide slider if bet on any card is off
 		if(!BET_ANY_CARD){
@@ -402,7 +404,7 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 				sideChange: function(front) {
 					if (front) {
 						//Replace image
-						$(this).css('background','url(images/allcards.png) no-repeat '+ $.getCardCoords(card));
+						$(this).css('background','url(images/allcards.png) no-repeat ' + $.getCardCoords(card));
 					} else {
 						//Make back of card the pack;
 						$(this).css('background','url(images/back.png)');
@@ -440,7 +442,7 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
                             $("#pictureDisplay" + randomNum).show();
 
                             //Show Lee
-                            setTimeout('$.openDialog()',150);
+                            setTimeout('$.openDialog()', 150);
 						}
 						else if(showNotification){
 
