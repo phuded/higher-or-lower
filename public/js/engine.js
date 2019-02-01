@@ -397,15 +397,15 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 		//Rotate card and display new one
 		cardImg.rotate3Di(
 			360,
-			900,
+			1500,
 			{
 				sideChange: function(front) {
 					if (front) {
 						//Replace image
-						$(this).css('background','url(images/allcards.png) no-repeat '+$.getCardCoords(card));			
+						$(this).css('background','url(images/allcards.png) no-repeat '+ $.getCardCoords(card));
 					} else {
 						//Make back of card the pack;
-						$(this).css('background','url(images/allcards.png) no-repeat 0px -928px');
+						$(this).css('background','url(images/back.png)');
 					}
 				},
 				complete:function(){
@@ -704,7 +704,7 @@ var GAME_ID;
 var MAX_DRINKER_ROWS = 10;
 
 //Images to preload
-var PRELOAD_IMAGES =['images/allcards.png'];
+var PRELOAD_IMAGES =['images/allcards.png', 'images/back.png'];
 
 // Websocket connection
 var WS_CONNECTION;
