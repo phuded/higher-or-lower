@@ -399,7 +399,7 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 		//Rotate card and display new one
 		cardImg.rotate3Di(
 			360,
-			900,
+			1000,
 			{
 				sideChange: function(front) {
 					if (front) {
