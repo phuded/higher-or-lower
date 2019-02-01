@@ -224,7 +224,7 @@ export async function deleteGame(id, res) {
         return res.status(500).send();
     }
 
-    // Delete the WS map
+    // Delete the WS map - this will kick out the last in the game
     delete global.clients[id];
 
     return res.send();

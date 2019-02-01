@@ -97,17 +97,22 @@ wsServer.on('request', function(request) {
 
     connection.on('close', function(connection) {
 
-        console.log("Removed WS client for game:" + gameId +  " - " + playerName);
+        if(!clients[gameId] || !clients[gameId][playerName]) {
+
+            return;
+        }
 
         // close user connection
         delete clients[gameId][playerName];
 
-        if(Object.keys(clients[gameId]).length == 0){
+        console.log("Removed WS client for game:" + gameId +  " - " + playerName);
 
-            console.log("Removed all WS client for game:" + gameId);
+        if (Object.keys(clients[gameId]).length == 0) {
 
             // Delete the WS map
             delete clients[gameId];
+
+            console.log("Removed all WS client for game:" + gameId);
         }
 
     });
