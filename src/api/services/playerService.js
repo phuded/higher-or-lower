@@ -15,7 +15,7 @@ export async function getPlayers(req, res) {
 
     const countPromise = Player.countDocuments({});
 
-    const playersPromise = Player.find({}).sort(sort).skip(start).limit(num);
+    const playersPromise = Player.find({}).sort(sort).collation({ locale: "en" }).skip(start).limit(num);
 
     const data = await Promise.all([playersPromise, countPromise]);
 

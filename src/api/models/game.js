@@ -12,7 +12,7 @@ let cardSchema = new mongoose.Schema({
 });
 
 let gameSchema = new mongoose.Schema({
-    name: {type: String, require: true},
+    name: {type: String, required: true},
     owner: String,
     players: [gamePlayerSchema],
     currentPlayerName: String,
