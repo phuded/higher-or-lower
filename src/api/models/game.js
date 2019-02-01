@@ -30,7 +30,7 @@ let gameSchema = new mongoose.Schema({
 });
 
 gameSchema.methods.toJSON = function() {
-    var obj = this.toObject();
+    const obj = this.toObject();
     delete obj.cards;
     return obj;
 }

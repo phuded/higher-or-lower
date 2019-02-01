@@ -4,9 +4,11 @@ $.prepareGame = function(){
     $.getPlayerList();
 
 	$('#drink').live('pageshow',function(event){
-		var fingers = $("#numFingers");
-		fingers.animate({fontSize:'3.0em'}, 400);
-		fingers.animate({fontSize:'1.0em'}, 300);
+
+		const fingers = $("#numFingers");
+
+		fingers.animate({fontSize: '3.0em'}, 400);
+		fingers.animate({fontSize: '1.0em'}, 300);
 		
 	});
 	
@@ -25,6 +27,17 @@ $.prepareGame = function(){
 	$('#game, #scores').live('pageshow',function(event){
 		$.showLoading(true);
 	});
+
+	// Set Player from cookie
+
+    const cookie = document.cookie;
+
+    if(cookie && (cookie.indexOf("user=") === 0)) {
+
+        const prevPlayer = cookie.split("=")[1];
+
+        $("#selectedPlayerName").val(prevPlayer);
+    }
 };
 
 $.websocketListen = function () {

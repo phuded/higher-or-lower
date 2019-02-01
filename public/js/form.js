@@ -72,9 +72,19 @@ $.getGameList = function(){
                     html = "style='text-decoration: line-through !important;'";
                 }
 
-                options += "<li><a " + html + " >" + name + "</a>";
+                let playerNames = "<p class='activePlayers'>Players: ";
+
+                $.each(game.players, function( index, value ) {
+
+                    playerNames += value.name + ", "
+                });
+
+                playerNames = playerNames.substring(0, playerNames.length - 2) + "</p>";
+
+                options += "<li><a " + html + " >" + name + playerNames + "</a>";
 
                 if(owner === $("#selectedPlayerName").val() || noCards) {
+
                     options += "<a href='javascript:$.deleteGame(&#39;" + id + "&#39;)' data-role='button' data-theme='b' data-inline='true' data-icon='minus'></a>";
                 }
 
@@ -114,12 +124,25 @@ $.showPlayerList = function(show, player){
 
                 $("#selectedPlayerName").val(player);
 
+                // Store in cookie
+                $.setCookie(player);
+
                 $("#errorMessage").hide();
 
             }
         });
     }
 };
+
+$.setCookie = function(playerName){
+
+    const date = new Date();
+    date.setTime(date.getTime() + (1 * 86400000));
+
+    const expires = "expires=" + date.toUTCString();
+
+    document.cookie = "user=" + playerName + ";" + expires + ";path=/";
+}
 
 $.deleteGame = function(id){
 

@@ -239,11 +239,16 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
     margin: -14px 0 0 0;
 }
 
+#gameList li a p.activePlayers{
+    white-space: initial;
+    margin-top: 1px;
+}
+
+
 /*Player List*/
 #playerList li{
 	font-size:0.9em;
 }
-
 /*Player Form*/
 #playerForm > span{
 	font-size:1.2em;
