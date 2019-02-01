@@ -46,18 +46,20 @@ $.websocketListen = function () {
         wsProtocol = "wss";
     }
 
-    const url = wsProtocol + "://" +  location.host  + "/ws/" + GAME_ID;
+    const url = wsProtocol + "://" +  location.host  + "/ws/" + GAME_ID + "/" + LOGGED_IN_PLAYER;
 
     WS_CONNECTION = new WebSocket(url);
 
     WS_CONNECTION.onopen = function () {
         // connection is opened and ready to use
 
-        console.log("Listening on: " + url);
+        console.log("WS Listening on: " + url);
     };
 
     WS_CONNECTION.onerror = function (error) {
         // an error occurred when sending/receiving data
+
+        console.log("WS Failed to connect on: " + url, error);
     };
 
     WS_CONNECTION.onmessage = function (message) {
@@ -541,6 +543,7 @@ $.leaveGame = function(){
 
             // Close connection
             if(WS_CONNECTION) {
+
                 WS_CONNECTION.close();
             }
 

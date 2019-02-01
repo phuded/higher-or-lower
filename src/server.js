@@ -64,21 +64,21 @@ wsServer.on('request', function(request) {
 
     const clients = global.clients;
 
-    const gameId = request.resourceURL.path.substr(4);
+    const path = request.resourceURL.path.substr(1).split("/");
+
+    const gameId = path[1];
+    const playerName = path[2];
 
     const connection = request.accept(null, request.origin);
 
-    let index = 0;
-
     if(!clients[gameId]){
 
-        clients[gameId] = [connection];
-    }
-    else{
-        index = clients[gameId].push(connection) - 1;
+        clients[gameId] = {};
     }
 
-    console.log("Added WS client for game:" + gameId +  " - " + index);
+    clients[gameId][playerName] = connection;
+
+    console.log("Added WS client for game:" + gameId +  " - " + playerName);
 
     // // This is the most important callback for us, we'll handle
     // // all messages from users here.
@@ -97,10 +97,18 @@ wsServer.on('request', function(request) {
 
     connection.on('close', function(connection) {
 
-        console.log("Removed WS client for game:" + gameId +  " - " + index);
+        console.log("Removed WS client for game:" + gameId +  " - " + playerName);
 
         // close user connection
-        clients[gameId].splice(index, 1);
+        delete clients[gameId][playerName];
+
+        if(Object.keys(clients[gameId]).length == 0){
+
+            console.log("Removed all WS client for game:" + gameId);
+
+            // Delete the WS map
+            delete clients[gameId];
+        }
 
     });
 });

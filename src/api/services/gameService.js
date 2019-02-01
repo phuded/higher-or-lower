@@ -3,14 +3,16 @@ import Game, {Card, GamePlayer} from "../models/game";
 function notifyClients(gameId, game, playerName, playerUpdates){
 
     // Web Socket Push to relevant clients
-    let clients = global.clients[gameId];
+    let wsClients = global.clients[gameId];
 
-    if(clients){
+    if(wsClients){
 
-        for (let i = 0; i < clients.length; i++) {
+        Object.entries(wsClients).forEach(entry => {
 
-            clients[i].send(JSON.stringify({game: game, prevPlayer: playerName, playerUpdates: playerUpdates}));
-        }
+            let client = entry[1];
+
+            client.send(JSON.stringify({game: game, prevPlayer: playerName, playerUpdates: playerUpdates}));
+        });
     }
 
 }
@@ -221,6 +223,9 @@ export async function deleteGame(id, res) {
 
         return res.status(500).send();
     }
+
+    // Delete the WS map
+    delete global.clients[id];
 
     return res.send();
  };
