@@ -74,9 +74,11 @@ $.getGameList = function(){
 
                 let playerNames = "<p class='activePlayers'>Players: ";
 
-                $.each(game.players, function( index, value ) {
+                $.each(game.players, function( index, player ) {
 
-                    playerNames += value.name + ", "
+                    if(player.active) {
+                        playerNames += player.name + ", "
+                    }
                 });
 
                 playerNames = playerNames.substring(0, playerNames.length - 2) + "</p>";
