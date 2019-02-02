@@ -112,8 +112,6 @@ $.websocketListen = function () {
         if(differentPlayer || differentCard) {
 
             //Updated!
-            //Remove colour from background
-            $("#cardDisplay").removeClass('green red');
 
             //Reset bet counter
             $("#currentNumFingers").val(0).slider("refresh");
@@ -346,8 +344,6 @@ $.playTurn = function(higherGuess){
 		success: function(game){
 
             //Updated!
-            //Remove colour from background
-            $("#cardDisplay").removeClass('green red');
 
             //Reset bet counter
             findersSlider.val(0).slider("refresh");
@@ -373,13 +369,16 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 
 	//Card image
     const cardImg = $("#card");
+
+    // Hide buttons
+    $("#gameButtons").hide();
+    $("#sliderBar").hide();
+
+    //Remove colour from background
+    $("#cardDisplay").removeClass('green red');
 	
 	//Not first card - flipping
 	if(correctGuess !== undefined){
-
-	    // Hide buttons
-        $("#gameButtons").hide();
-        $("#sliderBar").hide();
 
 		//Rotate card and display new one
 		cardImg.rotate3Di(
