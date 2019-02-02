@@ -12,9 +12,9 @@ $.getPlayerList = function(){
 
             const players = json.players;
 
-            var options = '';
+            let options = '';
 
-            for (var i = 0; i < players.length; i++) {
+            for (let i = 0; i < players.length; i++) {
 
                 const name = players[i].name;
 
@@ -27,6 +27,45 @@ $.getPlayerList = function(){
 
             //Refresh View
             $('#playerList ul').listview('refresh');
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            //Error
+        }
+    });
+};
+
+/* Get List of players */
+$.getGamePlayerList = function(){
+
+    $("div#gamePlayerList ul").html("");
+
+    const selectedPlayer = $("#selectedPlayerName").val();
+
+    //Get Player List
+    $.ajax({
+        type: "GET",
+        url: "api/players",
+        success: function(json){
+
+            const players = json.players;
+
+            let options = '';
+
+            for (let i = 0; i < players.length; i++) {
+
+                const name = players[i].name;
+
+                // Don't include selected player
+                if(selectedPlayer !== name) {
+
+                    options += "<li><label style='display:block;'><input type='checkbox' id='player-" + name + "' name='player-" + name + "'> " + name + "</label></li>";
+                }
+            }
+
+            $("div#gamePlayerList ul").append(options);
+
+            //Refresh View
+            $('#gamePlayerList ul').listview('refresh');
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             //Error
@@ -49,9 +88,9 @@ $.getGameList = function(){
 
             const games = json.games;
 
-            var options = '';
+            let options = '';
 
-            for (var i = 0; i < games.length; i++) {
+            for (let i = 0; i < games.length; i++) {
 
                 const game = games[i];
 
@@ -109,32 +148,64 @@ $.getGameList = function(){
 //Show form panels - list 
 $.showPlayerList = function(show, player){
 
-    var formContent = $(".gameForm");
-    var playerList = $("#playerList");
+    const formContent = $(".gameForm");
+    const playerList = $("#playerList");
 
     if(show){
+
         formContent.fadeOut(function() {
             playerList.fadeIn('fast');
         });
 
+        return;
+
     }
-    else{
-        playerList.fadeOut(function() {
-            formContent.fadeIn('fast');
 
-            if(player != null){
+    playerList.fadeOut(function() {
+        formContent.fadeIn('fast');
 
-                $("#selectedPlayerName").val(player);
+        if(player != null){
 
-                // Store in cookie
-                $.setCookie(player);
+            $("#selectedPlayerName").val(player);
 
-                $("#errorMessage").hide();
+            // Store in cookie
+            $.setCookie(player);
 
-            }
-        });
-    }
+            $("#errorMessage").hide();
+
+            // Get game player list
+            $.getGamePlayerList();
+
+        }
+    });
+
 };
+
+$.showGamePlayerList = function(show, player){
+
+    const formContent = $(".gameForm");
+    const gamePlayerList = $("#gamePlayerList");
+
+    if(show){
+
+        formContent.fadeOut(function() {
+            gamePlayerList.fadeIn('fast');
+        });
+
+        return;
+
+    }
+
+    gamePlayerList.fadeOut(function() {
+        formContent.fadeIn('fast');
+
+        if(player != null){
+
+        }
+    });
+
+};
+
 
 $.setCookie = function(playerName){
 
@@ -206,10 +277,10 @@ $.createNewPlayer = function(show, player){
     }
 
     //Call method to create player and display main form if 2nd argument true
-    var pName = $("#pname");
+    const pName = $("#pname");
 
     //Get username
-    var playerName = pName.val();
+    const playerName = pName.val();
 
     const playerNameValid = (playerName.length > 0) && (playerName.indexOf("Player ") == -1);
 
@@ -222,8 +293,8 @@ $.createNewPlayer = function(show, player){
         return
     }
 
-    var fName = $("#fname").val();
-    var surname = $("#surname").val();
+    const fName = $("#fname").val();
+    const surname = $("#surname").val();
 
     //Add new player
     $.ajax({
@@ -248,6 +319,9 @@ $.createNewPlayer = function(show, player){
                 $("#selectedPlayerName").val(playerName);
 
                 $.clearNewPlayerForm();
+
+                // Reload
+                $.getGamePlayerList();
 
                 // Remove main form error
                 $("#errorMessage").hide();
@@ -275,8 +349,8 @@ $.clearNewPlayerForm = function(){
 
 $.showGameList = function(show, selectedGameId, selectedGameName){
 
-    var formContent = $(".gameForm");
-    var gameList = $("#gameList");
+    const formContent = $(".gameForm");
+    const gameList = $("#gameList");
 
     if(show){
 

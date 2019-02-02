@@ -68,8 +68,8 @@
 
 						<table>
 							<tr>
-								<td class="tableButton"><a id="search" class="smallerButton" href="javascript:$.showPlayerList(true, 1)" data-role="button" data-icon="search" data-inline="true" data-theme="a">Choose</a></td>
-								<td class="tableButton"><a id="add" class="smallerButton" href="javascript:$.createNewPlayer(true, 1)" data-role="button" data-icon="plus" data-inline="true">New</a></td>
+								<td class="tableButton"><a id="search" class="smallerButton" href="javascript:$.showPlayerList(true, null)" data-role="button" data-icon="search" data-inline="true" data-theme="a">Choose</a></td>
+								<td class="tableButton"><a id="add" class="smallerButton" href="javascript:$.createNewPlayer(true, null)" data-role="button" data-icon="plus" data-inline="true">New</a></td>
 								<td> <input id="selectedPlayerName" style="font-size: 0.9em;" type="text" MAXLENGTH=8" placeholder="None Specified" data-theme="d" readonly/></td>
 							</tr>
 						</table>
@@ -96,7 +96,11 @@
 								<input id="newGameName" type="text" placeholder="Optional: Enter Game Name" data-theme="d"/>
 								<br/>
 
-								<span>1. What are you drinking?</span>
+								<span>1. Choose other players</span>
+
+								<a href="javascript:$.showGamePlayerList(true, null)" class="smallerButton wholeWidthButton" data-role="button" data-theme="a" data-inline="true" data-icon="search">Choose Players</a>
+
+								<span>2. What are you drinking?</span>
 								<fieldset data-role="controlgroup">
 									<input type="radio" name="drink_choice" id="drink_beer_bottle" value="swig" class="drinkOption" checked="checked" />
 									<label for="drink_beer_bottle">Bottled Beer</label>
@@ -114,7 +118,7 @@
 									<label for="drink_wine">Wine</label>
 								</fieldset>
 
-								<span>2. Select Game Options</span>
+								<span>3. Select Game Options</span>
 								<fieldset id="gameOptions" data-role="controlgroup" data-role="fieldcontain">
 									<input type="checkbox" name="playAsAnyone" id="playAsAnyone" class="gameFlag"/>
 									<label for="playAsAnyone">Play as anyone</label>
@@ -141,13 +145,21 @@
 					<!--Hidden game list -->
 					<div id="gameList" style="display:none;">
 						<ul data-role="listview" data-filter="true" data-inset="true" data-theme="c"></ul>
-						<a href="javascript:$.showGameList(false, null, null)" id="backFromListGame" data-role="button" data-theme="c" data-inline="true" data-icon="back">Back</a>
+						<a class="listButton" href="javascript:$.showGameList(false, null, null)" data-role="button" data-theme="c" data-inline="true" data-icon="back">Back</a>
 					</div>
 
 					<!--Hidden player list -->
 					<div id="playerList" style="display:none;">
+						<a class="listButton" style="margin-bottom: 20px;" href="javascript:$.showPlayerList(false, null)" data-role="button" data-theme="c" data-inline="true" data-icon="back">Back</a>
 						<ul data-role="listview" data-filter="true" data-inset="true" data-theme="c"></ul>
-						<a href="javascript:$.showPlayerList(false, null)" id="backFromList" data-role="button" data-theme="c" data-inline="true" data-icon="back">Back</a>
+						<a class="listButton" href="javascript:$.showPlayerList(false, null)" data-role="button" data-theme="c" data-inline="true" data-icon="back">Back</a>
+					</div>
+
+					<!--Hidden game player list -->
+					<div id="gamePlayerList" style="display:none;">
+						<a class="listButton" style="margin-bottom: 20px;" href="javascript:$.showGamePlayerList(false, null)" data-role="button" data-theme="c" data-inline="true" data-icon="check">Done</a>
+						<ul data-role="listview" data-filter="true" data-inset="true" data-theme="c"></ul>
+						<a class="listButton" href="javascript:$.showGamePlayerList(false, null)" data-role="button" data-theme="c" data-inline="true" data-icon="check">Done</a>
 					</div>
 
 					<!-- New player form -->

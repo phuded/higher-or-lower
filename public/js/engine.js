@@ -38,6 +38,9 @@ $.prepareGame = function(){
 
         $("#selectedPlayerName").val(prevPlayer);
     }
+
+    // Get game player list
+    $.getGamePlayerList();
 };
 
 $.websocketListen = function () {
@@ -169,7 +172,7 @@ $.startGame = function(){
 
 	const selectedPlayerName = $("#selectedPlayerName").val();
 
-	var players = [];
+	let players = [];
 
 	//Set players in array
 	players.push(selectedPlayerName);
@@ -182,6 +185,14 @@ $.startGame = function(){
 
 
 	if(!GAME_ID || !$("#selectedGameName").val()){
+
+        $("#gamePlayerList ul li input[type=checkbox]:checked").each(function () {
+
+            const name = $(this).attr('id').substr(7);
+
+            players.push(name);
+
+        });
 
         $.createNewGame(players);
 

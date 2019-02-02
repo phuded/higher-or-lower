@@ -173,9 +173,19 @@ span#drinkMessage{
 	padding: 10px 8px;
 }
 
+a.listButton{
+	font-size: 0.8em;
+	margin: 0;
+}
+
 a.smallerButton{
 	font-size:0.7em;
 	margin: 0;
+}
+
+a.wholeWidthButton{
+	display: block;
+	margin: 5px 0 10px 0;
 }
 
 /* Start/cancel */

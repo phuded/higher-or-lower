@@ -3,6 +3,7 @@ $.openForm = function(){
 
     //Get player list
     $.getPlayerList();
+    $.getGamePlayerList();
 
 	//Clear Search
 	$("div#playerList input").val("");
