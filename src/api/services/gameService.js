@@ -1,6 +1,6 @@
 import Game, {Card, GamePlayer} from "../models/game";
 
-function notifyClients(gameId, game, playerName, playerUpdates){
+function notifyClients(gameId, game, prevPlayer, playerUpdates){
 
     // Web Socket Push to relevant clients
     let wsClients = global.clients[gameId];
@@ -9,9 +9,13 @@ function notifyClients(gameId, game, playerName, playerUpdates){
 
         Object.entries(wsClients).forEach(entry => {
 
-            let client = entry[1];
+            let clientPlayerName = entry[0];
+            let clientConnection = entry[1];
 
-            client.send(JSON.stringify({game: game, prevPlayer: playerName, playerUpdates: playerUpdates}));
+            if(clientPlayerName !== prevPlayer) {
+
+                clientConnection.send(JSON.stringify({game: game, playerUpdates: playerUpdates}));
+            }
         });
     }
 

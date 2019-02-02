@@ -77,75 +77,61 @@ $.websocketListen = function () {
 
     WS_CONNECTION.onmessage = function (message) {
 
-        try {
+        let res = JSON.parse(message.data);
 
-            const res = JSON.parse(message.data);
+        const playerUpdates = res.playerUpdates;
 
-            const prevPlayer = res.prevPlayer;
+        if(playerUpdates){
 
-            const playerUpdates = res.playerUpdates;
+            $.each( playerUpdates.added, function(index, added) {
 
+                if(added !== LOGGED_IN_PLAYER){
+
+                    $.notify(added + " has joined the game.", "success");
+                }
+            });
+
+            $.each( playerUpdates.removed, function(index, removed) {
+
+                if(removed !== LOGGED_IN_PLAYER){
+
+                    $.notify(removed + " has left the game.");
+                }
+            });
+        }
+
+        const game = res.game;
+
+        const differentCardValue = game.currentCard.value !== CURRENT_CARD.value;
+        const differentCardSuit = game.currentCard.suit !== CURRENT_CARD.suit;
+        const differentCard = differentCardValue || differentCardSuit;
+
+        const differentPlayer = game.currentPlayerName !== CURRENT_PLAYER;
+
+        // Don't refresh if same
+        if(differentPlayer || differentCard) {
+
+            //Updated!
+            //Remove colour from background
+            $("#cardDisplay").removeClass('green red');
+
+            //Reset bet counter
+            $("#currentNumFingers").val(0).slider("refresh");
+
+            let status = game.status;
+
+            // Only a player being updated - not another turn
             if(playerUpdates){
 
-                $.each( playerUpdates.added, function(index, added) {
+                status = undefined;
 
-                    if(added !== LOGGED_IN_PLAYER){
-
-                        $.notify(added + " has joined the game.", "success");
-                    }
-                });
-
-                $.each( playerUpdates.removed, function(index, removed) {
-
-                    if(removed !== LOGGED_IN_PLAYER){
-
-                        $.notify(removed + " has left the game.");
-                    }
-                });
-            }
-            
-            const game = res.game;
-
-            const differentCardValue = game.currentCard.value !== CURRENT_CARD.value;
-            const differentCardSuit = game.currentCard.suit !== CURRENT_CARD.suit;
-            const differentCard = differentCardValue || differentCardSuit;
-
-            const differentPlayer = game.currentPlayerName !== CURRENT_PLAYER;
-
-            // Don't refresh if same
-            if(differentPlayer || differentCard) {
-
-                //Updated!
-                //Remove colour from background
-                $("#cardDisplay").removeClass('green red');
-
-                //Reset bet counter
-                $("#currentNumFingers").val(0).slider("refresh");
-
-                // Only show animation for logged in player
-                let showPopup = (prevPlayer ===  LOGGED_IN_PLAYER);
-
-                let showNotification = !showPopup;
-
-                // Player has been removed and current turn changed - no notification or pop up (if last go was incorrect)
-                if(!prevPlayer){
-
-                    showPopup = false;
-                    showNotification = false;
-
-                }
-
-                //Display card
-                $.displayCard(game.currentCard, game.cardsLeft, game.status, game.currentPlayerName, game.bet, game.fingersToDrink, game.players, showPopup, showNotification);
-
-                //Finally make the current card the next one
-                CURRENT_CARD = game.currentCard;
-
+                //Set the next player and change text
+                $.setNextPlayer(game.currentPlayerName);
             }
 
-        } catch (e) {
+            //Display card
+            $.displayCard(game.currentCard, game.cardsLeft, status, game.currentPlayerName, game.bet, game.fingersToDrink, game.players, false, true);
 
-            console.log("Invalid data: ", message.data, e);
         }
 
     };
@@ -242,8 +228,6 @@ $.createNewGame = function(players){
 
             $.websocketListen();
 
-            CURRENT_CARD = game.currentCard;
-
             // Set bet on any card
             BET_ANY_CARD = game.betAnyCard;
 
@@ -265,7 +249,7 @@ $.createNewGame = function(players){
                 $.closeForm();
 
                 //Display card
-                $.displayCard(CURRENT_CARD, game.cardsLeft);
+                $.displayCard(game.currentCard, game.cardsLeft);
 
                 //Reset bet counter
                 $("#totalNumFingers").text("0");
@@ -298,9 +282,8 @@ $.joinGame = function(players){
 
             GAME_ID = game._id;
 
+            // Listen on WS
             $.websocketListen();
-
-            CURRENT_CARD = game.currentCard;
 
             // Set bet on any card
             BET_ANY_CARD = game.betAnyCard;
@@ -325,7 +308,7 @@ $.joinGame = function(players){
                 $.closeForm();
 
                 //Display
-                $.displayCard(CURRENT_CARD, game.cardsLeft);
+                $.displayCard(game.currentCard, game.cardsLeft);
 
                 // Scores - skip updates as just joining
                 $.updateTurnScores(game.players, CURRENT_BET, game.fingersToDrink, true);
@@ -346,14 +329,10 @@ $.joinGame = function(players){
 
 $.playTurn = function(higherGuess){
 
-	//Remove colour from background
-	$("#cardDisplay").removeClass('green red');
+	const findersSlider = $("#currentNumFingers");
 
 	//Get slider
-	var currentBet = parseInt($("#currentNumFingers").val());
-
-	//Reset bet counter
-	$("#currentNumFingers").val(0).slider("refresh");
+    const currentBet = parseInt(findersSlider.val());
 
 	$.ajax({
 		type: "PUT",
@@ -364,8 +343,18 @@ $.playTurn = function(higherGuess){
 			"playerName" : CURRENT_PLAYER
 		},
 		dataType: "json",
-		success: function(res){
-            //Nothing
+		success: function(game){
+
+            //Updated!
+            //Remove colour from background
+            $("#cardDisplay").removeClass('green red');
+
+            //Reset bet counter
+            findersSlider.val(0).slider("refresh");
+
+            //Display card
+            $.displayCard(game.currentCard, game.cardsLeft, game.status, game.currentPlayerName, game.bet, game.fingersToDrink, game.players, true, false);
+
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
             //Nothing
@@ -388,14 +377,10 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 	//Not first card - flipping
 	if(correctGuess !== undefined){
 
+	    // Hide buttons
         $("#gameButtons").hide();
+        $("#sliderBar").hide();
 
-		//Hide slider if bet on any card is off
-		if(!BET_ANY_CARD){
-
-			$("#sliderBar").hide();
-
-		}
 		//Rotate card and display new one
 		cardImg.rotate3Di(
 			360,
@@ -404,10 +389,10 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 				sideChange: function(front) {
 					if (front) {
 						//Replace image
-						$(this).css('background','url(images/allcards.png) no-repeat ' + $.getCardCoords(card));
+						$(this).css('background', 'url(images/allcards.png) no-repeat ' + $.getCardCoords(card));
 					} else {
 						//Make back of card the pack;
-						$(this).css('background','url(images/back.png)');
+						$(this).css('background', 'url(images/back.png)');
 					}
 				},
 				complete:function(){
@@ -476,6 +461,8 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
         $.changePermissions(cardNum, cardsLeft);
 	}
 
+    //Finally make the current card the next one
+    CURRENT_CARD = card;
 
 	//Update num of cards left
 	$("#cardsLeft").html("<u>" + cardsLeft + "</u>" + (cardsLeft > 1 ? " cards":" card"));
