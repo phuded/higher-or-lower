@@ -43,12 +43,12 @@ export async function updateGame(req, res) {
 
     let turnBody = req.body;
 
-    if((turnBody.guess == null) || (turnBody.bet == null) || !turnBody.playerName){
+    if((turnBody.guess == null) || (turnBody.bet == null) || !turnBody.playerName || !turnBody.loggedInPlayerName){
 
         return res.status(400).send({error: "Invalid parameters"});
     }
 
-    return sUpdateGame(id, turnBody.playerName, (turnBody.guess == "true"), parseInt(turnBody.bet), res);
+    return sUpdateGame(id, turnBody.playerName, turnBody.loggedInPlayerName, (turnBody.guess == "true"), parseInt(turnBody.bet), res);
 };
 
 export async function updateGamePlayers(req, res) {

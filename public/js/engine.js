@@ -338,7 +338,8 @@ $.playTurn = function(higherGuess){
 		data: {
 		    "bet": currentBet,
 			"guess" : higherGuess,
-			"playerName" : CURRENT_PLAYER
+			"playerName" : CURRENT_PLAYER,
+            "loggedInPlayerName": LOGGED_IN_PLAYER
 		},
 		dataType: "json",
 		success: function(game){

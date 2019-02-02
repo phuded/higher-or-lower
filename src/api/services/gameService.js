@@ -99,7 +99,7 @@ export async function createGame(gameBody, res) {
 
 };
 
-export async function updateGame(id, playerName, guess, bet, res) {
+export async function updateGame(id, playerName, loggedInPlayerName, guess, bet, res) {
 
     let game;
 
@@ -131,7 +131,7 @@ export async function updateGame(id, playerName, guess, bet, res) {
     await game.save();
 
     // Notify via WS
-    notifyClients(id, game, playerName, null);
+    notifyClients(id, game, loggedInPlayerName, null);
 
     return res.send(game);
 };
