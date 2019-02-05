@@ -1,16 +1,72 @@
 let players;
 
+$.getCopyUrl = function(){
+
+    let url = window.location.href.split("/");
+    url.pop();
+    url.pop();
+    url = url.join("/");
+
+    copyTextToClipboard(url);
+}
+
+//TODO: make util class
+function copyTextToClipboard(text) {
+
+    var textArea = document.createElement("textarea");
+
+    // Place in top-left corner of screen regardless of scroll position.
+    textArea.style.position = 'fixed';
+    textArea.style.top = 0;
+    textArea.style.left = 0;
+
+    // Ensure it has a small width and height. Setting to 1px / 1em
+    // doesn't work as this gives a negative w/h on some browsers.
+    textArea.style.width = '2em';
+    textArea.style.height = '2em';
+
+    // We don't need padding, reducing the size if it does flash render.
+    textArea.style.padding = 0;
+
+    // Clean up any borders.
+    textArea.style.border = 'none';
+    textArea.style.outline = 'none';
+    textArea.style.boxShadow = 'none';
+
+    // Avoid flash of white box if rendered for any reason.
+    textArea.style.background = 'transparent';
+
+
+    textArea.value = text;
+
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+
+        document.execCommand('copy');
+
+    } catch (err) {
+
+    }
+
+    document.body.removeChild(textArea);
+}
+
 //Update the score for a player
 $.updateScore = function(_players, fingersToDrink, skipHighScores){
 
 	players = _players;
 
-	var table = $("#scoreTable");
+    let table = $("#scoreTable");
+
+	let copyLink = $("#copyLink");
 
     //Create scoretab var
-    var scoreTableBody = "";
+    let scoreTableBody = "";
 
-    var playerToUpdate = null;
+    let playerToUpdate = null;
 
     //Set players in array
     $(players).each(function(pIdx, player){
@@ -71,10 +127,13 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
 
         // Show score table
         table.show();
+        copyLink.show();
+
 	}
 	else{
 
 	    table.hide();
+        copyLink.hide();
 	}
 
 	if(!skipHighScores && playerToUpdate) {

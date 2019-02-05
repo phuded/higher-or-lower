@@ -31,9 +31,11 @@ $.prepareGame = function(){
 	// Set Player from cookie
     const cookie = document.cookie;
 
+    let prevPlayer = null;
+
     if(cookie && (cookie.indexOf("user=") === 0)) {
 
-        const prevPlayer = cookie.split("=")[1];
+        prevPlayer = cookie.split("=")[1];
 
         $("#selectedPlayerName").val(prevPlayer);
     }
@@ -45,7 +47,7 @@ $.prepareGame = function(){
 
     path = path.split("/");
 
-    if(path.length != 4){
+    if(path.length != 4 && path.length != 3){
 
         // Show the page
         $("body").show();
@@ -54,7 +56,24 @@ $.prepareGame = function(){
     }
 
     const gameId = path[1];
-    const playerName = path[2];
+
+    let playerName = null;
+
+    if(path.length == 4) {
+
+        playerName = path[2];
+    }
+    else if(prevPlayer){
+
+        playerName = prevPlayer;
+    }
+
+    if(!playerName){
+
+        $.handleInvalidParams();
+
+        return;
+    }
 
     $.ajax({
         type: "GET",
@@ -64,13 +83,13 @@ $.prepareGame = function(){
             $.ajax({
                 type: "GET",
                 url: "/api/players/" + playerName,
-                success: function(game){
+                success: function(player){
 
                     GAME_ID = gameId;
 
                     $("#selectedPlayerName").val(playerName);
 
-                    $("#selectedGameName").val(game.name);
+                    $("#selectedGameName").val($.generateGameName(game));
 
                     $("#start").html($("#start").html().replace("Create New", "Join"));
 
@@ -89,6 +108,11 @@ $.prepareGame = function(){
         }
     });
 };
+
+$.generateGameName = function(game){
+
+    return game.name + " [Created by: " + game.owner + "]";
+}
 
 $.handleInvalidParams = function () {
 
@@ -321,7 +345,7 @@ $.createNewGame = function(players){
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
 
-                $("#gameTitle").text(game.name + " [Created by: " + game.owner + "]");
+                $("#gameTitle").text($.generateGameName(game));
 
             });
         },
@@ -380,7 +404,7 @@ $.joinGame = function(players){
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
 
-                $("#gameTitle").text(game.name + " [Created by: " + game.owner + "]");
+                $("#gameTitle").text($.generateGameName(game));
 
             });
         },

@@ -98,7 +98,7 @@ $.getGameList = function(){
 
                 const owner = game.owner;
 
-                const name = game.name + " [Created by: " + owner + "]";
+                const name = $.generateGameName(game);
 
                 const cardsLeft = game.cardsLeft;
 
