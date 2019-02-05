@@ -7,7 +7,7 @@ $.getPlayerList = function(){
     //Get Player List
     $.ajax({
         type: "GET",
-        url: "api/players",
+        url: "/api/players",
         success: function(json){
 
             const players = json.players;
@@ -44,7 +44,7 @@ $.getGamePlayerList = function(){
     //Get Player List
     $.ajax({
         type: "GET",
-        url: "api/players",
+        url: "/api/players",
         success: function(json){
 
             const players = json.players;
@@ -83,7 +83,7 @@ $.getGameList = function(){
     //Get Player List
     $.ajax({
         type: "GET",
-        url: "api/games?order-by=_id&dir=asc",
+        url: "/api/games?order-by=_id&dir=asc",
         success: function(json){
 
             const games = json.games;
@@ -221,7 +221,7 @@ $.deleteGame = function(id){
 
     $.ajax({
         type: "DELETE",
-        url: "api/games/" + id,
+        url: "/api/games/" + id,
         dataType: "json",
         success: function(json){
 
@@ -299,7 +299,7 @@ $.createNewPlayer = function(show, player){
     //Add new player
     $.ajax({
         type: "POST",
-        url: "api/players",
+        url: "/api/players",
         data: {	name: playerName,
                 firstName: fName,
                 surname: surname

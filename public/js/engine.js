@@ -29,7 +29,6 @@ $.prepareGame = function(){
 	});
 
 	// Set Player from cookie
-
     const cookie = document.cookie;
 
     if(cookie && (cookie.indexOf("user=") === 0)) {
@@ -39,8 +38,48 @@ $.prepareGame = function(){
         $("#selectedPlayerName").val(prevPlayer);
     }
 
-    // Get game player list
+    // Get game player list - after cookie player is set
     $.getGamePlayerList();
+
+    let path = window.location.pathname;
+
+    path = path.split("/");
+
+    if(path.length != 4){
+
+        // Show the page
+        $("body").show();
+
+        return;
+    }
+
+    const gameId = path[1];
+    const playerName = path[2];
+
+    $.ajax({
+        type: "GET",
+        url: "/api/games/" + gameId,
+        dataType: "json",
+        success: function(game){
+
+            GAME_ID = gameId;
+
+            $("#selectedPlayerName").val(playerName);
+
+            $("#selectedGameName").val(game.name);
+
+            // Launch the game
+            $.startGame();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+            // History
+            history.replaceState({}, "", "/");
+
+            // Show the page
+            $("body").show();
+        }
+    });
 };
 
 $.websocketListen = function () {
@@ -183,7 +222,6 @@ $.startGame = function(){
 	//Hide any current card
 	$("#cardDisplay").removeClass('green red');
 
-
 	if(!GAME_ID || !$("#selectedGameName").val()){
 
         $("#gamePlayerList ul li input[type=checkbox]:checked").each(function () {
@@ -218,7 +256,7 @@ $.createNewGame = function(players){
 
     $.ajax({
         type: "POST",
-        url: "api/games",
+        url: "/api/games",
         data: {
             "name" : gameName,
             "players" : players,
@@ -281,7 +319,7 @@ $.joinGame = function(players){
 
     $.ajax({
         type: "PUT",
-        url: "api/games/" + GAME_ID + "/players",
+        url: "/api/games/" + GAME_ID + "/players",
         data: {
             "players" : players
         },
@@ -345,7 +383,7 @@ $.playTurn = function(higherGuess){
 
 	$.ajax({
 		type: "PUT",
-		url: "api/games/" + GAME_ID,
+		url: "/api/games/" + GAME_ID,
 		data: {
 		    "bet": currentBet,
 			"guess" : higherGuess,
@@ -400,10 +438,10 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 				sideChange: function(front) {
 					if (front) {
 						//Replace image
-						$(this).css('background', 'url(images/allcards.png) no-repeat ' + $.getCardCoords(card));
+						$(this).css('background', 'url(/images/allcards.png) no-repeat ' + $.getCardCoords(card));
 					} else {
 						//Make back of card the pack;
-						$(this).css('background', 'url(images/back.png)');
+						$(this).css('background', 'url(/images/back.png)');
 					}
 				},
 				complete:function(){
@@ -466,7 +504,7 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 	else{
 
 		//Showing card for first time
-		cardImg.css('background', "url(images/allcards.png) no-repeat " + $.getCardCoords(card));
+		cardImg.css('background', "url(/images/allcards.png) no-repeat " + $.getCardCoords(card));
 		cardImg.show();
 
         $.changePermissions(cardNum, cardsLeft);
@@ -547,7 +585,7 @@ $.leaveGame = function(){
 
     $.ajax({
         type: "PUT",
-        url: "api/games/" + GAME_ID + "/players",
+        url: "/api/games/" + GAME_ID + "/players",
         data: {
             "playersToRemove" : [LOGGED_IN_PLAYER]
         },
@@ -704,7 +742,7 @@ var GAME_ID;
 var MAX_DRINKER_ROWS = 10;
 
 //Images to preload
-var PRELOAD_IMAGES =['images/allcards.png', 'images/back.png'];
+var PRELOAD_IMAGES =['/images/allcards.png', '/images/back.png'];
 
 // Websocket connection
 var WS_CONNECTION;

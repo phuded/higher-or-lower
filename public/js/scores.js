@@ -1,4 +1,4 @@
-var players;
+let players;
 
 //Update the score for a player
 $.updateScore = function(_players, fingersToDrink, skipHighScores){
@@ -139,7 +139,7 @@ function sendHighScores(playerToUpdate, fingersToDrink){
 
     $.ajax({
         type: "PUT",
-        url: "api/players/" + playerName,
+        url: "/api/players/" + playerName,
         data: { "maxFingers": fingersToDrink,
 				"maxCorrect": winningRun,
 				"maxIncorrect": losingRun

@@ -77,7 +77,7 @@ $.generateDrinkersTable = function(table, orderBy, sDir, num, start){
 
 	$.ajax({
 		type: "GET",
-		url: "api/players?order-by=" + orderBy + "&dir=" + sDir + "&num=" + num + "&start=" + start,
+		url: "/api/players?order-by=" + orderBy + "&dir=" + sDir + "&num=" + num + "&start=" + start,
 		success: function(json){
 
 			//Remove again
