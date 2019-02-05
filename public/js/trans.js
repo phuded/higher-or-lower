@@ -17,7 +17,6 @@ $.openForm = function(){
     $("#game-contents").hide();
     $("#form").fadeIn();
 
-
     // History
     history.replaceState({}, "", "/");
 };

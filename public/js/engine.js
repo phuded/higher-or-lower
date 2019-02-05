@@ -59,27 +59,44 @@ $.prepareGame = function(){
     $.ajax({
         type: "GET",
         url: "/api/games/" + gameId,
-        dataType: "json",
         success: function(game){
 
-            GAME_ID = gameId;
+            $.ajax({
+                type: "GET",
+                url: "/api/players/" + playerName,
+                success: function(game){
 
-            $("#selectedPlayerName").val(playerName);
+                    GAME_ID = gameId;
 
-            $("#selectedGameName").val(game.name);
+                    $("#selectedPlayerName").val(playerName);
 
-            // Launch the game
-            $.startGame();
+                    $("#selectedGameName").val(game.name);
+
+                    $("#start").html($("#start").html().replace("Create New", "Join"));
+
+                    // Launch the game
+                    $.startGame();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+                    $.handleInvalidParams();
+                }
+            });
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
 
-            // History
-            history.replaceState({}, "", "/");
-
-            // Show the page
-            $("body").show();
+            $.handleInvalidParams();
         }
     });
+};
+
+$.handleInvalidParams = function () {
+
+    // History
+    history.replaceState({}, "", "/");
+
+    // Show the page
+    $("body").show();
 };
 
 $.websocketListen = function () {

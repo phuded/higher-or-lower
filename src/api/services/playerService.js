@@ -22,6 +22,28 @@ export async function getPlayers(req, res) {
     return res.send({players: data[0], total: data[1]});
 }
 
+export async function getPlayer(name, res) {
+
+    let player;
+
+    try {
+        player = await Player.findOne({name: name});
+    }
+    catch (e) {
+
+        return res.status(500).send({error: e.message});
+    }
+
+    if(!player){
+
+        return res.status(404).send();
+
+    }
+
+    return res.send(player);
+
+};
+
 
 export async function createPlayer(req, res) {
 

@@ -1,4 +1,4 @@
-import {getPlayers, updatePlayer, createPlayer, deletePlayer} from "../controllers/playerController";
+import {getPlayer, getPlayers, updatePlayer, createPlayer, deletePlayer} from "../controllers/playerController";
 import {getGame, getGames, createGame, updateGame, deleteGame, updateGamePlayers} from "../controllers/gameController";
 
 export default function routes(app) {
@@ -11,6 +11,8 @@ export default function routes(app) {
     app.get("/management/health", function (req, res) {
         res.send('Ok');
     });
+
+    app.route(root + "/api/players/:name").get(getPlayer);
 
     app.route(root + "/api/players").get(getPlayers);
 
