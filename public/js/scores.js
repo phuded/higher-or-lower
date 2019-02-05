@@ -112,22 +112,22 @@ function resetScoreTable(){
 
 function sendHighScores(playerToUpdate, fingersToDrink){
 
-    var playerName = playerToUpdate.name;
+    const playerName = playerToUpdate.name;
 
     //Check for winning streak
-    var winningRun = 0;
+    let winningRun = 0;
 
     //Losing streak
-    var losingRun = 0;
+    let losingRun = 0;
 
-    var correctGuess = playerToUpdate.stats[playerToUpdate.stats.length - 1];
+    let correctGuess = playerToUpdate.stats[playerToUpdate.stats.length - 1];
 
     if(correctGuess){
 
         //Determine any winning streak
-        for(var i = playerToUpdate.stats.length; i--; i>=0){
+        for(let i = playerToUpdate.stats.length; i--; i>=0){
 
-            var prevTurn = playerToUpdate.stats[i];
+            const prevTurn = playerToUpdate.stats[i];
 
             if(prevTurn){
                 winningRun++;
@@ -140,9 +140,9 @@ function sendHighScores(playerToUpdate, fingersToDrink){
     else{
 
         //Determine any losing streak
-        for(i = playerToUpdate.stats.length; i--; i>=0){
+        for(let i = playerToUpdate.stats.length; i--; i>=0){
 
-            var prevTurn = playerToUpdate.stats[i];
+            const prevTurn = playerToUpdate.stats[i];
 
             if(!prevTurn){
                 losingRun++;
