@@ -13,7 +13,7 @@ $.getCopyUrl = function(){
 //TODO: make util class
 function copyTextToClipboard(text) {
 
-    var textArea, range, selection;
+    let textArea, range, selection;
 
     textArea = document.createElement('textArea');
     textArea.value = text;
@@ -25,8 +25,6 @@ function copyTextToClipboard(text) {
     selection.removeAllRanges();
     selection.addRange(range);
     textArea.setSelectionRange(0, 999999);
-
-    textArea.select();
 
     document.execCommand('copy');
     document.body.removeChild(textArea);
