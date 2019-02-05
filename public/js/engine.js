@@ -1,5 +1,8 @@
 $.prepareGame = function(){
 
+    // Enable copy JS
+    new ClipboardJS('#copyLink');
+
 	//Get player list
     $.getPlayerList();
 

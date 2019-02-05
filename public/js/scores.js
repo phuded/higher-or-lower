@@ -7,28 +7,7 @@ $.getCopyUrl = function(){
     url.pop();
     url = url.join("/");
 
-    copyTextToClipboard(url);
-};
-
-//TODO: make util class
-function copyTextToClipboard(text) {
-
-    let textArea, range, selection;
-
-    textArea = document.createElement('textArea');
-    textArea.value = text;
-    document.body.appendChild(textArea);
-
-    range = document.createRange();
-    range.selectNodeContents(textArea);
-    selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
-    textArea.setSelectionRange(0, 999999);
-
-    document.execCommand('copy');
-    document.body.removeChild(textArea);
-
+    return url;
 };
 
 //Update the score for a player
@@ -105,6 +84,7 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
         // Show score table
         table.show();
         copyLink.show();
+        copyLink.attr("data-clipboard-text", $.getCopyUrl());
 
 	}
 	else{
