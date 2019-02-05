@@ -1,5 +1,6 @@
 let players;
 
+// TODO: Move to util and copy other methods, add copy per player, test on Android, create player on fly? make all players lowercase and enforce lowercase
 $.getCopyUrl = function(){
 
     let url = window.location.href.split("/");
