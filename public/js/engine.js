@@ -406,6 +406,10 @@ $.joinGame = function(players){
 
 $.playTurn = function(higherGuess){
 
+    // Hide buttons
+    $("#gameButtons").hide();
+    $("#sliderBar").hide();
+
 	const findersSlider = $("#currentNumFingers");
 
 	//Get slider
@@ -434,6 +438,7 @@ $.playTurn = function(higherGuess){
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
             //Nothing
+
 		}
 	});
 
@@ -669,28 +674,28 @@ $.getCardCoords = function(card){
 
 
 //Game variables
-var CURRENT_CARD;
+let CURRENT_CARD;
 
-var LOGGED_IN_PLAYER;
+let LOGGED_IN_PLAYER;
 
-var CURRENT_PLAYER;
+let CURRENT_PLAYER;
 
-var CURRENT_BET = 0;
+let CURRENT_BET = 0;
 
-var BET_ANY_CARD = false;
+let BET_ANY_CARD = false;
 
-var PLAY_AS_ANYONE = false;
+let PLAY_AS_ANYONE = false;
 
 //Drink type
-var DRINK_TYPE;
+let DRINK_TYPE;
 
-var GAME_ID;
+let GAME_ID;
 
 //Number of drinkers displayed in table
-var MAX_DRINKER_ROWS = 10;
+let MAX_DRINKER_ROWS = 10;
 
 //Images to preload
-var PRELOAD_IMAGES =['/images/allcards.png', '/images/back.png'];
+const PRELOAD_IMAGES =['/images/allcards.png', '/images/back.png'];
 
 // Websocket connection
-var WS_CONNECTION;
+let WS_CONNECTION;
