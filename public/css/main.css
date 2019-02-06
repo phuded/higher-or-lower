@@ -270,7 +270,13 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 
 /*Scores tab */
 #scoreTab{
-	padding:10px;
+	padding: 10px;
+}
+
+#scoreTab #copyLink{
+	font-size: 0.8em;
+	width: 150px;
+	margin-bottom: 15px;
 }
 
 #scoreTable{
@@ -279,11 +285,11 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
     border-top-left-radius: 0.6em;
 	font-weight: bold;
     text-shadow: none;
-	padding:3px;
+	padding:1px;
 }
 
 #scoreTable tr th, #scoreTable tr td{
-	padding:2px;
+	padding:1px;
 }
 
 #scoreTable tr th{
@@ -291,15 +297,13 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 	max-width:100px;
 }
 
-
-#scoreTable tr td{
+#scoreTable tr td.correct, #scoreTable tr td.incorrect{
 	width:22px;
 	max-width:22px;
 	text-align:center;
 	border: 1px solid grey;
 	font-size: 0.9em;
 }
-
 #scoreTable tr td.correct{
 	background-color:#66CC99;
 }
@@ -308,24 +312,41 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 	background-color:#F78181;
 }
 
-#scoreTab a{
+/* Copy link */
+#scoreTable tr td.copyLinkCell{
+	border: none;
+	max-width: none;
+}
+
+#scoreTable tr td.copyLinkCell a{
+	width: 31px;
+	height: 31px;
+}
+
+#scoreTable tr td.copyLinkCell a > span{
+	padding: 5px 0 5px 6px !important;
+}
+
+#scoreTable tr td.copyLinkCell a > span > span.ui-icon-copy, #scoreTab #copyLink > span > span.ui-icon-copy{
+	background-image: url(/images/copy.png);
+	background-color: transparent;
+	background-size: 18px;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+}
+
+#scoreTable a.playerName{
 	font-size: 0.8em;
 	width:90px;
 }
 
-#scoreTab a.copyLink{
-	width: 150px;
-	margin-bottom: 15px;
-}
-
-#scoreTab a>span{
+#scoreTable a.playerName > span, #scoreTab #copyLink > span{
 	padding: .6em 0 .6em 20px !important;
 }
 
-#scoreTab a>span>span.ui-icon{
+#scoreTable a > span > span.ui-icon{
 	left:4px;
 }
-
 
 /*Drinkers tab */
 

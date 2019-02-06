@@ -29,6 +29,7 @@
 		<script type="text/javascript" src="/js/scores.js"></script>
 		<script type="text/javascript" src="/js/drinkers.js"></script>
 		<script type="text/javascript" src="/js/trans.js"></script>
+		<script type="text/javascript" src="/js/util.js"></script>
 
 		<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
@@ -247,7 +248,7 @@
 			<div id="scoreTab" class="tab-content" data-role="content">
 
 				<h4 id="gameTitle" style="margin-block-start: 0.4em; margin-block-end: 10px;"></h4>
-				<a id="copyLink" class="copyLink" style="display: none;" data-role="button" data-icon="check" data-theme="c">Copy Game Link</a>
+				<a id="copyLink" class="copyLink" style="display: none;" data-role="button" data-icon="copy" data-theme="c">Copy Game Link</a>
 
 				<table id="scoreTable" style="display: none;"></table>
 				<div id="scoreStats" style="display:none;">
@@ -258,7 +259,7 @@
 					<p id="stats_percentage"><b>Percentage correct: </b><span></span></p>
 					<p id="stats_correctS"><b>Most correct guesses in a row: </b><span></span></p>
 					<p id="stats_incorrectS"><b>Most incorrect guesses in a row: </b><span></span></p>
-					<a href="javascript:$.showPlayerStats(0,false)" data-role="button" data-icon="back" data-theme="c">Back</a>
+					<a class="listButton wholeWidthButton" href="javascript:$.showPlayerStats(0,false)" data-role="button" data-icon="back" data-theme="c">Back</a>
 				</div>
 			</div>
 

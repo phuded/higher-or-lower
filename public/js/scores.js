@@ -1,16 +1,5 @@
 let players;
 
-// TODO: Move to util and copy other methods, add copy per player, test on Android, create player on fly? make all players lowercase and enforce lowercase
-$.getCopyUrl = function(){
-
-    let url = window.location.href.split("/");
-    url.pop();
-    url.pop();
-    url = url.join("/");
-
-    return url;
-};
-
 //Update the score for a player
 $.updateScore = function(_players, fingersToDrink, skipHighScores){
 
@@ -37,26 +26,30 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
 		}
 
         //Add in header row
-        scoreTableBody += "<tr><th><a href='javascript:$.showPlayerStats(" + pIdx + ", true)' data-role='button' data-icon='grid' ";
+        scoreTableBody += "<tr><th><a href='javascript:$.showPlayerStats(" + pIdx + ", true)' data-role='button' data-icon='grid' class='playerName' ";
+
+        const url = $.getCopyUrl() + "/" + playerName;
+
+        const playerCopyLinkButton = "<a class='copyLink' data-role='button' data-icon='copy' data-theme='c' data-iconpos='notext' data-clipboard-text='" + url + "'></a>";
 
         if(playerName === LOGGED_IN_PLAYER){
 
-            scoreTableBody += "data-theme='b' style='text-decoration: underline;'>" + playerName + "</a></th>";
+            scoreTableBody += "data-theme='b' style='text-decoration: underline;'>" + playerName + "</a></th><td class='copyLinkCell'></td>";
         }
         else if(!player.active){
 
-            scoreTableBody += "data-theme='c' style='text-decoration: line-through;'>" + playerName + "</a></th>";
+            scoreTableBody += "data-theme='c' style='text-decoration: line-through;'>" + playerName + "</a></th><td class='copyLinkCell'>" + playerCopyLinkButton + "</td>";
         }
         else{
 
-            scoreTableBody += "data-theme='c'>" + playerName + "</a></th>";
+            scoreTableBody += "data-theme='c'>" + playerName + "</a></th><td class='copyLinkCell'>" + playerCopyLinkButton + "</td>";
         }
 
-        var numStats = player.stats.length;
+        const numStats = player.stats.length;
 
         $(player.stats).slice(-8).each(function(idx, stat) {
 
-            var num = idx + 1;
+            let num = idx + 1;
 
         	if(numStats > 8 ){
 

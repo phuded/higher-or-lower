@@ -381,7 +381,6 @@ $.showGameList = function(show, selectedGameId, selectedGameName){
 
 };
 
-
 $.clearCurrentGame = function(){
 
    // Hide cancel
@@ -390,11 +389,11 @@ $.clearCurrentGame = function(){
    GAME_ID = null;
 
    $.clearGameSelection();
-}
+};
 
 $.clearGameSelection = function(){
 
     $("#selectedGameName").val("");
 
     $("#start").html($("#start").html().replace("Join", "Create New"));
-}
+};
