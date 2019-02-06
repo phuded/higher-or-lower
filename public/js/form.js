@@ -305,7 +305,7 @@ $.createNewPlayer = function(show, player){
                 surname: surname
         },
         dataType: "json",
-        success: function(json){
+        success: function(player){
 
             //Added!
             //Refresh player list
@@ -316,7 +316,7 @@ $.createNewPlayer = function(show, player){
 
                 formContent.fadeIn('fast');
 
-                $("#selectedPlayerName").val(playerName);
+                $("#selectedPlayerName").val(player.name);
 
                 $.clearNewPlayerForm();
 

@@ -56,3 +56,50 @@ $.preLoadImages = function(imageList, callback) {
     }
     pic = undefined;
 };
+
+function playAsAnyoneChecked(){
+
+    const playAsAnyone = $("#playAsAnyone").attr('checked');
+
+    if(playAsAnyone === "checked"){
+
+        return true;
+    }
+
+    return false;
+};
+function removeCardChecked(){
+
+    const remove = $("#removeCards").attr('checked');
+
+    if(remove === "checked"){
+
+        return true;
+    }
+
+    return false;
+};
+
+function useWholePackChecked(){
+
+    const wholePack = $("#wholePack").attr('checked');
+
+    if(wholePack === "checked"){
+
+        return true;
+    }
+
+    return false;
+};
+
+function betAnyCardChecked(){
+
+    const fullBetting = $("#fullBetting").attr('checked');
+
+    if(fullBetting === "checked"){
+
+        return true;
+    }
+
+    return false;
+};

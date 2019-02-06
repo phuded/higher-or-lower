@@ -253,7 +253,6 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
     margin-top: 1px;
 }
 
-
 /*Player List*/
 #playerList li{
 	font-size:0.9em;
@@ -266,6 +265,10 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 
 #playerForm #playerFormErrorMessage{
 	color:red;
+}
+
+#playerForm #pname{
+	text-transform: lowercase;
 }
 
 /*Scores tab */

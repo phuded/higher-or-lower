@@ -667,56 +667,6 @@ $.getCardCoords = function(card){
 	return x + "px " + y;
 };
 
-function playAsAnyoneChecked(){
-
-    const playAsAnyone = $("#playAsAnyone").attr('checked');
-
-    if(playAsAnyone === "checked"){
-
-        return true;
-    }
-
-    return false;
-};
-
-
-function removeCardChecked(){
-
-   const remove = $("#removeCards").attr('checked');
-
-   if(remove === "checked"){
-
-   		return true;
-   }
-
-   return false;
-};
-
-function useWholePackChecked(){
-
-    const wholePack = $("#wholePack").attr('checked');
-
-    if(wholePack === "checked"){
-
-        return true;
-    }
-
-    return false;
-};
-
-function betAnyCardChecked(){
-
-    const fullBetting = $("#fullBetting").attr('checked');
-
-    if(fullBetting === "checked"){
-
-        return true;
-    }
-
-    return false;
-};
-
-
 
 //Game variables
 var CURRENT_CARD;
