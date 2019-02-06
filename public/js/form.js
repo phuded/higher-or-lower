@@ -280,7 +280,7 @@ $.createNewPlayer = function(show, player){
     const pName = $("#pname");
 
     //Get username
-    const playerName = pName.val();
+    const playerName = pName.val().trim();
 
     const playerNameValid = (playerName.length > 0) && (playerName.indexOf("Player ") == -1);
 
