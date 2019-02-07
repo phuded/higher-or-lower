@@ -43,14 +43,14 @@ $.prepareGame = function(){
         $("#selectedPlayerName").val(prevPlayer);
     }
 
-    // Get game player list - after cookie player is set
-    $.getGamePlayerList();
-
     let path = window.location.pathname;
 
     path = path.split("/");
 
     if(path.length != 4 && path.length != 3){
+
+        // Get game player list - after cookie player is set
+        $.getGamePlayerList();
 
         // Show the page
         $("body").show();
@@ -91,6 +91,9 @@ $.prepareGame = function(){
                     GAME_ID = gameId;
 
                     $("#selectedPlayerName").val(playerName);
+
+                    // Get game player list - after player is set
+                    $.getGamePlayerList();
 
                     $("#selectedGameName").val($.generateGameName(game));
 

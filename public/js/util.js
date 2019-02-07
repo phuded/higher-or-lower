@@ -16,6 +16,9 @@ $.generateGameName = function(game){
 
 $.handleInvalidParams = function () {
 
+    // Get game player list
+    $.getGamePlayerList();
+
     // History
     history.replaceState({}, "", "/");
 
