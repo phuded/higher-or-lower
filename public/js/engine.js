@@ -1,7 +1,14 @@
 $.prepareGame = function(){
 
     // Enable copy JS
-    new ClipboardJS(".copyLink");
+    const clipboard = new ClipboardJS(".copyLink");
+
+    clipboard.on('success', function(e) {
+
+        const message = e.trigger.getAttribute("message");
+
+        $.notify(message + " copied to clipboard", "success");
+    });
 
 	//Get player list
     $.getPlayerList();
