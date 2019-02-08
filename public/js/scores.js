@@ -5,7 +5,8 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
 
 	players = _players;
 
-    let table = $("#scoreTable");
+    const tableDiv = $("#scoreTableDiv");
+    const table = $("#scoreTable");
 
 	let copyLink = $("#copyLink");
 
@@ -28,34 +29,28 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
         //Add in header row
         scoreTableBody += "<tr><th><a href='javascript:$.showPlayerStats(" + pIdx + ", true)' data-role='button' data-icon='grid' class='playerName' ";
 
-        const url = $.getCopyUrl() + "/" + playerName;
-
-        const playerCopyLinkButton = "<a class='copyLink' data-role='button' data-icon='copy' data-theme='c' data-iconpos='notext' data-clipboard-text='" + url + "' message='" + playerName  + " game joining link'></a>";
-
         if(playerName === LOGGED_IN_PLAYER){
 
-            scoreTableBody += "data-theme='b' style='text-decoration: underline;'>" + playerName + "</a></th><td class='copyLinkCell'></td>";
+            scoreTableBody += "data-theme='b' style='text-decoration: underline;'>";
         }
         else if(!player.active){
 
-            scoreTableBody += "data-theme='c' style='text-decoration: line-through;'>" + playerName + "</a></th><td class='copyLinkCell'>" + playerCopyLinkButton + "</td>";
+            scoreTableBody += "data-theme='c' style='text-decoration: line-through;'>";
         }
         else{
 
-            scoreTableBody += "data-theme='c'>" + playerName + "</a></th><td class='copyLinkCell'>" + playerCopyLinkButton + "</td>";
+            scoreTableBody += "data-theme='c'>";
         }
 
-        const numStats = player.stats.length;
+        const url = $.getCopyUrl() + "/" + playerName;
 
-        $(player.stats).slice(-8).each(function(idx, stat) {
+        const playerCopyLinkButton = "<a class='copyLink' data-role='button' data-icon='copy' data-theme='c' data-iconpos='notext' data-clipboard-text='" + url + "' message='" + playerName  + " game joining link'></a>";
+        
+        scoreTableBody += playerName + "</a></th><td class='copyLinkCell'>" + playerCopyLinkButton + "</td>";
+
+        $(player.stats).each(function(idx, stat) {
 
             let num = idx + 1;
-
-        	if(numStats > 8 ){
-
-                num += (numStats - 8);
-
-            }
 
             if (stat) {
                 scoreTableBody += "<td class='correct'>" + num + "</td>";
@@ -76,14 +71,14 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
     if(scoreTableBody && !scoresVisible){
 
         // Show score table
-        table.show();
+        tableDiv.show();
         copyLink.show();
         copyLink.attr("data-clipboard-text", $.getCopyUrl());
 
 	}
 	else{
 
-	    table.hide();
+        tableDiv.hide();
         copyLink.hide();
 	}
 
@@ -96,11 +91,12 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
 // Reset the score table
 function resetScoreTable(){
 
-    var table = $("#scoreTable");
+    const tableDiv = $("#scoreTableDiv");
+    const table = $("#scoreTable");
 
     table.html("");
 
-    table.hide();
+    tableDiv.hide();
 }
 
 
@@ -171,32 +167,36 @@ function sendHighScores(playerToUpdate, fingersToDrink){
 /*Show player stats*/
 $.showPlayerStats = function(pNum, show){
 
+    const scoreTableDiv = $("#scoreTableDiv");
+    const scoreStats = $("#scoreStats");
+
     // Show table
 	if(!show){
-		$("#scoreStats").hide();
-		$("#scoreTable").fadeIn();
+        scoreStats.hide();
+        scoreTableDiv.fadeIn();
 
 		return;
 	}
 
 	//Hide scores
-	$("#scoreTable").hide();
+    scoreTableDiv.hide();
 
-	var player = players[pNum];
+	const player = players[pNum];
 
 	//Set player name
 	$("#stats_name").text(player.name);
 
-	var numGuesses = player.stats.length;
+    const numGuesses = player.stats.length;
 
-	var correct = 0;
-	var correctStreak = 0;
-	var bestCorrectStreak = 0;
+	let correct = 0;
+    let correctStreak = 0;
+    let bestCorrectStreak = 0;
 
-	var incorrectStreak = 0;
-	var bestIncorrectStreak = 0;
+    let incorrectStreak = 0;
+    let bestIncorrectStreak = 0;
 
-	$.each(player.stats ,function(i, correctGuess){
+	$.each(player.stats, function(i, correctGuess){
+
 		if(correctGuess){
 			//Increase number which are correct
 			correct++;
@@ -223,7 +223,7 @@ $.showPlayerStats = function(pNum, show){
 		}
 	});
 
-	var percentage = numGuesses>0?(correct*100/numGuesses).toFixed(1):"0.0";
+	const percentage = numGuesses>0?(correct*100/numGuesses).toFixed(1):"0.0";
 
 	$("#stats_guesses span").text(numGuesses);
 	$("#stats_correct span").text(correct);
@@ -231,6 +231,6 @@ $.showPlayerStats = function(pNum, show){
 	$("#stats_percentage span").text(percentage+'%');
 	$("#stats_correctS span").text(bestCorrectStreak);
 	$("#stats_incorrectS span").text(bestIncorrectStreak);
-	$("#scoreStats").fadeIn();
+    scoreStats.fadeIn();
 
 }

@@ -282,6 +282,11 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 	margin-bottom: 15px;
 }
 
+#scoreTableDiv{
+	position: relative;
+	overflow: auto;
+}
+
 #scoreTable{
 	border:1px solid #6D7B8D;
 	border-bottom-left-radius: 0.6em;
@@ -289,6 +294,9 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 	font-weight: bold;
     text-shadow: none;
 	padding:1px;
+
+	max-width: 95vw;
+	table-layout: fixed;
 }
 
 #scoreTable tr th, #scoreTable tr td{
@@ -296,13 +304,11 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 }
 
 #scoreTable tr th{
-	width:100px;
 	max-width:100px;
 }
 
 #scoreTable tr td.correct, #scoreTable tr td.incorrect{
-	width:22px;
-	max-width:22px;
+	min-width: 22px;
 	text-align:center;
 	border: 1px solid grey;
 	font-size: 0.9em;
