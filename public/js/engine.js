@@ -338,8 +338,8 @@ $.createNewGame = function(players){
                 //Display card
                 $.displayCard(game.currentCard, game.cardsLeft);
 
-                //Reset bet counter
-                $("#totalNumFingers").text("0");
+                // Scores - skip updates as just creating
+                $.updateTurnScores(game.players, CURRENT_BET, game.fingersToDrink, true);
 
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");

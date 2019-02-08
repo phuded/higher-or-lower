@@ -45,7 +45,7 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
         const url = $.getCopyUrl() + "/" + playerName;
 
         const playerCopyLinkButton = "<a class='copyLink' data-role='button' data-icon='copy' data-theme='c' data-iconpos='notext' data-clipboard-text='" + url + "' message='" + playerName  + " game joining link'></a>";
-        
+
         scoreTableBody += playerName + "</a></th><td class='copyLinkCell'>" + playerCopyLinkButton + "</td>";
 
         $(player.stats).each(function(idx, stat) {
