@@ -288,9 +288,6 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 }
 
 #scoreTable{
-	border:1px solid #6D7B8D;
-	border-bottom-left-radius: 0.6em;
-    border-top-left-radius: 0.6em;
 	font-weight: bold;
     text-shadow: none;
 	padding:1px;
