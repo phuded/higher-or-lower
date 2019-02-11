@@ -1,5 +1,15 @@
 $.prepareGame = function(){
 
+    // Enable copy JS
+    const clipboard = new ClipboardJS(".copyLink");
+
+    clipboard.on('success', function(e) {
+
+        const message = e.trigger.getAttribute("message");
+
+        $.notify(message + " copied to clipboard", "success");
+    });
+
 	//Get player list
     $.getPlayerList();
 
@@ -29,18 +39,87 @@ $.prepareGame = function(){
 	});
 
 	// Set Player from cookie
-
     const cookie = document.cookie;
+
+    let prevPlayer = null;
 
     if(cookie && (cookie.indexOf("user=") === 0)) {
 
-        const prevPlayer = cookie.split("=")[1];
+        prevPlayer = cookie.split("=")[1];
 
         $("#selectedPlayerName").val(prevPlayer);
     }
 
-    // Get game player list
-    $.getGamePlayerList();
+    let path = window.location.pathname;
+
+    path = path.split("/");
+
+    if(path.length != 4 && path.length != 3){
+
+        // Get game player list - after cookie player is set
+        $.getGamePlayerList();
+
+        // Show the page
+        $("body").show();
+
+        return;
+    }
+
+    const gameId = path[1];
+
+    let playerName = null;
+
+    if(path.length == 4) {
+
+        playerName = path[2].toLowerCase();
+    }
+    else if(prevPlayer){
+
+        playerName = prevPlayer;
+    }
+
+    if(!playerName){
+
+        $.handleInvalidParams();
+
+        return;
+    }
+
+    $.ajax({
+        type: "GET",
+        url: "/api/games/" + gameId,
+        success: function(game){
+
+            $.ajax({
+                type: "GET",
+                url: "/api/players/" + playerName,
+                success: function(player){
+
+                    GAME_ID = gameId;
+
+                    $("#selectedPlayerName").val(playerName);
+
+                    // Get game player list - after player is set
+                    $.getGamePlayerList();
+
+                    $("#selectedGameName").val($.generateGameName(game));
+
+                    $("#start").html($("#start").html().replace("Create New", "Join"));
+
+                    // Launch the game
+                    $.startGame();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+                    $.handleInvalidParams();
+                }
+            });
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+            $.handleInvalidParams();
+        }
+    });
 };
 
 $.websocketListen = function () {
@@ -183,7 +262,6 @@ $.startGame = function(){
 	//Hide any current card
 	$("#cardDisplay").removeClass('green red');
 
-
 	if(!GAME_ID || !$("#selectedGameName").val()){
 
         $("#gamePlayerList ul li input[type=checkbox]:checked").each(function () {
@@ -218,7 +296,7 @@ $.createNewGame = function(players){
 
     $.ajax({
         type: "POST",
-        url: "api/games",
+        url: "/api/games",
         data: {
             "name" : gameName,
             "players" : players,
@@ -260,13 +338,13 @@ $.createNewGame = function(players){
                 //Display card
                 $.displayCard(game.currentCard, game.cardsLeft);
 
-                //Reset bet counter
-                $("#totalNumFingers").text("0");
+                // Scores - skip updates as just creating
+                $.updateTurnScores(game.players, CURRENT_BET, game.fingersToDrink, true);
 
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
 
-                $("#gameTitle").text(game.name + " [Created by: " + game.owner + "]");
+                $("#gameTitle").text($.generateGameName(game));
 
             });
         },
@@ -281,7 +359,7 @@ $.joinGame = function(players){
 
     $.ajax({
         type: "PUT",
-        url: "api/games/" + GAME_ID + "/players",
+        url: "/api/games/" + GAME_ID + "/players",
         data: {
             "players" : players
         },
@@ -325,7 +403,7 @@ $.joinGame = function(players){
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
 
-                $("#gameTitle").text(game.name + " [Created by: " + game.owner + "]");
+                $("#gameTitle").text($.generateGameName(game));
 
             });
         },
@@ -338,6 +416,10 @@ $.joinGame = function(players){
 
 $.playTurn = function(higherGuess){
 
+    // Hide buttons
+    $("#gameButtons").hide();
+    $("#sliderBar").hide();
+
 	const findersSlider = $("#currentNumFingers");
 
 	//Get slider
@@ -345,7 +427,7 @@ $.playTurn = function(higherGuess){
 
 	$.ajax({
 		type: "PUT",
-		url: "api/games/" + GAME_ID,
+		url: "/api/games/" + GAME_ID,
 		data: {
 		    "bet": currentBet,
 			"guess" : higherGuess,
@@ -366,6 +448,7 @@ $.playTurn = function(higherGuess){
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
             //Nothing
+
 		}
 	});
 
@@ -400,10 +483,10 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 				sideChange: function(front) {
 					if (front) {
 						//Replace image
-						$(this).css('background', 'url(images/allcards.png) no-repeat ' + $.getCardCoords(card));
+						$(this).css('background', 'url(/images/allcards.png) no-repeat ' + $.getCardCoords(card));
 					} else {
 						//Make back of card the pack;
-						$(this).css('background', 'url(images/back.png)');
+						$(this).css('background', 'url(/images/back.png)');
 					}
 				},
 				complete:function(){
@@ -466,7 +549,7 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 	else{
 
 		//Showing card for first time
-		cardImg.css('background', "url(images/allcards.png) no-repeat " + $.getCardCoords(card));
+		cardImg.css('background', "url(/images/allcards.png) no-repeat " + $.getCardCoords(card));
 		cardImg.show();
 
         $.changePermissions(cardNum, cardsLeft);
@@ -547,7 +630,7 @@ $.leaveGame = function(){
 
     $.ajax({
         type: "PUT",
-        url: "api/games/" + GAME_ID + "/players",
+        url: "/api/games/" + GAME_ID + "/players",
         data: {
             "playersToRemove" : [LOGGED_IN_PLAYER]
         },
@@ -598,113 +681,31 @@ $.getCardCoords = function(card){
 
 	return x + "px " + y;
 };
- 
-
-$.preLoadImages = function(imageList, callback) {
-		var pic = [], i, total, loaded = 0;
-		if (typeof imageList != 'undefined') {
-			if ($.isArray(imageList)) {
-				total = imageList.length; // used later
-					for (i=0; i < total; i++) {
-						pic[i] = new Image();
-						pic[i].onload = function() {
-							loaded++; // should never hit a race condition due to JS's non-threaded nature
-							if (loaded == total) {
-								if ($.isFunction(callback)) {
-									callback();
-								}
-							}
-						};
-						pic[i].src = imageList[i];
-					}
-			}
-			else {
-				pic[0] = new Image();
-				pic[0].onload = function() {
-					if ($.isFunction(callback)) {
-						callback();
-					}
-				}
-				pic[0].src = imageList;
-			}
-		}
-		pic = undefined;
-};
-
-function playAsAnyoneChecked(){
-
-    const playAsAnyone = $("#playAsAnyone").attr('checked');
-
-    if(playAsAnyone === "checked"){
-
-        return true;
-    }
-
-    return false;
-};
-
-
-function removeCardChecked(){
-
-   const remove = $("#removeCards").attr('checked');
-
-   if(remove === "checked"){
-
-   		return true;
-   }
-
-   return false;
-};
-
-function useWholePackChecked(){
-
-    const wholePack = $("#wholePack").attr('checked');
-
-    if(wholePack === "checked"){
-
-        return true;
-    }
-
-    return false;
-};
-
-function betAnyCardChecked(){
-
-    const fullBetting = $("#fullBetting").attr('checked');
-
-    if(fullBetting === "checked"){
-
-        return true;
-    }
-
-    return false;
-};
-
 
 
 //Game variables
-var CURRENT_CARD;
+let CURRENT_CARD;
 
-var LOGGED_IN_PLAYER;
+let LOGGED_IN_PLAYER;
 
-var CURRENT_PLAYER;
+let CURRENT_PLAYER;
 
-var CURRENT_BET = 0;
+let CURRENT_BET = 0;
 
-var BET_ANY_CARD = false;
+let BET_ANY_CARD = false;
 
-var PLAY_AS_ANYONE = false;
+let PLAY_AS_ANYONE = false;
 
 //Drink type
-var DRINK_TYPE;
+let DRINK_TYPE;
 
-var GAME_ID;
+let GAME_ID;
 
 //Number of drinkers displayed in table
-var MAX_DRINKER_ROWS = 10;
+let MAX_DRINKER_ROWS = 10;
 
 //Images to preload
-var PRELOAD_IMAGES =['images/allcards.png', 'images/back.png'];
+const PRELOAD_IMAGES =['/images/allcards.png', '/images/back.png'];
 
 // Websocket connection
-var WS_CONNECTION;
+let WS_CONNECTION;

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 let playerSchema = new mongoose.Schema({
-  name: {type: String, required: true, unique: true},
+  name: {type: String, required: true, unique: true, lowercase: true},
   firstName: String,
   surname: String,
   maxFingers: { type: Number, default: 0 },

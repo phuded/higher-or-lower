@@ -5,31 +5,33 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable = no">
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-		<link rel="apple-touch-icon" href="images/iphone-iconS.png" />
-		<link rel="apple-touch-icon" sizes="72x72" href="images/iphone-iconM.png" />
-		<link rel="apple-touch-icon" sizes="114x114" href="images/iphone-iconL.png" />
-		<link rel="apple-touch-startup-image" href="images/startup.png">
+		<link rel="apple-touch-icon" href="/images/iphone-iconS.png" />
+		<link rel="apple-touch-icon" sizes="72x72" href="/images/iphone-iconM.png" />
+		<link rel="apple-touch-icon" sizes="114x114" href="/images/iphone-iconL.png" />
+		<link rel="apple-touch-startup-image" href="/images/startup.png">
 		<!--http://stackoverflow.com/questions/5767565/jquery-mobile-viewport-hide-safari-header-and-footer
 		http://developer.apple.com/library/safari/#documentation/appleapplications/reference/safariwebcontent/configuringwebapplications/configuringwebapplications.html-->
 
 		<title>Higher or Lower</title>
-		<link rel="stylesheet" href="lib/jquery.mobile-1.0.min.css" />
-		<link rel="stylesheet" type="text/css" href="css/main.css" />
+		<link rel="stylesheet" href="/lib/jquery.mobile-1.0.min.css" />
+		<link rel="stylesheet" type="text/css" href="/css/main.css" />
 
-		<script type="text/javascript" src="lib/jquery-1.6.4.min.js"></script>
+		<script type="text/javascript" src="/lib/jquery-1.6.4.min.js"></script>
 
-		<script type="text/javascript" src="lib/jquery-css-transform.js"></script>
-		<script type="text/javascript" src="lib/rotate3Di.js"></script>
-		<script type="text/javascript" src="lib/jquery.mobile-1.0.min.js"></script>
-		<script type="text/javascript" src="lib/notify.js"></script>
+		<script type="text/javascript" src="/lib/jquery-css-transform.js"></script>
+		<script type="text/javascript" src="/lib/rotate3Di.js"></script>
+		<script type="text/javascript" src="/lib/jquery.mobile-1.0.min.js"></script>
+		<script type="text/javascript" src="/lib/notify.js"></script>
+		<script type="text/javascript" src="/lib/clipboard.min.js"></script>
 
-		<script type="text/javascript" src="js/engine.js"></script>
-		<script type="text/javascript" src="js/form.js"></script>
-		<script type="text/javascript" src="js/scores.js"></script>
-		<script type="text/javascript" src="js/drinkers.js"></script>
-		<script type="text/javascript" src="js/trans.js"></script>
+		<script type="text/javascript" src="/js/engine.js"></script>
+		<script type="text/javascript" src="/js/form.js"></script>
+		<script type="text/javascript" src="/js/scores.js"></script>
+		<script type="text/javascript" src="/js/drinkers.js"></script>
+		<script type="text/javascript" src="/js/trans.js"></script>
+		<script type="text/javascript" src="/js/util.js"></script>
 
-		<link rel="icon" href="favicon.ico" type="image/x-icon" />
+		<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
 		<script type="text/javascript">
 			$(document).ready(function() {
@@ -37,7 +39,7 @@
 			});
 		</script>
 	</head>
-	<body>
+	<body style="display: none;">
 
 		<!-- GAME -->
 		<div data-role="page" id="game" data-theme="b" data-title="Higher or Lower">
@@ -59,7 +61,7 @@
 
 					<div class="gameForm">
 
-						<h3 style="margin-block-start: 0.4em;"><img src="images/beer.png" style="height: 33px; vertical-align: middle; margin-right: 8px;"/>New Game</h3>
+						<h3 style="margin-block-start: 0.4em;"><img src="/images/beer.png" style="height: 33px; vertical-align: middle; margin-right: 8px;"/>New Game</h3>
 
 
 						<p><b>Select your Player</b></p>
@@ -137,7 +139,7 @@
 
 						<a href="javascript:$.closeForm()" id="cancel" class="formButton" data-role="button" data-theme="c" data-inline="true" data-icon="back" style="display:none;">Back to game</a>
 
-						<span class="game_spinner" style="display:none;"><img src="images/loading.gif"/>&nbsp;Loading</span>
+						<span class="game_spinner" style="display:none;"><img src="/images/loading.gif"/>&nbsp;Loading</span>
 						<span id="errorMessage" style="display: none;">No Player Selected</span>
 
 					</div>
@@ -186,7 +188,7 @@
 					</div>
 
 					<!-- Download required icons -->
-					<img src="images/allcards.png" style="display:none;"/>
+					<img src="/images/allcards.png" style="display:none;"/>
 				</div>
 			</div>
 
@@ -215,7 +217,7 @@
 						<table>
 							<tr>
 								<td style="width: 50%;">
-									<a href="javascript:$.openForm()" data-role="button" data-transition="fade" data-icon="back" data-theme="a" id="newGame">Back</a>
+									<a href="javascript:$.openForm()" data-role="button" data-transition="fade" data-icon="back" data-theme="a" id="backToMenu">Back</a>
 									<a href="javascript:$.leaveGame()" data-role="button" data-transition="fade" data-icon="minus" data-theme="c" id="leaveGame">Quit Game</a>
 								</td>
 								<td style="border-left: 1px dotted #456F9A;">
@@ -244,8 +246,13 @@
 			</div>
 
 			<div id="scoreTab" class="tab-content" data-role="content">
-				<h4 id="gameTitle" style="margin-block-start: 0.4em;"></h4>
-				<table id="scoreTable" style="display: none;"></table>
+
+				<h4 id="gameTitle" style="margin-block-start: 0.4em; margin-block-end: 10px;"></h4>
+				<a id="copyLink" class="copyLink" style="display: none;" data-role="button" data-icon="copy" data-theme="c" message="Game link">Copy Game Link</a>
+
+				<div id="scoreTableDiv" style="display: none;">
+					<table id="scoreTable"></table>
+				</div>
 				<div id="scoreStats" style="display:none;">
 					<h3 id="stats_name" style="color:#155678;"></h3>
 					<p id="stats_guesses"><b>Guesses made: </b><span></span></p>
@@ -254,7 +261,7 @@
 					<p id="stats_percentage"><b>Percentage correct: </b><span></span></p>
 					<p id="stats_correctS"><b>Most correct guesses in a row: </b><span></span></p>
 					<p id="stats_incorrectS"><b>Most incorrect guesses in a row: </b><span></span></p>
-					<a href="javascript:$.showPlayerStats(0,false)" data-role="button" data-icon="back" data-theme="c">Back</a>
+					<a class="listButton wholeWidthButton" href="javascript:$.showPlayerStats(0,false)" data-role="button" data-icon="back" data-theme="c">Back</a>
 				</div>
 			</div>
 
@@ -284,7 +291,7 @@
 					</tr>
 				</table>
 				<div class="spinner">
-					<img src="images/loading.gif"/>
+					<img src="/images/loading.gif"/>
 				</div>
 				<div class="navButtons">
 						<a href="javascript:$.navDrinkersTab(-1)" data-role="button" data-icon="arrow-l" data-theme="c" data-inline="true">Prev</a>
@@ -301,14 +308,14 @@
 		<!-- Lee You must drink Form -->
 		<div data-role="dialog" id="drink">
 			<div data-role="header" data-theme="b" class="header">
-				<h1><img src="images/beer.png" style="height: 25px; vertical-align: middle;"/> Drink!</h1>
+				<h1><img src="/images/beer.png" style="height: 25px; vertical-align: middle;"/> Drink!</h1>
 			</div>
 			<div id="pictureContainer" data-role="content" data-theme="b">
-				<img id="pictureDisplay1" class="pictureDisplay ui-corner-all" src="images/drink1.jpg" title="You must drink!" style="display:none;"/>
-				<img id="pictureDisplay2" class="pictureDisplay ui-corner-all" src="images/drink2.jpg" title="You must drink!" style="display:none;"/>
-				<img id="pictureDisplay3" class="pictureDisplay ui-corner-all" src="images/drink3.jpg" title="You must drink!" style="display:none;"/>
-				<img id="pictureDisplay4" class="pictureDisplay ui-corner-all" src="images/drink4.jpg" title="You must drink!" style="display:none;"/>
-				<img id="pictureDisplay5" class="pictureDisplay ui-corner-all" src="images/drink5.jpg" title="You must drink!" style="display:none;"/>
+				<img id="pictureDisplay1" class="pictureDisplay ui-corner-all" src="/images/drink1.jpg" title="You must drink!" style="display:none;"/>
+				<img id="pictureDisplay2" class="pictureDisplay ui-corner-all" src="/images/drink2.jpg" title="You must drink!" style="display:none;"/>
+				<img id="pictureDisplay3" class="pictureDisplay ui-corner-all" src="/images/drink3.jpg" title="You must drink!" style="display:none;"/>
+				<img id="pictureDisplay4" class="pictureDisplay ui-corner-all" src="/images/drink4.jpg" title="You must drink!" style="display:none;"/>
+				<img id="pictureDisplay5" class="pictureDisplay ui-corner-all" src="/images/drink5.jpg" title="You must drink!" style="display:none;"/>
 				<div>
 					<span id="drinkMessage"></span>
 				</div>

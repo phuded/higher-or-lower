@@ -1,16 +1,19 @@
-var players;
+let players;
 
 //Update the score for a player
 $.updateScore = function(_players, fingersToDrink, skipHighScores){
 
 	players = _players;
 
-	var table = $("#scoreTable");
+    const tableDiv = $("#scoreTableDiv");
+    const table = $("#scoreTable");
+
+	let copyLink = $("#copyLink");
 
     //Create scoretab var
-    var scoreTableBody = "";
+    let scoreTableBody = "";
 
-    var playerToUpdate = null;
+    let playerToUpdate = null;
 
     //Set players in array
     $(players).each(function(pIdx, player){
@@ -24,32 +27,30 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
 		}
 
         //Add in header row
-        scoreTableBody += "<tr><th><a href='javascript:$.showPlayerStats(" + pIdx + ", true)' data-role='button' data-icon='grid' ";
+        scoreTableBody += "<tr><th><a href='javascript:$.showPlayerStats(" + pIdx + ", true)' data-role='button' data-icon='grid' class='playerName' ";
 
         if(playerName === LOGGED_IN_PLAYER){
 
-            scoreTableBody += "data-theme='b' style='text-decoration: underline;'>" + playerName + "</a></th>";
+            scoreTableBody += "data-theme='b' style='text-decoration: underline;'>";
         }
         else if(!player.active){
 
-            scoreTableBody += "data-theme='c' style='text-decoration: line-through;'>" + playerName + "</a></th>";
+            scoreTableBody += "data-theme='c' style='text-decoration: line-through;'>";
         }
         else{
 
-            scoreTableBody += "data-theme='c'>" + playerName + "</a></th>";
+            scoreTableBody += "data-theme='c'>";
         }
 
-        var numStats = player.stats.length;
+        const url = $.getCopyUrl() + "/" + playerName;
 
-        $(player.stats).slice(-8).each(function(idx, stat) {
+        const playerCopyLinkButton = "<a class='copyLink' data-role='button' data-icon='copy' data-theme='c' data-iconpos='notext' data-clipboard-text='" + url + "' message='" + playerName  + " game joining link'></a>";
 
-            var num = idx + 1;
+        scoreTableBody += playerName + "</a></th><td class='copyLinkCell'>" + playerCopyLinkButton + "</td>";
 
-        	if(numStats > 8 ){
+        $(player.stats).each(function(idx, stat) {
 
-                num += (numStats - 8);
-
-            }
+            let num = idx + 1;
 
             if (stat) {
                 scoreTableBody += "<td class='correct'>" + num + "</td>";
@@ -70,11 +71,15 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
     if(scoreTableBody && !scoresVisible){
 
         // Show score table
-        table.show();
+        tableDiv.show();
+        copyLink.show();
+        copyLink.attr("data-clipboard-text", $.getCopyUrl());
+
 	}
 	else{
 
-	    table.hide();
+        tableDiv.hide();
+        copyLink.hide();
 	}
 
 	if(!skipHighScores && playerToUpdate) {
@@ -86,32 +91,33 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
 // Reset the score table
 function resetScoreTable(){
 
-    var table = $("#scoreTable");
+    const tableDiv = $("#scoreTableDiv");
+    const table = $("#scoreTable");
 
     table.html("");
 
-    table.hide();
+    tableDiv.hide();
 }
 
 
 function sendHighScores(playerToUpdate, fingersToDrink){
 
-    var playerName = playerToUpdate.name;
+    const playerName = playerToUpdate.name;
 
     //Check for winning streak
-    var winningRun = 0;
+    let winningRun = 0;
 
     //Losing streak
-    var losingRun = 0;
+    let losingRun = 0;
 
-    var correctGuess = playerToUpdate.stats[playerToUpdate.stats.length - 1];
+    let correctGuess = playerToUpdate.stats[playerToUpdate.stats.length - 1];
 
     if(correctGuess){
 
         //Determine any winning streak
-        for(var i = playerToUpdate.stats.length; i--; i>=0){
+        for(let i = playerToUpdate.stats.length; i--; i>=0){
 
-            var prevTurn = playerToUpdate.stats[i];
+            const prevTurn = playerToUpdate.stats[i];
 
             if(prevTurn){
                 winningRun++;
@@ -124,9 +130,9 @@ function sendHighScores(playerToUpdate, fingersToDrink){
     else{
 
         //Determine any losing streak
-        for(i = playerToUpdate.stats.length; i--; i>=0){
+        for(let i = playerToUpdate.stats.length; i--; i>=0){
 
-            var prevTurn = playerToUpdate.stats[i];
+            const prevTurn = playerToUpdate.stats[i];
 
             if(!prevTurn){
                 losingRun++;
@@ -139,7 +145,7 @@ function sendHighScores(playerToUpdate, fingersToDrink){
 
     $.ajax({
         type: "PUT",
-        url: "api/players/" + playerName,
+        url: "/api/players/" + playerName,
         data: { "maxFingers": fingersToDrink,
 				"maxCorrect": winningRun,
 				"maxIncorrect": losingRun
@@ -161,32 +167,36 @@ function sendHighScores(playerToUpdate, fingersToDrink){
 /*Show player stats*/
 $.showPlayerStats = function(pNum, show){
 
+    const scoreTableDiv = $("#scoreTableDiv");
+    const scoreStats = $("#scoreStats");
+
     // Show table
 	if(!show){
-		$("#scoreStats").hide();
-		$("#scoreTable").fadeIn();
+        scoreStats.hide();
+        scoreTableDiv.fadeIn();
 
 		return;
 	}
 
 	//Hide scores
-	$("#scoreTable").hide();
+    scoreTableDiv.hide();
 
-	var player = players[pNum];
+	const player = players[pNum];
 
 	//Set player name
 	$("#stats_name").text(player.name);
 
-	var numGuesses = player.stats.length;
+    const numGuesses = player.stats.length;
 
-	var correct = 0;
-	var correctStreak = 0;
-	var bestCorrectStreak = 0;
+	let correct = 0;
+    let correctStreak = 0;
+    let bestCorrectStreak = 0;
 
-	var incorrectStreak = 0;
-	var bestIncorrectStreak = 0;
+    let incorrectStreak = 0;
+    let bestIncorrectStreak = 0;
 
-	$.each(player.stats ,function(i, correctGuess){
+	$.each(player.stats, function(i, correctGuess){
+
 		if(correctGuess){
 			//Increase number which are correct
 			correct++;
@@ -213,7 +223,7 @@ $.showPlayerStats = function(pNum, show){
 		}
 	});
 
-	var percentage = numGuesses>0?(correct*100/numGuesses).toFixed(1):"0.0";
+	const percentage = numGuesses>0?(correct*100/numGuesses).toFixed(1):"0.0";
 
 	$("#stats_guesses span").text(numGuesses);
 	$("#stats_correct span").text(correct);
@@ -221,6 +231,6 @@ $.showPlayerStats = function(pNum, show){
 	$("#stats_percentage span").text(percentage+'%');
 	$("#stats_correctS span").text(bestCorrectStreak);
 	$("#stats_incorrectS span").text(bestIncorrectStreak);
-	$("#scoreStats").fadeIn();
+    scoreStats.fadeIn();
 
 }

@@ -19,6 +19,9 @@ app.use(express.static(path.join(__dirname, '../public')))
 //register the route
 routes(app);
 
+app.use("/:gameId", express.static(path.join(__dirname, '../public')));
+app.use("/:gameId/:playerName", express.static(path.join(__dirname, '../public')));
+
 // Generic 404 response for invalid URLs
 app.use(function(req, res) {
     res.status(404).send({url: req.originalUrl + ' not found'})

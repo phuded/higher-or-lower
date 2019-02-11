@@ -7,7 +7,7 @@ $.getPlayerList = function(){
     //Get Player List
     $.ajax({
         type: "GET",
-        url: "api/players",
+        url: "/api/players",
         success: function(json){
 
             const players = json.players;
@@ -44,7 +44,7 @@ $.getGamePlayerList = function(){
     //Get Player List
     $.ajax({
         type: "GET",
-        url: "api/players",
+        url: "/api/players",
         success: function(json){
 
             const players = json.players;
@@ -83,7 +83,7 @@ $.getGameList = function(){
     //Get Player List
     $.ajax({
         type: "GET",
-        url: "api/games?order-by=_id&dir=asc",
+        url: "/api/games?order-by=_id&dir=asc",
         success: function(json){
 
             const games = json.games;
@@ -98,7 +98,7 @@ $.getGameList = function(){
 
                 const owner = game.owner;
 
-                const name = game.name + " [Created by: " + owner + "]";
+                const name = $.generateGameName(game);
 
                 const cardsLeft = game.cardsLeft;
 
@@ -221,7 +221,7 @@ $.deleteGame = function(id){
 
     $.ajax({
         type: "DELETE",
-        url: "api/games/" + id,
+        url: "/api/games/" + id,
         dataType: "json",
         success: function(json){
 
@@ -280,7 +280,7 @@ $.createNewPlayer = function(show, player){
     const pName = $("#pname");
 
     //Get username
-    const playerName = pName.val();
+    const playerName = pName.val().trim();
 
     const playerNameValid = (playerName.length > 0) && (playerName.indexOf("Player ") == -1);
 
@@ -299,13 +299,13 @@ $.createNewPlayer = function(show, player){
     //Add new player
     $.ajax({
         type: "POST",
-        url: "api/players",
+        url: "/api/players",
         data: {	name: playerName,
                 firstName: fName,
                 surname: surname
         },
         dataType: "json",
-        success: function(json){
+        success: function(player){
 
             //Added!
             //Refresh player list
@@ -316,7 +316,7 @@ $.createNewPlayer = function(show, player){
 
                 formContent.fadeIn('fast');
 
-                $("#selectedPlayerName").val(playerName);
+                $("#selectedPlayerName").val(player.name);
 
                 $.clearNewPlayerForm();
 
@@ -381,7 +381,6 @@ $.showGameList = function(show, selectedGameId, selectedGameName){
 
 };
 
-
 $.clearCurrentGame = function(){
 
    // Hide cancel
@@ -390,11 +389,11 @@ $.clearCurrentGame = function(){
    GAME_ID = null;
 
    $.clearGameSelection();
-}
+};
 
 $.clearGameSelection = function(){
 
     $("#selectedGameName").val("");
 
     $("#start").html($("#start").html().replace("Join", "Create New"));
-}
+};
