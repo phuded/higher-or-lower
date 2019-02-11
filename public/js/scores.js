@@ -93,10 +93,15 @@ function resetScoreTable(){
 
     const tableDiv = $("#scoreTableDiv");
     const table = $("#scoreTable");
+    const copyLink = $("#copyLink");
 
     table.html("");
 
     tableDiv.hide();
+    copyLink.hide();
+
+    //Remove game title
+    $("#gameTitle").html("<strong>No Game In Progress</strong>");
 }
 
 

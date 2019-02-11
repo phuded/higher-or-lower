@@ -1,16 +1,8 @@
-.main{
-    /*position:	absolute;
-    top:		50px;
-    bottom:		47px;
-    width: 		100%;*/
-    padding: 0;
-}
-
 .tab-content{
 	background:transparent;
 }
 
-.main .playerNameBar{
+.nameBar{
 	background-color: lightGray;
 	padding: 4px;
 	margin-top: 5px;
@@ -19,9 +11,11 @@
 	text-shadow: none;
 }
 
-.main *{
+#mainTab, #scoreTab{
 	text-align:center;
+	padding: 0;
 }
+
 /*Hide dialogue close button*/
 .header a{
 	display:none !important;
@@ -65,7 +59,7 @@
 }
 
 /* Betting buttons */
-#higher,#lower{
+#higher, #lower{
 	width: 160px;
 	font-size: 1.15em;
 }
@@ -266,10 +260,6 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 }
 
 /*Scores tab */
-#scoreTab{
-	padding: 10px;
-}
-
 #scoreTab #copyLink{
 	font-size: 0.8em;
 	width: 150px;

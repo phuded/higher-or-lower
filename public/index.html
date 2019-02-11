@@ -194,8 +194,8 @@
 
 			<div id="game-contents" style="display: none;">
 
-				<div class="main" class="tab-content" data-role="content">
-						<p class="playerNameBar">
+				<div id="mainTab" class="tab-content" data-role="content">
+						<p class="nameBar">
 							<span id="playerName"/>
 						</p>
 						<div id="sliderPanel">
@@ -247,7 +247,10 @@
 
 			<div id="scoreTab" class="tab-content" data-role="content">
 
-				<h4 id="gameTitle" style="margin-block-start: 0.4em; margin-block-end: 10px;"></h4>
+				<p class="nameBar">
+					<span id="gameTitle"><strong>No Game In Progress</strong></span>
+				</p>
+
 				<a id="copyLink" class="copyLink" style="display: none;" data-role="button" data-icon="copy" data-theme="c" message="Game link">Copy Game Link</a>
 
 				<div id="scoreTableDiv" style="display: none;">

@@ -9,9 +9,16 @@ $.getCopyUrl = function(){
     return url;
 };
 
-$.generateGameName = function(game){
+$.generateGameName = function(game, bold){
 
-    return game.name + " [Created by: " + game.owner + "]";
+    let gameName = game.name;
+
+    if(bold){
+
+        gameName = "<strong>" + gameName + "</strong>";
+    }
+
+    return gameName + " [Created by: " + game.owner + "]";
 };
 
 $.handleInvalidParams = function () {

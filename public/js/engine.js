@@ -344,7 +344,7 @@ $.createNewGame = function(players){
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
 
-                $("#gameTitle").text($.generateGameName(game));
+                $("#gameTitle").html($.generateGameName(game, true));
 
             });
         },
@@ -403,7 +403,7 @@ $.joinGame = function(players){
                 //Reset bet slider
                 $("#currentNumFingers").val(0).slider("refresh");
 
-                $("#gameTitle").text($.generateGameName(game));
+                $("#gameTitle").html($.generateGameName(game, true));
 
             });
         },
@@ -650,9 +650,6 @@ $.leaveGame = function(){
 
             // Reset scoretab
             resetScoreTable();
-
-            //Remove game title
-            $("#gameTitle").text("");
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
 
