@@ -22,6 +22,7 @@ let gameSchema = new mongoose.Schema({
     removeCards: Boolean,
     wholePack: Boolean,
     betAnyCard: Boolean,
+    limitBetsToOne: Boolean,
     currentCard: cardSchema,
     bet: {type: Number, default: 0},
     fingersToDrink: {type: Number, default: 0},

@@ -119,6 +119,11 @@ export async function updateGame(id, playerName, loggedInPlayerName, guess, bet,
         return res.status(400).send({error: "Cannot update game: " + id + ": Invalid current player: " + playerName});
     }
 
+    if(game.limitBetsToOne && bet > 1){
+
+        return res.status(400).send({error: "Cannot update game: " + id + ": Invalid bet: " + bet});
+    }
+
     // Make changes
     const gameUpdated = playTurn(game, guess, bet);
 

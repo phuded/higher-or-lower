@@ -75,7 +75,8 @@
 }
 
 #sliderBar div{
-	width: 65%;
+	width: 60%;
+	touch-action: none;
 }
 
 #sliderBar div a{

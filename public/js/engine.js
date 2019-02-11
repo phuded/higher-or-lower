@@ -192,11 +192,7 @@ $.websocketListen = function () {
 
         // Don't refresh if same
         if(differentPlayer || differentCard) {
-
             //Updated!
-
-            //Reset bet counter
-            $("#currentNumFingers").val(0).slider("refresh");
 
             let status = game.status;
 
@@ -216,6 +212,22 @@ $.websocketListen = function () {
 
     };
 };
+
+$.resetBetCounter = function(){
+
+    const slider = $("#currentNumFingers");
+
+    if(LIMIT_BETS_TO_ONE) {
+
+        slider.attr("max", 1);
+    }
+    else{
+
+        slider.attr("max", 4);
+    }
+
+    slider.val(0).slider("refresh");
+}
 
 
 $.startGame = function(){
@@ -305,7 +317,8 @@ $.createNewGame = function(players){
             "playAsAnyone": playAsAnyoneChecked(),
             "removeCards": removeCardChecked(),
             "wholePack": useWholePackChecked(),
-            "betAnyCard": betAnyCardChecked()
+            "betAnyCard": betAnyCardChecked(),
+            "limitBetsToOne": limitBetsToOneChecked()
         },
         dataType: "json",
         success: function(game){
@@ -319,6 +332,8 @@ $.createNewGame = function(players){
             BET_ANY_CARD = game.betAnyCard;
 
             PLAY_AS_ANYONE = game.playAsAnyone;
+
+            LIMIT_BETS_TO_ONE = game.limitBetsToOne;
 
             //Set the next player and change text
             $.setNextPlayer(game.currentPlayerName);
@@ -340,9 +355,6 @@ $.createNewGame = function(players){
 
                 // Scores - skip updates as just creating
                 $.updateTurnScores(game.players, CURRENT_BET, game.fingersToDrink, true);
-
-                //Reset bet slider
-                $("#currentNumFingers").val(0).slider("refresh");
 
                 $("#gameTitle").html($.generateGameName(game, true));
 
@@ -379,6 +391,8 @@ $.joinGame = function(players){
 
             DRINK_TYPE = game.drinkType;
 
+            LIMIT_BETS_TO_ONE = game.limitBetsToOne;
+
             //Set the next player and change text
             $.setNextPlayer(game.currentPlayerName);
 
@@ -400,9 +414,6 @@ $.joinGame = function(players){
                 // Scores - skip updates as just joining
                 $.updateTurnScores(game.players, CURRENT_BET, game.fingersToDrink, true);
 
-                //Reset bet slider
-                $("#currentNumFingers").val(0).slider("refresh");
-
                 $("#gameTitle").html($.generateGameName(game, true));
 
             });
@@ -420,10 +431,8 @@ $.playTurn = function(higherGuess){
     $("#gameButtons").hide();
     $("#sliderBar").hide();
 
-	const findersSlider = $("#currentNumFingers");
-
 	//Get slider
-    const currentBet = parseInt(findersSlider.val());
+    const currentBet = parseInt($("#currentNumFingers").val());
 
 	$.ajax({
 		type: "PUT",
@@ -436,11 +445,7 @@ $.playTurn = function(higherGuess){
 		},
 		dataType: "json",
 		success: function(game){
-
             //Updated!
-
-            //Reset bet counter
-            findersSlider.val(0).slider("refresh");
 
             //Display card
             $.displayCard(game.currentCard, game.cardsLeft, game.status, game.currentPlayerName, game.bet, game.fingersToDrink, game.players, true, false);
@@ -574,6 +579,9 @@ $.changePermissions = function(cardNum, cardsLeft){
     const buttons = $("#gameButtons");
     const slider = $("#sliderBar");
 
+    //Reset bet counter
+    $.resetBetCounter();
+
     if(cardsLeft === 0){
 
         buttons.hide();
@@ -695,6 +703,8 @@ let PLAY_AS_ANYONE = false;
 
 //Drink type
 let DRINK_TYPE;
+
+let LIMIT_BETS_TO_ONE = false;
 
 let GAME_ID;
 

@@ -23,7 +23,7 @@ export async function createGame(req, res) {
 
     let gameBody = req.body;
 
-    if(!gameBody.name || !gameBody.owner || !gameBody.players || !gameBody.drinkType || (gameBody.playAsAnyone == null) || (gameBody.removeCards == null) || (gameBody.wholePack == null) || (gameBody.betAnyCard == null)){
+    if(!gameBody.name || !gameBody.owner || !gameBody.players || !gameBody.drinkType || (gameBody.playAsAnyone == null) || (gameBody.removeCards == null) || (gameBody.wholePack == null) || (gameBody.betAnyCard == null) || (gameBody.limitBetsToOne == null)){
 
         return res.status(400).send({error: "Invalid parameters"});
     }

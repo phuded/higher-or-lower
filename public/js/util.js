@@ -113,3 +113,15 @@ function betAnyCardChecked(){
 
     return false;
 };
+
+function limitBetsToOneChecked(){
+
+    const limitBetsToOne = $("#limitBetsToOne").attr('checked');
+
+    if(limitBetsToOne === "checked"){
+
+        return true;
+    }
+
+    return false;
+};
