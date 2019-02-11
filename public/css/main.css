@@ -3,7 +3,7 @@
     top:		50px;
     bottom:		47px;
     width: 		100%;*/
-    padding: 5px;
+    padding: 0;
 }
 
 .tab-content{
@@ -11,18 +11,12 @@
 }
 
 .main .playerNameBar{
-	border:1px inset white;
-	background-color:lightGray;
-	padding:4px;
-	-moz-border-radius: 8px;
-	-webkit-border-radius: 8px;
-	border-radius: 8px;
-
-	/*To fit app screen perfectly*/
+	background-color: lightGray;
+	padding: 4px;
 	margin-top: 5px;
-	margin-bottom:10px;
-
-	font-size: 1.25em;
+	margin-bottom: 10px;
+	font-size: 16px;
+	text-shadow: none;
 }
 
 .main *{
@@ -38,10 +32,10 @@
 	margin-right: auto;
 	width: 220px;
 	height: 340px;
-	border: 3px inset white;
-	-moz-border-radius: 8px;
-	-webkit-border-radius: 8px;
-	border-radius: 8px;
+	border: 2px inset white;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
 }
 
 #cardDisplay.green{
