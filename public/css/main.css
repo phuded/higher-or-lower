@@ -270,14 +270,13 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 #scoreTableDiv{
 	position: relative;
 	overflow: auto;
+	margin-right: 5px
 }
 
 #scoreTable{
 	font-weight: bold;
     text-shadow: none;
 	padding:1px;
-
-	max-width: 95vw;
 	table-layout: fixed;
 }
 
