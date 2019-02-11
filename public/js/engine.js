@@ -702,7 +702,7 @@ let DRINK_TYPE;
 let GAME_ID;
 
 //Number of drinkers displayed in table
-let MAX_DRINKER_ROWS = 10;
+let MAX_DRINKER_ROWS = 15;
 
 //Images to preload
 const PRELOAD_IMAGES =['/images/allcards.png', '/images/back.png'];

@@ -1,29 +1,33 @@
-
-//Generate drinkers tab
+/**
+ * Load the table initially
+ * @param id
+ * @param orderBy
+ * @param dir
+ */
 $.generateDrinkersTab = function(id, orderBy, dir){
 	//Clear table
-	var table = $("#drinkersTab table");
+	const table = $("#drinkersTab table");
 	
 	//When clicking on headers - need to show loading again
 	$.showLoading(true);
 	
 	//Get state
-	var sDir = table.data("sort");
+	let sDir = table.data("sort");
 	
 	//If a column has ever been stored
 	if(sDir){
 		//if same column - flip sort order
 		if(sDir.col == id){
-			table.data("sort", sDir.dir == "asc" ? {col:id, dir:"desc"} : {col:id, dir:"asc"});
+			table.data("sort", sDir.dir == "asc" ? {col:id, dir: "desc"} : {col:id, dir: "asc"});
 		}
 		//else set default column order (per HTML)
 		else{
-			table.data("sort", {col:id, dir:dir});
+			table.data("sort", {col: id, dir: dir});
 		}
 	}
 	//else set default column order (per HTML)
 	else{
-		table.data("sort", {col:id ,dir:dir});
+		table.data("sort", {col: id, dir: dir});
 	}
 	
 	//Set var as actual direction
@@ -38,13 +42,17 @@ $.generateDrinkersTab = function(id, orderBy, dir){
 	//Reset/store start position
 	table.data("start", 0);
 	
-	$.generateDrinkersTable(table, orderBy, sDir, MAX_DRINKER_ROWS,0);
+	$.generateDrinkersTable(table, orderBy, sDir, MAX_DRINKER_ROWS, 0);
 };
 
+/**
+ * On clicking thr button (reload, next or prev)
+ * @param direction
+ */
 $.navDrinkersTab = function(direction){
 
-	var table = $("#drinkersTab table");
-	var start = table.data("start");
+	const table = $("#drinkersTab table");
+	let start = table.data("start");
 	
 	//Depending on direction, add to or remove from start
 	if(direction > 0){
@@ -57,8 +65,8 @@ $.navDrinkersTab = function(direction){
 	//Store start
 	table.data("start", start);
 	
-	var dir = table.data("sort").dir;
-	var col = table.data("sort").col;
+	const dir = table.data("sort").dir;
+    let col = table.data("sort").col;
 	
 	switch(col){
 		case 1: col = 'name'; break;
@@ -73,6 +81,14 @@ $.navDrinkersTab = function(direction){
 	$.generateDrinkersTable(table, col, dir, MAX_DRINKER_ROWS, start);
 };
 
+/**
+ * Render the table
+ * @param table
+ * @param orderBy
+ * @param sDir
+ * @param num
+ * @param start
+ */
 $.generateDrinkersTable = function(table, orderBy, sDir, num, start){
 
 	$.ajax({
@@ -91,20 +107,23 @@ $.generateDrinkersTable = function(table, orderBy, sDir, num, start){
 
 				table.append("<tr><td>" + (index + start + 1) + "</td><td>" + value.name + "</td><td>" + value.maxFingers + "</td><td>" + value.maxCorrect + "</td><td>" + value.maxIncorrect + "</td></tr>");
 			});
+
+            const prevButton = $(".navButtons>a:eq(0)");
+            const nextButton = $(".navButtons>a:eq(1)");
 			
 			//Show or hide nav buttons
 			if(start == 0){
-				$(".navButtons>a:eq(0)").hide();
+                prevButton.hide();
 			}
 			else{
-				$(".navButtons>a:eq(0)").show();
+                prevButton.show();
 			}
 			
 			if((start + num) >= table.data("max")){
-				$(".navButtons>a:eq(1)").hide();
+                nextButton.hide();
 			}
 			else{
-				$(".navButtons>a:eq(1)").show();
+                nextButton.show();
 			}
 			
 			//Show table
@@ -112,16 +131,20 @@ $.generateDrinkersTable = function(table, orderBy, sDir, num, start){
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
 			table.find("tr:gt(0)").remove();
-			$.showLoading(false,true);
+			$.showLoading(false, true);
 		}
 	});
 };
 
-//Show loading & nav buttons on drinkers tab
+/**
+ * Show loading & nav buttons on drinkers tab
+ * @param show
+ * @param error
+ */
 $.showLoading = function(show, error){
 
 	if(show){
-		var table = $("#drinkersTab table");
+		const table = $("#drinkersTab table");
 		table.find("tr:gt(0)").remove();
 		$(".navButtons").hide();
 		$(".reloadButton").hide();
