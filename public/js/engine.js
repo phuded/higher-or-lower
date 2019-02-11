@@ -71,7 +71,7 @@ $.prepareGame = function(){
 
     if(path.length == 4) {
 
-        playerName = path[2];
+        playerName = path[2].toLowerCase();
     }
     else if(prevPlayer){
 
