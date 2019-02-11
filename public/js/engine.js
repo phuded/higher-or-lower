@@ -354,7 +354,7 @@ $.createNewGame = function(players){
                 $.displayCard(game.currentCard, game.cardsLeft);
 
                 // Scores - skip updates as just creating
-                $.updateTurnScores(game.players, CURRENT_BET, game.fingersToDrink, true);
+                $.updateTurnScores(game.players, CURRENT_BET, game.fingersToDrink, game.cardsLeft, true);
 
                 $("#gameTitle").html($.generateGameName(game, true));
 
@@ -412,7 +412,7 @@ $.joinGame = function(players){
                 $.displayCard(game.currentCard, game.cardsLeft);
 
                 // Scores - skip updates as just joining
-                $.updateTurnScores(game.players, CURRENT_BET, game.fingersToDrink, true);
+                $.updateTurnScores(game.players, CURRENT_BET, game.fingersToDrink, game.cardsLeft, true);
 
                 $("#gameTitle").html($.generateGameName(game, true));
 
@@ -541,7 +541,7 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 					}
 
 					// Scores
-                    $.updateTurnScores(players, bet, fingersToDrink, false);
+                    $.updateTurnScores(players, bet, fingersToDrink, cardsLeft, false);
 
 					//Set the next player and change text
 					$.setNextPlayer(nextPlayer);
@@ -615,10 +615,17 @@ $.changePermissions = function(cardNum, cardsLeft){
 }
 
 //Update DB, scores and current number of fingers
-$.updateTurnScores = function(players, bet, fingersToDrink, skipHighScores){
+$.updateTurnScores = function(players, bet, fingersToDrink, cardsLeft, skipHighScores){
 
 	//Update fingers	
 	$("#totalNumFingers").text(bet);
+
+    // Styling for game title
+	if(cardsLeft == 0){
+
+	    $("#gameTitle strong").attr("style", "text-decoration: line-through;");
+
+	}
 	
 	//Update the score on score tab
 	$.updateScore(players, fingersToDrink, skipHighScores);

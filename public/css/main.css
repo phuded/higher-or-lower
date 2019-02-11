@@ -338,6 +338,11 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 	left:4px;
 }
 
+#scoreStats{
+    text-align: left;
+    padding: 8px;
+}
+
 /*Drinkers tab */
 
 #drinkersTab{
