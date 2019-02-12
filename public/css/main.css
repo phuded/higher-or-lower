@@ -60,7 +60,7 @@
 
 /* Betting buttons */
 #higher, #lower{
-	width: 160px;
+	width: 48vw;
 	font-size: 1.15em;
 }
 
@@ -94,6 +94,7 @@
 	height: 60px;
 	position: absolute;
 	bottom: 0;
+	color: lightgray;
 }
 
 #footer table{
