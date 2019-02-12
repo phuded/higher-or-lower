@@ -139,13 +139,13 @@ div#pictureContainer >div{
 
 .pictureDisplay{
 	margin: 20px auto 5px;
-	width: 174px;
-	height: 174px;
+	width: 215px;
+	height: 215px;
 }
 
 span#drinkMessage{
-	font-size:1.1em;
-	color:red;
+	font-size: 20px;
+	color: #e23333;
 }
 
 #fingers{

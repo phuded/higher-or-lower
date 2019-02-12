@@ -17,8 +17,8 @@ $.prepareGame = function(){
 
 		const fingers = $("#numFingers");
 
-		fingers.animate({fontSize: '3.0em'}, 400);
-		fingers.animate({fontSize: '1.0em'}, 300);
+		fingers.animate({fontSize: 48}, 400);
+		fingers.animate({fontSize: 20}, 300);
 		
 	});
 	
