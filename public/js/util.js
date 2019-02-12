@@ -69,59 +69,29 @@ $.preLoadImages = function(imageList, callback) {
 
 function playAsAnyoneChecked(){
 
-    const playAsAnyone = $("#playAsAnyone").attr('checked');
+    return $("#playAsAnyone").is(':checked');
 
-    if(playAsAnyone === "checked"){
-
-        return true;
-    }
-
-    return false;
 };
 function removeCardChecked(){
 
-    const remove = $("#removeCards").attr('checked');
+    return $("#removeCards").is(':checked');
 
-    if(remove === "checked"){
-
-        return true;
-    }
-
-    return false;
 };
 
 function useWholePackChecked(){
 
-    const wholePack = $("#wholePack").attr('checked');
+    return $("#wholePack").is(':checked');
 
-    if(wholePack === "checked"){
-
-        return true;
-    }
-
-    return false;
 };
 
 function betAnyCardChecked(){
 
-    const fullBetting = $("#fullBetting").attr('checked');
+    return $("#fullBetting").is(':checked');
 
-    if(fullBetting === "checked"){
-
-        return true;
-    }
-
-    return false;
 };
 
 function limitBetsToOneChecked(){
 
-    const limitBetsToOne = $("#limitBetsToOne").attr('checked');
+    return $("#limitBetsToOne").is(':checked');
 
-    if(limitBetsToOne === "checked"){
-
-        return true;
-    }
-
-    return false;
 };
