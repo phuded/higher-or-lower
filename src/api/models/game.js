@@ -1,9 +1,18 @@
 import mongoose from "mongoose";
 
+let gamePlayerStatsSchema = new mongoose.Schema({
+    guesses: [Boolean],
+    numCorrectGuesses: {type: Number, default: 0},
+    numIncorrectGuesses: {type: Number, default: 0},
+    percentageCorrect: {type: String, default: "0.0"},
+    correctGuessStreak: {type: Number, default: 0},
+    incorrectGuessStreak: {type: Number, default: 0}
+});
+
 let gamePlayerSchema = new mongoose.Schema({
     name: String,
     active: {type: Boolean, default: true},
-    stats: [Boolean]
+    stats: {type: gamePlayerStatsSchema, default: gamePlayerStatsSchema}
 });
 
 let cardSchema = new mongoose.Schema({
@@ -34,7 +43,9 @@ gameSchema.methods.toJSON = function() {
     const obj = this.toObject();
     delete obj.cards;
     return obj;
-}
+};
+
+export const GamePlayerStats = mongoose.model("GamePlayerStats", gamePlayerStatsSchema);
 
 export const GamePlayer = mongoose.model("GamePlayer", gamePlayerSchema);
 

@@ -141,8 +141,6 @@ export async function updateGame(id, playerName, loggedInPlayerName, guess, bet,
     return res.send(game);
 };
 
-
-
 export async function updateGamePlayers(id, newPlayers, playersToRemove, res) {
 
     let game;
@@ -316,7 +314,61 @@ function playTurn(game, guess, bet){
 
 function setStat(currentPlayerName, players, status){
 
-    players.find(player => (player.name == currentPlayerName)).stats.push(status);
+    const gamePlayerStats = players.find(player => (player.name == currentPlayerName)).stats;
+
+    const guesses = gamePlayerStats.guesses;
+
+    guesses.push(status);
+
+    const numGuesses = guesses.length;
+
+    let correct = 0;
+    let correctStreak = 0;
+    let bestCorrectStreak = 0;
+
+    let incorrectStreak = 0;
+    let bestIncorrectStreak = 0;
+
+    guesses.forEach(function(correctGuess) {
+
+        if(correctGuess){
+
+            //Increase number which are correct
+            correct++;
+
+            //Increase correct streak
+            correctStreak++;
+
+            //If current correct streak is better than any previous best - store
+            if(correctStreak > bestCorrectStreak){
+                bestCorrectStreak = correctStreak;
+            }
+
+            //Terminate any incorrect streaks
+            incorrectStreak = 0;
+        }
+        else{
+            //Increase incorrect streak
+            incorrectStreak++;
+
+            //If current incorrect streak is better than any previous best - store
+            if(incorrectStreak > bestIncorrectStreak){
+                bestIncorrectStreak = incorrectStreak;
+            }
+
+            //Terminate any correct streaks
+            correctStreak = 0;
+        }
+    });
+
+    const percentage = numGuesses > 0 ? (correct * 100/numGuesses).toFixed(1) : 0.0;
+
+    gamePlayerStats.numCorrectGuesses = correct;
+    gamePlayerStats.numIncorrectGuesses = numGuesses - correct;
+    gamePlayerStats.percentageCorrect = percentage;
+    gamePlayerStats.correctGuessStreak = bestCorrectStreak;
+    gamePlayerStats.incorrectGuessStreak = bestIncorrectStreak;
+
 }
 
 

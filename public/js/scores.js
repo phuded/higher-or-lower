@@ -48,7 +48,7 @@ $.updateScore = function(_players, fingers, skipHighScores){
 
         scoreTableBody += playerName + "</a></th><td class='copyLinkCell'>" + playerCopyLinkButton + "</td>";
 
-        $(player.stats).each(function(idx, stat) {
+        $(player.stats.guesses).each(function(idx, stat) {
 
             let num = idx + 1;
 
@@ -115,14 +115,14 @@ function sendHighScores(playerToUpdate, fingers){
     //Losing streak
     let losingRun = 0;
 
-    let correctGuess = playerToUpdate.stats[playerToUpdate.stats.length - 1];
+    let correctGuess = playerToUpdate.stats.guesses[playerToUpdate.stats.guesses.length - 1];
 
     if(correctGuess){
 
         //Determine any winning streak
-        for(let i = playerToUpdate.stats.length; i--; i>=0){
+        for(let i = playerToUpdate.stats.guesses.length; i--; i>=0){
 
-            const prevTurn = playerToUpdate.stats[i];
+            const prevTurn = playerToUpdate.stats.guesses[i];
 
             if(prevTurn){
                 winningRun++;
@@ -135,9 +135,9 @@ function sendHighScores(playerToUpdate, fingers){
     else{
 
         //Determine any losing streak
-        for(let i = playerToUpdate.stats.length; i--; i>=0){
+        for(let i = playerToUpdate.stats.guesses.length; i--; i>=0){
 
-            const prevTurn = playerToUpdate.stats[i];
+            const prevTurn = playerToUpdate.stats.guesses[i];
 
             if(!prevTurn){
                 losingRun++;
@@ -189,51 +189,14 @@ $.showPlayerStats = function(pNum, show){
 	//Set player name
 	$("#stats_name").text(player.name);
 
-    const numGuesses = player.stats.length;
+	const playerStats = player.stats;
 
-	let correct = 0;
-    let correctStreak = 0;
-    let bestCorrectStreak = 0;
-
-    let incorrectStreak = 0;
-    let bestIncorrectStreak = 0;
-
-	$.each(player.stats, function(i, correctGuess){
-
-		if(correctGuess){
-			//Increase number which are correct
-			correct++;
-			//Increase correct streak
-			correctStreak++;
-
-			//If current correct streak is better than any previous best - store
-			if(correctStreak>bestCorrectStreak){
-				bestCorrectStreak = correctStreak;
-			}
-			//Terminate any incorrect streaks
-			incorrectStreak = 0;
-		}
-		else{
-			//Increase incorrect streak
-			incorrectStreak++;
-
-			//If current incorrect streak is better than any previous best - store
-			if(incorrectStreak>bestIncorrectStreak){
-				bestIncorrectStreak = incorrectStreak;
-			}
-			//Terminate any correct streaks
-			correctStreak = 0;
-		}
-	});
-
-	const percentage = numGuesses>0?(correct*100/numGuesses).toFixed(1):"0.0";
-
-	$("#stats_guesses span").text(numGuesses);
-	$("#stats_correct span").text(correct);
-	$("#stats_incorrect span").text(numGuesses - correct);
-	$("#stats_percentage span").text(percentage+'%');
-	$("#stats_correctS span").text(bestCorrectStreak);
-	$("#stats_incorrectS span").text(bestIncorrectStreak);
+	$("#stats_guesses span").text(playerStats.guesses.length);
+	$("#stats_correct span").text(playerStats.numCorrectGuesses);
+	$("#stats_incorrect span").text(playerStats.numIncorrectGuesses);
+	$("#stats_percentage span").text(playerStats.percentageCorrect+'%');
+	$("#stats_correctS span").text(playerStats.correctGuessStreak);
+	$("#stats_incorrectS span").text(playerStats.incorrectGuessStreak);
     scoreStats.fadeIn();
 
 };
