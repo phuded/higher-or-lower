@@ -242,6 +242,11 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
     margin-top: 1px;
 }
 
+/*Game Player List*/
+#gamePlayerList li{
+	background-image: linear-gradient(#fdfdfd,#eee);
+}
+
 /*Player List*/
 #playerList li{
 	font-size:0.9em;
