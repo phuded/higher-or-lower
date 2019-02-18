@@ -543,7 +543,7 @@ $.displayCard = function(game, status, showPopup, showNotification){
 	}
 
     // Scores
-    $.updateTurnScores(game.players, game.bet, game.cardsLeft);
+    $.updateTurnScores(game);
 
     //Finally make the current card the next one
     CURRENT_CARD = game.currentCard;
@@ -597,20 +597,20 @@ $.changePermissions = function(cardNum, cardsLeft){
 }
 
 //Update DB, scores and current number of fingers
-$.updateTurnScores = function(players, bet, cardsLeft){
+$.updateTurnScores = function(game){
 
-	//Update fingers	
-	$("#totalNumFingers").text(bet);
+	//Update fingers
+	$("#totalNumFingers").text(game.bet);
 
     // Styling for game title
-	if(cardsLeft == 0){
+	if(game.cardsLeft == 0){
 
 	    $("#gameTitle strong").attr("style", "text-decoration: line-through;");
-	    
+
 	}
 	
 	//Update the score on score tab
-	$.updateScore(players);
+	$.updateScore(game.players, game.winners);
 };
 
 
@@ -624,7 +624,7 @@ $.setNextPlayer = function(game){
     // Game over!
     if(game.cardsLeft === 0 && game.winners){
 
-        text = "<strong>GAME OVER:</strong> "  + game.winners.join(" ,") + ((game.winners.length > 1)? " win!": " wins!");
+        text = "<strong>GAME OVER:</strong> "  + game.winners.join(", ") + ((game.winners.length > 1)? " win!": " wins!");
     }
 
 	//change text

@@ -1,7 +1,7 @@
 let players;
 
 //Update the score for a player
-$.updateScore = function(_players){
+$.updateScore = function(_players, winners){
 
 	players = _players;
 
@@ -18,20 +18,28 @@ $.updateScore = function(_players){
 
         const playerName = player.name;
 
+        let icon = "grid";
+
+        const isWinner = winners.indexOf(playerName) > -1;
+
+        if(isWinner){
+            icon = "star"
+        }
+
         //Add in header row
-        scoreTableBody += "<tr><th><a href='javascript:$.showPlayerStats(" + pIdx + ", true)' data-role='button' data-icon='grid' class='playerName' ";
+        scoreTableBody += "<tr><th><a href='javascript:$.showPlayerStats(" + pIdx + ", true)' data-role='button' class='playerName' ";
 
         if(playerName === LOGGED_IN_PLAYER){
 
-            scoreTableBody += "data-theme='b' style='text-decoration: underline;'>";
+            scoreTableBody += "data-icon='" + icon + "' data-theme='b' style='text-decoration: underline;'>";
         }
         else if(!player.active){
 
-            scoreTableBody += "data-theme='c' style='text-decoration: line-through;'>";
+            scoreTableBody += "data-icon='" + icon + "' data-theme='c' style='text-decoration: line-through;'>";
         }
         else{
 
-            scoreTableBody += "data-theme='c'>";
+            scoreTableBody += "data-icon='" + icon + "' data-theme='c'>";
         }
 
         const url = $.getCopyUrl() + "/" + playerName;
