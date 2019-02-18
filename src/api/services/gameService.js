@@ -102,7 +102,7 @@ export async function createGame(gameBody, res) {
 };
 
 export async function updateGame(id, playerName, loggedInPlayerName, guess, bet, res) {
-    
+
     let game;
 
     try {
