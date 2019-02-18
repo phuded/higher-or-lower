@@ -1,4 +1,4 @@
-// TODO: create player on fly? make all players lowercase and enforce lowercase
+// TODO: create player on fly?
 $.getCopyUrl = function(){
 
     let url = window.location.href.split("/");
@@ -60,7 +60,7 @@ $.preLoadImages = function(imageList, callback) {
                 if ($.isFunction(callback)) {
                     callback();
                 }
-            }
+            };
             pic[0].src = imageList;
         }
     }

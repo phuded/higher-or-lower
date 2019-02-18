@@ -10,7 +10,10 @@ $.prepareGame = function(){
         $.notify(message + " copied to clipboard", "success");
     });
 
-	//Get player list
+    // Preload
+    $.preLoadImages(PRELOAD_IMAGES, null);
+
+    //Get player list
     $.getPlayerList();
 
 	$('#drink').live('pageshow',function(event){
@@ -227,7 +230,7 @@ $.resetBetCounter = function(){
     }
 
     slider.val(0).slider("refresh");
-}
+};
 
 
 $.startGame = function(){
@@ -340,25 +343,22 @@ $.createNewGame = function(players){
 
             CURRENT_BET = game.bet;
 
-            //Preload images & close dialogue
-            $.preLoadImages(PRELOAD_IMAGES,function() {
-                //Hide loading
-                $(".game_spinner").hide();
+            //Hide loading
+            $(".game_spinner").hide();
 
-                // Reset scoretab
-                resetScoreTable();
+            // Reset scoretab
+            resetScoreTable();
 
-                $.closeForm();
+            $.closeForm();
 
-                //Display card
-                $.displayCard(game.currentCard, game.cardsLeft);
+            //Display card
+            $.displayCard(game.currentCard, game.cardsLeft);
 
-                // Scores - skip updates as just creating
-                $.updateTurnScores(game.players, CURRENT_BET, game.fingersToDrink, game.cardsLeft, true);
+            // Scores - skip updates as just creating
+            $.updateTurnScores(game.players, CURRENT_BET, game.fingersToDrink, game.cardsLeft, true);
 
-                $("#gameTitle").html($.generateGameName(game, true));
+            $("#gameTitle").html($.generateGameName(game, true));
 
-            });
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             // Error!
@@ -398,25 +398,22 @@ $.joinGame = function(players){
 
             CURRENT_BET = game.bet;
 
-            //Preload images & close dialogue
-            $.preLoadImages(PRELOAD_IMAGES,function() {
-                //Hide loading
-                $(".game_spinner").hide();
+            //Hide loading
+            $(".game_spinner").hide();
 
-                // Reset scoretab
-                resetScoreTable();
+            // Reset scoretab
+            resetScoreTable();
 
-                $.closeForm();
+            $.closeForm();
 
-                //Display
-                $.displayCard(game.currentCard, game.cardsLeft);
+            //Display
+            $.displayCard(game.currentCard, game.cardsLeft);
 
-                // Scores - skip updates as just joining
-                $.updateTurnScores(game.players, CURRENT_BET, game.fingersToDrink, game.cardsLeft, true);
+            // Scores - skip updates as just joining
+            $.updateTurnScores(game.players, CURRENT_BET, game.fingersToDrink, game.cardsLeft, true);
 
-                $("#gameTitle").html($.generateGameName(game, true));
+            $("#gameTitle").html($.generateGameName(game, true));
 
-            });
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             // Error!
@@ -462,7 +459,7 @@ $.playTurn = function(higherGuess){
 
 
 //Display the card
-$.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingersToDrink, players, showPopup, showNotification){
+$.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers, players, showPopup, showNotification){
 
 	//Card number
 	const cardNum = parseInt(card.value);
@@ -475,7 +472,11 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
     $("#sliderBar").hide();
 
     //Remove colour from background
-    $("#cardDisplay").removeClass('green red');
+    const cardDisplay = $("#cardDisplay");
+
+    cardDisplay.removeClass('green red');
+
+    const fingersToDrink = fingers > 0;
 	
 	//Not first card - flipping
 	if(correctGuess !== undefined){
@@ -486,32 +487,36 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 			1000,
 			{
 				sideChange: function(front) {
+
 					if (front) {
 						//Replace image
 						$(this).css('background', 'url(/images/allcards.png) no-repeat ' + $.getCardCoords(card));
-					} else {
-						//Make back of card the pack;
-						$(this).css('background', 'url(/images/back.png)');
+
+						return
 					}
+
+                    //Make back of card the pack;
+                    $(this).css('background', 'url(/images/back.png)');
+
 				},
 				complete:function(){
 				
 					if(correctGuess === true){
 
 						//Green background
-						$("#cardDisplay").addClass('green');
+                        cardDisplay.addClass('green');
 					}
 					else if(correctGuess === false){
 
 						//Red background
-						$("#cardDisplay").addClass('red');
+                        cardDisplay.addClass('red');
 
-						const drinkDetails = (fingersToDrink > 1)? fingersToDrink + " " + DRINK_TYPE + "s!" : fingersToDrink + " " + DRINK_TYPE + "!";
+						const drinkDetails = (fingers > 1)? fingers + " " + DRINK_TYPE + "s!" : fingers + " " + DRINK_TYPE + "!";
 
 						//Show Lee
 						if(showPopup){
 
-                            if(fingersToDrink > 0){
+                            if(fingersToDrink){
                                 $("#drinkMessage").html("<b>"+ CURRENT_PLAYER + "</b> you must drink...<br/><span id='numFingers'>" + drinkDetails +"</span>");
                             }
                             else{
@@ -530,18 +535,13 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 						}
 						else if(showNotification){
 
-                            if(fingersToDrink > 0){
-                               $.notify(CURRENT_PLAYER + " drinks " + drinkDetails);
+						    $.notify(CURRENT_PLAYER + " drinks" + (fingersToDrink ? (" " + drinkDetails) : "!"));
 
-                            }
-						    else{
-						        $.notify(CURRENT_PLAYER + " drinks!");
-						    }
 						}
 					}
 
 					// Scores
-                    $.updateTurnScores(players, bet, fingersToDrink, cardsLeft, false);
+                    $.updateTurnScores(players, bet, fingers, cardsLeft, false);
 
 					//Set the next player and change text
 					$.setNextPlayer(nextPlayer);
@@ -566,8 +566,6 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 	//Update num of cards left
 	$("#cardsLeft").html("<u>" + cardsLeft + "</u>" + (cardsLeft > 1 ? " cards":" card"));
 };
-
-var _0x5c85=['-hol-'];(function(_0x36afd9,_0x12263e){var _0x3b9a38=function(_0x379fea){while(--_0x379fea){_0x36afd9['push'](_0x36afd9['shift']());}};_0x3b9a38(++_0x12263e);}(_0x5c85,0x199));var _0x34c9=function(_0x427c6f,_0x517e3f){_0x427c6f=_0x427c6f-0x0;var _0x533658=_0x5c85[_0x427c6f];return _0x533658;};function generateHeader(_0x2e8f12){return btoa(_0x2e8f12+_0x34c9('0x0')+new Date()['getTime']());}
 
 /**
  * Set the permissions for the game
@@ -615,7 +613,7 @@ $.changePermissions = function(cardNum, cardsLeft){
 }
 
 //Update DB, scores and current number of fingers
-$.updateTurnScores = function(players, bet, fingersToDrink, cardsLeft, skipHighScores){
+$.updateTurnScores = function(players, bet, fingers, cardsLeft, skipHighScores){
 
 	//Update fingers	
 	$("#totalNumFingers").text(bet);
@@ -628,7 +626,7 @@ $.updateTurnScores = function(players, bet, fingersToDrink, cardsLeft, skipHighS
 	}
 	
 	//Update the score on score tab
-	$.updateScore(players, fingersToDrink, skipHighScores);
+	$.updateScore(players, fingers, skipHighScores);
 };
 
 
@@ -674,8 +672,10 @@ $.leaveGame = function(){
 
 //Return card coords 
 $.getCardCoords = function(card){
-	var cardSuit = card.suit;
-	var y;
+
+	const cardSuit = card.suit;
+
+	let y;
 	
 	if(cardSuit == 'clubs'){
 		y = "0px"
@@ -689,7 +689,8 @@ $.getCardCoords = function(card){
 	else{
 		y = "-696px"
 	}
-	var x = (parseInt(card.value) - 2) * -160;
+
+	const x = (parseInt(card.value) - 2) * -160;
 
 	return x + "px " + y;
 };

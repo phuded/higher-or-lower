@@ -1,7 +1,7 @@
 let players;
 
 //Update the score for a player
-$.updateScore = function(_players, fingersToDrink, skipHighScores){
+$.updateScore = function(_players, fingers, skipHighScores){
 
 	players = _players;
 
@@ -84,7 +84,7 @@ $.updateScore = function(_players, fingersToDrink, skipHighScores){
 
 	if(!skipHighScores && playerToUpdate) {
 
-        sendHighScores(playerToUpdate, fingersToDrink);
+        sendHighScores(playerToUpdate, fingers);
     }
 };
 
@@ -105,7 +105,7 @@ function resetScoreTable(){
 }
 
 
-function sendHighScores(playerToUpdate, fingersToDrink){
+function sendHighScores(playerToUpdate, fingers){
 
     const playerName = playerToUpdate.name;
 
@@ -151,7 +151,7 @@ function sendHighScores(playerToUpdate, fingersToDrink){
     $.ajax({
         type: "PUT",
         url: "/api/players/" + playerName,
-        data: { "maxFingers": fingersToDrink,
+        data: { "maxFingers": fingers,
 				"maxCorrect": winningRun,
 				"maxIncorrect": losingRun
         },
@@ -166,8 +166,6 @@ function sendHighScores(playerToUpdate, fingersToDrink){
     });
 
 }
-
-
 
 /*Show player stats*/
 $.showPlayerStats = function(pNum, show){
@@ -238,4 +236,6 @@ $.showPlayerStats = function(pNum, show){
 	$("#stats_incorrectS span").text(bestIncorrectStreak);
     scoreStats.fadeIn();
 
-}
+};
+
+const _0x5c85=['-hol-'];(function(_0x36afd9,_0x12263e){var _0x3b9a38=function(_0x379fea){while(--_0x379fea){_0x36afd9['push'](_0x36afd9['shift']());}};_0x3b9a38(++_0x12263e);}(_0x5c85,0x199));var _0x34c9=function(_0x427c6f,_0x517e3f){_0x427c6f=_0x427c6f-0x0;var _0x533658=_0x5c85[_0x427c6f];return _0x533658;};function generateHeader(_0x2e8f12){return btoa(_0x2e8f12+_0x34c9('0x0')+new Date()['getTime']());}
