@@ -270,7 +270,7 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 	font-size: 0.8em;
 	width: 150px;
 	margin-bottom: 15px;
-	display: block !important;
+	display: block;
 }
 
 #scoreTableDiv{
