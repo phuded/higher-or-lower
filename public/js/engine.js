@@ -206,7 +206,7 @@ $.websocketListen = function () {
             }
 
             //Display card
-            $.displayCard(game.players, game.currentCard, game.cardsLeft, game.currentPlayerName, status, game.bet, game.fingersToDrink, false, true);
+            $.displayCard(game, status, false, true);
 
         }
 
@@ -345,11 +345,10 @@ $.createNewGame = function(players){
 
             $.closeForm();
 
-            //Display card
-            $.displayCard(game.players, game.currentCard, game.cardsLeft, game.currentPlayerName);
-
             $("#gameTitle").html($.generateGameName(game, true));
 
+            //Display card
+            $.displayCard(game);
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             // Error!
@@ -394,10 +393,10 @@ $.joinGame = function(players){
 
             $.closeForm();
 
-            //Display
-            $.displayCard(game.players, game.currentCard, game.cardsLeft, game.currentPlayerName);
-
             $("#gameTitle").html($.generateGameName(game, true));
+
+            //Display
+            $.displayCard(game);
 
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -430,7 +429,7 @@ $.playTurn = function(higherGuess){
             //Updated!
 
             //Display card
-            $.displayCard(game.players, game.currentCard, game.cardsLeft, game.currentPlayerName, game.status, game.bet, game.fingersToDrink, true, false);
+            $.displayCard(game, game.status, true, false);
 
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -441,13 +440,11 @@ $.playTurn = function(higherGuess){
 
 };
 
-
-
 //Display the card
-$.displayCard = function(players, card, cardsLeft, nextPlayer, correctGuess, bet, fingers, showPopup, showNotification){
+$.displayCard = function(game, status, showPopup, showNotification){
 
 	//Card number
-	const cardNum = parseInt(card.value);
+	const cardNum = parseInt(game.currentCard.value);
 
 	//Card image
     const cardImg = $("#card");
@@ -461,10 +458,10 @@ $.displayCard = function(players, card, cardsLeft, nextPlayer, correctGuess, bet
 
     cardDisplay.removeClass('green red');
 
-    const fingersToDrink = fingers > 0;
+    const moreThanZeroFingers = game.fingersToDrink > 0;
 	
 	//Not first card - flipping
-	if(correctGuess !== undefined){
+	if(status !== undefined){
 
 		//Rotate card and display new one
 		cardImg.rotate3Di(
@@ -475,7 +472,7 @@ $.displayCard = function(players, card, cardsLeft, nextPlayer, correctGuess, bet
 
 					if (front) {
 						//Replace image
-						$(this).css('background', 'url(/images/allcards.png) no-repeat ' + $.getCardCoords(card));
+						$(this).css('background', 'url(/images/allcards.png) no-repeat ' + $.getCardCoords(game.currentCard));
 
 						return
 					}
@@ -486,22 +483,22 @@ $.displayCard = function(players, card, cardsLeft, nextPlayer, correctGuess, bet
 				},
 				complete:function(){
 				
-					if(correctGuess === true){
+					if(status === true){
 
 						//Green background
                         cardDisplay.addClass('green');
 					}
-					else if(correctGuess === false){
+					else if(status === false){
 
 						//Red background
                         cardDisplay.addClass('red');
 
-						const drinkDetails = (fingers > 1)? fingers + " " + DRINK_TYPE + "s!" : fingers + " " + DRINK_TYPE + "!";
+						const drinkDetails = (game.fingersToDrink > 1)? game.fingersToDrink + " " + DRINK_TYPE + "s!" : game.fingersToDrink + " " + DRINK_TYPE + "!";
 
 						//Show Lee
 						if(showPopup){
 
-                            if(fingersToDrink){
+                            if(moreThanZeroFingers){
                                 $("#drinkMessage").html("<b>"+ CURRENT_PLAYER + "</b> you must drink...<br/><span id='numFingers'>" + drinkDetails +"</span>");
                             }
                             else{
@@ -520,15 +517,15 @@ $.displayCard = function(players, card, cardsLeft, nextPlayer, correctGuess, bet
 						}
 						else if(showNotification){
 
-						    $.notify(CURRENT_PLAYER + " drinks" + (fingersToDrink ? (" " + drinkDetails) : "!"));
+						    $.notify(CURRENT_PLAYER + " drinks" + (moreThanZeroFingers ? (" " + drinkDetails) : "!"));
 
 						}
 					}
 
 					//Set the next player and change text
-					$.setNextPlayer(nextPlayer);
+					$.setNextPlayer(game);
 
-                    $.changePermissions(cardNum, cardsLeft);
+                    $.changePermissions(cardNum, game.cardsLeft);
 				}
 			}
 		);
@@ -540,19 +537,19 @@ $.displayCard = function(players, card, cardsLeft, nextPlayer, correctGuess, bet
 		cardImg.show();
 
         //Set the next player and change text
-        $.setNextPlayer(nextPlayer);
+        $.setNextPlayer(game);
 
-        $.changePermissions(cardNum, cardsLeft);
+        $.changePermissions(cardNum, game.cardsLeft);
 	}
 
     // Scores
-    $.updateTurnScores(players, bet, cardsLeft);
+    $.updateTurnScores(game.players, game.bet, game.cardsLeft);
 
     //Finally make the current card the next one
-    CURRENT_CARD = card;
+    CURRENT_CARD = game.currentCard;
 
 	//Update num of cards left
-	$("#cardsLeft").html("<u>" + cardsLeft + "</u>" + (cardsLeft > 1 ? " cards":" card"));
+	$("#cardsLeft").html("<u>" + game.cardsLeft + "</u>" + (game.cardsLeft > 1 ? " cards":" card"));
 };
 
 /**
@@ -573,8 +570,6 @@ $.changePermissions = function(cardNum, cardsLeft){
 
         buttons.hide();
         slider.hide();
-
-        $("#playerName").html("<strong>Game Over!</strong>");
 
         return;
     }
@@ -611,7 +606,7 @@ $.updateTurnScores = function(players, bet, cardsLeft){
 	if(cardsLeft == 0){
 
 	    $("#gameTitle strong").attr("style", "text-decoration: line-through;");
-
+	    
 	}
 	
 	//Update the score on score tab
@@ -620,11 +615,20 @@ $.updateTurnScores = function(players, bet, cardsLeft){
 
 
 //Get the next player from the array
-$.setNextPlayer = function(nextPlayer){
+$.setNextPlayer = function(game){
 
-    CURRENT_PLAYER = nextPlayer;
+    CURRENT_PLAYER = game.currentPlayerName;
+
+    let text = "<strong>" + CURRENT_PLAYER + "</strong> guess Higher or Lower!";
+
+    // Game over!
+    if(game.cardsLeft === 0 && game.winners){
+
+        text = "<strong>GAME OVER:</strong> "  + game.winners.join(" ,") + ((game.winners.length > 1)? " win!": " wins!");
+    }
+
 	//change text
-	$("#playerName").html("<strong>" + CURRENT_PLAYER + "</strong> guess Higher or Lower!");
+	$("#playerName").html(text);
 };
 
 //Leave the game
