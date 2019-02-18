@@ -446,6 +446,8 @@ $.displayCard = function(game, status, showPopup, showNotification){
 	//Card number
 	const cardNum = parseInt(game.currentCard.value);
 
+	const cardCoords = $.getCardCoords(game.currentCard);
+
 	//Card image
     const cardImg = $("#card");
 
@@ -471,10 +473,11 @@ $.displayCard = function(game, status, showPopup, showNotification){
 				sideChange: function(front) {
 
 					if (front) {
-						//Replace image
-						$(this).css('background', 'url(/images/allcards.png) no-repeat ' + $.getCardCoords(game.currentCard));
 
-						return
+						//Replace image
+						$(this).css('background', 'url(/images/allcards.png) no-repeat ' + cardCoords);
+
+						return;
 					}
 
                     //Make back of card the pack;
@@ -482,6 +485,9 @@ $.displayCard = function(game, status, showPopup, showNotification){
 
 				},
 				complete:function(){
+
+                    //Replace image for working in new tabs
+                    $(this).css('background', 'url(/images/allcards.png) no-repeat ' + cardCoords);
 				
 					if(status === true){
 
@@ -533,7 +539,7 @@ $.displayCard = function(game, status, showPopup, showNotification){
 	else{
 
 		//Showing card for first time
-		cardImg.css('background', "url(/images/allcards.png) no-repeat " + $.getCardCoords(card));
+		cardImg.css('background', "url(/images/allcards.png) no-repeat " + cardCoords);
 		cardImg.show();
 
         //Set the next player and change text

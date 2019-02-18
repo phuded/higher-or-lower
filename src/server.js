@@ -81,7 +81,7 @@ wsServer.on('request', function(request) {
 
     clients[gameId][playerName] = connection;
 
-    console.log("Added WS client for game:" + gameId +  " - " + playerName);
+    console.log("Added WS client for game: " + gameId +  " - " + playerName);
 
     // // This is the most important callback for us, we'll handle
     // // all messages from users here.
