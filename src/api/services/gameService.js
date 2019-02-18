@@ -102,7 +102,7 @@ export async function createGame(gameBody, res) {
 };
 
 export async function updateGame(id, playerName, loggedInPlayerName, guess, bet, res) {
-
+    
     let game;
 
     try {
@@ -286,7 +286,7 @@ function newPack(wholePack){
     return cards;
 }
 
-async function playTurn(game, guess, bet){
+function playTurn(game, guess, bet){
 
     // Game is finished
     if(game.cardsLeft == 0){
@@ -326,18 +326,18 @@ async function playTurn(game, guess, bet){
 
     game.status = status;
 
-    const allActivePlayers = getAllActivePlayers(game.players);
-
-    const nextPlayer = getNextPlayer(game.currentPlayerName, allActivePlayers);
-
-    // Set next player
-    game.currentPlayerName = nextPlayer.name;
-
     // Set cards left over
     game.cardsLeft = game.cards.length;
 
     // Add stats
-    await setPlayerStats(game.currentPlayerName, game.players, status, fingersToDrink);
+    setPlayerStats(game.currentPlayerName, game.players, status, fingersToDrink);
+
+    // Set next player
+    const allActivePlayers = getAllActivePlayers(game.players);
+
+    const nextPlayer = getNextPlayer(game.currentPlayerName, allActivePlayers);
+
+    game.currentPlayerName = nextPlayer.name;
 
     return true
 };
@@ -399,7 +399,7 @@ async function setPlayerStats(currentPlayerName, players, status, fingersToDrink
     gamePlayerStats.correctGuessStreak = bestCorrectStreak;
     gamePlayerStats.incorrectGuessStreak = bestIncorrectStreak;
 
-    // Update player stats - don't need to await
+    // Update player stats - await?
     await updatePlayer(currentPlayerName, bestCorrectStreak, bestIncorrectStreak, fingersToDrink);
 }
 
