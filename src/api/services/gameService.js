@@ -151,7 +151,8 @@ export async function updateGame(id, playerName, loggedInPlayerName, guess, bet,
 function setWinners(players){
 
     let winningPercentage = 0.0;
-    let winners = [];
+
+    let topPlayersByPercentage = [];
 
     players.forEach(function (player) {
 
@@ -160,16 +161,35 @@ function setWinners(players){
         if(percentage > winningPercentage){
 
             winningPercentage = percentage;
-            winners = [player.name];
+            topPlayersByPercentage = [player];
         }
         else if(percentage === winningPercentage){
 
-            winners.push(player.name)
+            topPlayersByPercentage.push(player)
         }
     });
 
-    return winners;
-}
+    let winningCorrectGuessStreak = 0;
+    let topPlayers = [];
+
+    topPlayersByPercentage.forEach(function (player) {
+
+        const correctGuessStreak = parseFloat(player.stats.correctGuessStreak);
+
+        if(correctGuessStreak > winningCorrectGuessStreak){
+
+            winningCorrectGuessStreak = correctGuessStreak;
+            topPlayers = [player.name];
+        }
+        else if(correctGuessStreak === winningCorrectGuessStreak){
+
+            topPlayers.push(player.name)
+        }
+
+    });
+
+    return topPlayers;
+};
 
 export async function updateGamePlayers(id, newPlayers, playersToRemove, res) {
 
