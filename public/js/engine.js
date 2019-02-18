@@ -203,13 +203,10 @@ $.websocketListen = function () {
             if(playerUpdates){
 
                 status = undefined;
-
-                //Set the next player and change text
-                $.setNextPlayer(game.currentPlayerName);
             }
 
             //Display card
-            $.displayCard(game.currentCard, game.cardsLeft, status, game.currentPlayerName, game.bet, game.fingersToDrink, game.players, false, true);
+            $.displayCard(game.players, game.currentCard, game.cardsLeft, game.currentPlayerName, status, game.bet, game.fingersToDrink, false, true);
 
         }
 
@@ -338,9 +335,6 @@ $.createNewGame = function(players){
 
             LIMIT_BETS_TO_ONE = game.limitBetsToOne;
 
-            //Set the next player and change text
-            $.setNextPlayer(game.currentPlayerName);
-
             CURRENT_BET = game.bet;
 
             //Hide loading
@@ -352,10 +346,7 @@ $.createNewGame = function(players){
             $.closeForm();
 
             //Display card
-            $.displayCard(game.currentCard, game.cardsLeft);
-
-            // Scores - skip updates as just creating
-            $.updateTurnScores(game.players, CURRENT_BET, game.cardsLeft);
+            $.displayCard(game.players, game.currentCard, game.cardsLeft, game.currentPlayerName);
 
             $("#gameTitle").html($.generateGameName(game, true));
 
@@ -393,9 +384,6 @@ $.joinGame = function(players){
 
             LIMIT_BETS_TO_ONE = game.limitBetsToOne;
 
-            //Set the next player and change text
-            $.setNextPlayer(game.currentPlayerName);
-
             CURRENT_BET = game.bet;
 
             //Hide loading
@@ -407,10 +395,7 @@ $.joinGame = function(players){
             $.closeForm();
 
             //Display
-            $.displayCard(game.currentCard, game.cardsLeft);
-
-            // Scores - skip updates as just joining
-            $.updateTurnScores(game.players, CURRENT_BET, game.cardsLeft);
+            $.displayCard(game.players, game.currentCard, game.cardsLeft, game.currentPlayerName);
 
             $("#gameTitle").html($.generateGameName(game, true));
 
@@ -445,7 +430,7 @@ $.playTurn = function(higherGuess){
             //Updated!
 
             //Display card
-            $.displayCard(game.currentCard, game.cardsLeft, game.status, game.currentPlayerName, game.bet, game.fingersToDrink, game.players, true, false);
+            $.displayCard(game.players, game.currentCard, game.cardsLeft, game.currentPlayerName, game.status, game.bet, game.fingersToDrink, true, false);
 
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -459,7 +444,7 @@ $.playTurn = function(higherGuess){
 
 
 //Display the card
-$.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers, players, showPopup, showNotification){
+$.displayCard = function(players, card, cardsLeft, nextPlayer, correctGuess, bet, fingers, showPopup, showNotification){
 
 	//Card number
 	const cardNum = parseInt(card.value);
@@ -540,9 +525,6 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 						}
 					}
 
-					// Scores
-                    $.updateTurnScores(players, bet, cardsLeft);
-
 					//Set the next player and change text
 					$.setNextPlayer(nextPlayer);
 
@@ -557,8 +539,14 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 		cardImg.css('background', "url(/images/allcards.png) no-repeat " + $.getCardCoords(card));
 		cardImg.show();
 
+        //Set the next player and change text
+        $.setNextPlayer(nextPlayer);
+
         $.changePermissions(cardNum, cardsLeft);
 	}
+
+    // Scores
+    $.updateTurnScores(players, bet, cardsLeft);
 
     //Finally make the current card the next one
     CURRENT_CARD = card;
@@ -580,6 +568,7 @@ $.changePermissions = function(cardNum, cardsLeft){
     //Reset bet counter
     $.resetBetCounter();
 
+    // Game over!
     if(cardsLeft === 0){
 
         buttons.hide();

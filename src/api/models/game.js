@@ -24,6 +24,7 @@ let gameSchema = new mongoose.Schema({
     name: {type: String, required: true},
     owner: String,
     players: [gamePlayerSchema],
+    winners: [String],
     currentPlayerName: String,
     status: {type: Boolean, default: null},
     cards: [cardSchema],

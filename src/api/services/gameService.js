@@ -135,6 +135,11 @@ export async function updateGame(id, playerName, loggedInPlayerName, guess, bet,
 
     }
 
+    if(game.cardsLeft == 0){
+
+        game.winners = setWinners(game.players);
+    }
+
     await game.save();
 
     // Notify via WS
@@ -142,6 +147,29 @@ export async function updateGame(id, playerName, loggedInPlayerName, guess, bet,
 
     return res.send(game);
 };
+
+function setWinners(players){
+
+    let winningPercentage = 0.0;
+    let winners = [];
+
+    players.forEach(function (player) {
+
+        const percentage = parseFloat(player.stats.percentageCorrect);
+
+        if(percentage > winningPercentage){
+
+            winningPercentage = percentage;
+            winners = [player.name];
+        }
+        else if(percentage === winningPercentage){
+
+            winners.push(player.name)
+        }
+    });
+
+    return winners;
+}
 
 export async function updateGamePlayers(id, newPlayers, playersToRemove, res) {
 
