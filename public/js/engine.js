@@ -355,7 +355,7 @@ $.createNewGame = function(players){
             $.displayCard(game.currentCard, game.cardsLeft);
 
             // Scores - skip updates as just creating
-            $.updateTurnScores(game.players, CURRENT_BET, game.fingersToDrink, game.cardsLeft, true);
+            $.updateTurnScores(game.players, CURRENT_BET, game.cardsLeft);
 
             $("#gameTitle").html($.generateGameName(game, true));
 
@@ -410,7 +410,7 @@ $.joinGame = function(players){
             $.displayCard(game.currentCard, game.cardsLeft);
 
             // Scores - skip updates as just joining
-            $.updateTurnScores(game.players, CURRENT_BET, game.fingersToDrink, game.cardsLeft, true);
+            $.updateTurnScores(game.players, CURRENT_BET, game.cardsLeft);
 
             $("#gameTitle").html($.generateGameName(game, true));
 
@@ -541,7 +541,7 @@ $.displayCard = function(card, cardsLeft, correctGuess, nextPlayer, bet, fingers
 					}
 
 					// Scores
-                    $.updateTurnScores(players, bet, fingers, cardsLeft, false);
+                    $.updateTurnScores(players, bet, cardsLeft);
 
 					//Set the next player and change text
 					$.setNextPlayer(nextPlayer);
@@ -613,7 +613,7 @@ $.changePermissions = function(cardNum, cardsLeft){
 }
 
 //Update DB, scores and current number of fingers
-$.updateTurnScores = function(players, bet, fingers, cardsLeft, skipHighScores){
+$.updateTurnScores = function(players, bet, cardsLeft){
 
 	//Update fingers	
 	$("#totalNumFingers").text(bet);
@@ -626,7 +626,7 @@ $.updateTurnScores = function(players, bet, fingers, cardsLeft, skipHighScores){
 	}
 	
 	//Update the score on score tab
-	$.updateScore(players, fingers, skipHighScores);
+	$.updateScore(players);
 };
 
 
@@ -720,7 +720,7 @@ let GAME_ID;
 let MAX_DRINKER_ROWS = 15;
 
 //Images to preload
-const PRELOAD_IMAGES =['/images/allcards.png', '/images/back.png'];
+const PRELOAD_IMAGES =['/images/allcards.png', '/images/back.png', '/images/copy.png'];
 
 // Websocket connection
 let WS_CONNECTION;

@@ -1,4 +1,3 @@
-import atob from "atob";
 import Player from "../models/player";
 
 export async function getPlayers(req, res) {
@@ -62,78 +61,39 @@ export async function createPlayer(req, res) {
     return res.send(result);
 };
 
-export async function updatePlayer(req, res) {
-
-    const name = req.params.name;
-
-    // Security Hack
-    var hol = req.headers.hol;
-
-    if(!hol){
-
-        return res.status(500).send({error: "Invalid request."});
-    }
-
-    hol = atob(hol).split("-");
-
-    if(hol[0] != name){
-
-        return res.status(500).send({error: "Invalid request."});
-    }
-
-    if(hol[1] != "hol"){
-
-        return res.status(500).send({error: "Invalid request."});
-    }
-
-    const clientTimeStamp = hol[2];
-
-    const currrentTimeStamp = new Date().getTime();
-
-    const diff = Math.abs(currrentTimeStamp - clientTimeStamp);
-
-    if(diff > 300000){
-
-        return res.status(500).send({error: "Invalid request."});
-    }
-
-    const playerUpdate = req.body;
-
-    playerUpdate.maxCorrect = parseInt(playerUpdate.maxCorrect);
-    playerUpdate.maxIncorrect = parseInt(playerUpdate.maxIncorrect);
-    playerUpdate.maxFingers = parseInt(playerUpdate.maxFingers);
+export async function updatePlayer(playerName, maxCorrect, maxIncorrect, fingers) {
 
     let foundPlayer;
 
     try {
 
-        foundPlayer = await Player.findOne({name: name});
+        foundPlayer = await Player.findOne({name: playerName});
     }
     catch (e) {
 
-        return res.status(404).send({error: "Cannot update player: " + name + ": Not found"});
+        return;
     }
 
-    if(playerUpdate.maxCorrect > foundPlayer.maxCorrect){
+    if(maxCorrect > foundPlayer.maxCorrect){
 
-        foundPlayer.maxCorrect = playerUpdate.maxCorrect;
+        foundPlayer.maxCorrect = maxCorrect;
     }
 
-    if(playerUpdate.maxIncorrect > foundPlayer.maxIncorrect){
+    if(maxIncorrect > foundPlayer.maxIncorrect){
 
-        foundPlayer.maxIncorrect = playerUpdate.maxIncorrect;
+        foundPlayer.maxIncorrect = maxIncorrect;
     }
 
-    if(playerUpdate.maxFingers > foundPlayer.maxFingers){
+    if(fingers > foundPlayer.maxFingers){
 
-        foundPlayer.maxFingers = playerUpdate.maxFingers;
+        foundPlayer.maxFingers = fingers;
     }
 
     foundPlayer.lastPlayed = new Date();
 
-    await foundPlayer.save();
+    foundPlayer = await foundPlayer.save();
 
-    return res.send(foundPlayer);
+    return foundPlayer;
 };
 
 

@@ -1,4 +1,6 @@
 import Game, {Card, GamePlayer} from "../models/game";
+import {updatePlayer} from "./playerService";
+
 
 function notifyClients(gameId, game, prevPlayer, playerUpdates){
 
@@ -256,7 +258,7 @@ function newPack(wholePack){
     return cards;
 }
 
-function playTurn(game, guess, bet){
+async function playTurn(game, guess, bet){
 
     // Game is finished
     if(game.cardsLeft == 0){
@@ -296,9 +298,6 @@ function playTurn(game, guess, bet){
 
     game.status = status;
 
-    // Add stats
-    setStat(game.currentPlayerName, game.players, status);
-
     const allActivePlayers = getAllActivePlayers(game.players);
 
     const nextPlayer = getNextPlayer(game.currentPlayerName, allActivePlayers);
@@ -309,10 +308,13 @@ function playTurn(game, guess, bet){
     // Set cards left over
     game.cardsLeft = game.cards.length;
 
+    // Add stats
+    await setPlayerStats(game.currentPlayerName, game.players, status, fingersToDrink);
+
     return true
 };
 
-function setStat(currentPlayerName, players, status){
+async function setPlayerStats(currentPlayerName, players, status, fingersToDrink){
 
     const gamePlayerStats = players.find(player => (player.name == currentPlayerName)).stats;
 
@@ -369,6 +371,8 @@ function setStat(currentPlayerName, players, status){
     gamePlayerStats.correctGuessStreak = bestCorrectStreak;
     gamePlayerStats.incorrectGuessStreak = bestIncorrectStreak;
 
+    // Update player stats - don't need to await
+    await updatePlayer(currentPlayerName, bestCorrectStreak, bestIncorrectStreak, fingersToDrink);
 }
 
 

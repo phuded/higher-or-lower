@@ -1,4 +1,4 @@
-import {getPlayers as sGetPlayers, getPlayer as sGetPlayer, createPlayer as sCreatePlayer, updatePlayer as sUpdatePlayer, deletePlayer as sDeletePlayer} from "../services/playerService";
+import {getPlayers as sGetPlayers, getPlayer as sGetPlayer, createPlayer as sCreatePlayer, deletePlayer as sDeletePlayer} from "../services/playerService";
 
 export async function getPlayers(req, res) {
 
@@ -22,11 +22,6 @@ export async function getPlayer(req, res) {
 export async function createPlayer(req, res) {
 
     return sCreatePlayer(req, res);
-};
-
-export async function updatePlayer(req, res) {
-
-    return sUpdatePlayer(req, res);
 };
 
 export async function deletePlayer(req, res) {
