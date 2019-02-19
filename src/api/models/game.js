@@ -6,7 +6,8 @@ let gamePlayerStatsSchema = new mongoose.Schema({
     numIncorrectGuesses: {type: Number, default: 0},
     percentageCorrect: {type: String, default: "0.0"},
     correctGuessStreak: {type: Number, default: 0},
-    incorrectGuessStreak: {type: Number, default: 0}
+    incorrectGuessStreak: {type: Number, default: 0},
+    fingersDrank: {type: Number, default: 0}
 });
 
 let gamePlayerSchema = new mongoose.Schema({

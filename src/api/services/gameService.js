@@ -419,6 +419,10 @@ async function setPlayerStats(currentPlayerName, players, status, fingersToDrink
     gamePlayerStats.correctGuessStreak = bestCorrectStreak;
     gamePlayerStats.incorrectGuessStreak = bestIncorrectStreak;
 
+    if(fingersToDrink > gamePlayerStats.fingersDrank) {
+        gamePlayerStats.fingersDrank = fingersToDrink;
+    }
+
     // Update player stats - await?
     await updatePlayer(currentPlayerName, bestCorrectStreak, bestIncorrectStreak, fingersToDrink);
 }

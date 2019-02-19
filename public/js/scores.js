@@ -130,6 +130,10 @@ $.showPlayerStats = function(pNum, show){
 	$("#stats_percentage span").text(playerStats.percentageCorrect+'%');
 	$("#stats_correctS span").text(playerStats.correctGuessStreak);
 	$("#stats_incorrectS span").text(playerStats.incorrectGuessStreak);
+
+    $("#stats_fingers span:first-child").text(DRINK_TYPE + "s");
+    $("#stats_fingers span:nth-child(2)").text(playerStats.fingersDrank);
+
     scoreStats.fadeIn();
 
 };
