@@ -20,7 +20,7 @@ $.updateScore = function(currentPlayerName, _players){
 
         let icon = "grid";
 
-        if(playerName === LOGGED_IN_PLAYER){
+        if(playerName === currentPlayerName){
             icon = "man";
         }
 
@@ -33,9 +33,9 @@ $.updateScore = function(currentPlayerName, _players){
         //Add in header row
         scoreTableBody += rowStart + "<td style='font-size: 12px;'>" + (pIdx + 1) + ".</td><th><a href='javascript:$.showPlayerStats(" + pIdx + ", true)' data-role='button' class='playerName' ";
 
-        if(playerName === currentPlayerName){
+        if(playerName === LOGGED_IN_PLAYER){
 
-            scoreTableBody += "data-icon='" + icon + "' data-theme='b'>";
+            scoreTableBody += "data-icon='" + icon + "' data-theme='b' style='text-decoration: underline;'>";
         }
         else{
 
