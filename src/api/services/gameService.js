@@ -240,18 +240,22 @@ export async function updateGamePlayers(id, newPlayers, playersToRemove, res) {
 
     const allActivePlayers = getAllActivePlayers(game.players);
 
-    // No Players
-    if(!allActivePlayers || allActivePlayers.length == 0){
+    // No Players including current in game
+    if((!allActivePlayers || allActivePlayers.length == 0)){
 
         return deleteGame(id, res);
 
     }
 
-    const isCurrentPlayerActive = game.players.find(player => (player.name == game.currentPlayerName)).active;
+    const currentPlayer = game.players.find(player => (player.name == game.currentPlayerName));
+
+    const isCurrentPlayerActive = currentPlayer.active;
 
     if(!isCurrentPlayerActive) {
 
-        const nextPlayer = getNextPlayer(game.currentPlayerName, allActivePlayers);
+        const allActivePlayersIncCurrent = getAllActivePlayers(game.players, game.currentPlayerName);
+
+        const nextPlayer = getNextPlayer(game.currentPlayerName, allActivePlayersIncCurrent);
 
         // Set next player
         game.currentPlayerName = nextPlayer.name;
@@ -421,9 +425,9 @@ async function setPlayerStats(currentPlayerName, players, status, fingersToDrink
 }
 
 
-function getAllActivePlayers(players){
+function getAllActivePlayers(players, currentPlayerName){
 
-    return players.filter(player => player.active);
+    return players.filter(player => (player.active || (currentPlayerName && player.name == currentPlayerName)));
 }
 
 function getNextPlayer(currentPlayerName, allActivePlayers){
