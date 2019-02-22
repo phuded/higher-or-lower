@@ -166,6 +166,8 @@ $.websocketListen = function () {
 
         const playerUpdates = res.playerUpdates;
 
+        const game = res.game;
+
         if(playerUpdates){
 
             $.each( playerUpdates.added, function(index, added) {
@@ -183,9 +185,10 @@ $.websocketListen = function () {
                     $.notify(removed + " has left the game.");
                 }
             });
-        }
 
-        const game = res.game;
+            // Scores
+            $.updateTurnScores(game);
+        }
 
         const differentCardValue = game.currentCard.value !== CURRENT_CARD.value;
         const differentCardSuit = game.currentCard.suit !== CURRENT_CARD.suit;
