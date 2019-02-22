@@ -616,7 +616,7 @@ $.updateTurnScores = function(game){
 	}
 	
 	//Update the score on score tab
-	$.updateScore(game.players, game.winners);
+	$.updateScore(game.players);
 };
 
 
@@ -628,9 +628,9 @@ $.setNextPlayer = function(game){
     let text = "<strong>" + CURRENT_PLAYER + "</strong> guess Higher or Lower!";
 
     // Game over!
-    if(game.cardsLeft === 0 && game.winners){
+    if(game.cardsLeft === 0){
 
-        text = "<strong>GAME OVER:</strong> "  + game.winners.join(", ") + ((game.winners.length > 1)? " win!": " wins!");
+        text = "<strong>GAME OVER</strong>";
     }
 
 	//change text

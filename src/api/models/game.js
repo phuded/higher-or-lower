@@ -12,6 +12,7 @@ let gamePlayerStatsSchema = new mongoose.Schema({
 
 let gamePlayerSchema = new mongoose.Schema({
     name: String,
+    rank: Number,
     active: {type: Boolean, default: true},
     stats: {type: gamePlayerStatsSchema, default: gamePlayerStatsSchema}
 });
@@ -25,7 +26,6 @@ let gameSchema = new mongoose.Schema({
     name: {type: String, required: true},
     owner: String,
     players: [gamePlayerSchema],
-    winners: [String],
     currentPlayerName: String,
     status: {type: Boolean, default: null},
     cards: [cardSchema],

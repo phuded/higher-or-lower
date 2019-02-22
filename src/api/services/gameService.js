@@ -135,10 +135,8 @@ export async function updateGame(id, playerName, loggedInPlayerName, guess, bet,
 
     }
 
-    if(game.cardsLeft == 0){
-
-        game.winners = setWinners(game.players);
-    }
+    // Rank Players
+    rankPlayers(game.players);
 
     await game.save();
 
@@ -148,47 +146,42 @@ export async function updateGame(id, playerName, loggedInPlayerName, guess, bet,
     return res.send(game);
 };
 
-function setWinners(players){
+function rankPlayers(players){
 
-    let winningPercentage = 0.0;
+    const sorted = [...players].sort(function(p1, p2){
 
-    let topPlayersByPercentage = [];
+        const percentageDiff = parseFloat(p2.stats.percentageCorrect) - parseFloat(p1.stats.percentageCorrect)
 
-    players.forEach(function (player) {
+        if(percentageDiff !== 0){
 
-        const percentage = parseFloat(player.stats.percentageCorrect);
-
-        if(percentage > winningPercentage){
-
-            winningPercentage = percentage;
-            topPlayersByPercentage = [player];
+            return percentageDiff
         }
-        else if(percentage === winningPercentage){
 
-            topPlayersByPercentage.push(player)
+        const correctSteak = p2.stats.correctGuessStreak - p1.stats.correctGuessStreak;
+
+        if(correctSteak !== 0){
+
+            return correctSteak
         }
+
+        const incorrectSteak = p1.stats.incorrectGuessStreak - p2.stats.incorrectGuessStreak;
+
+        if(incorrectSteak !== 0){
+
+            return incorrectSteak
+        }
+
+        const guesses = p2.stats.guesses.length - p1.stats.guesses.length;
+
+        return guesses
     });
 
-    let winningCorrectGuessStreak = 0;
-    let topPlayers = [];
+    for(let i = 0; i < sorted.length; i++){
 
-    topPlayersByPercentage.forEach(function (player) {
+        const playerName = sorted[i].name;
 
-        const correctGuessStreak = parseFloat(player.stats.correctGuessStreak);
-
-        if(correctGuessStreak > winningCorrectGuessStreak){
-
-            winningCorrectGuessStreak = correctGuessStreak;
-            topPlayers = [player.name];
-        }
-        else if(correctGuessStreak === winningCorrectGuessStreak){
-
-            topPlayers.push(player.name)
-        }
-
-    });
-
-    return topPlayers;
+        players.find(player => (player.name == playerName)).rank = i + 1;
+    };
 };
 
 export async function updateGamePlayers(id, newPlayers, playersToRemove, res) {
