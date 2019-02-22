@@ -616,7 +616,7 @@ $.updateTurnScores = function(game){
 	}
 	
 	//Update the score on score tab
-	$.updateScore(game.players);
+	$.updateScore(game.currentPlayerName, game.players);
 };
 
 

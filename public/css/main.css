@@ -83,6 +83,11 @@
 	width: 35px;
 	height: 35px;
 	margin-top:-18px;
+	border-radius: 10px;
+}
+
+#sliderBar .ui-slider{
+	background: #456293;
 }
 
 #currentNumFingers{
@@ -273,6 +278,19 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 	display: block;
 }
 
+#scoreTab .ui-icon-copy{
+	background-image: url(/images/copy.png);
+	background-color: transparent;
+	background-size: 18px;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+}
+
+#scoreTab .ui-icon-man{
+	background-image: url(/images/person.png);
+	background-size: 18px;
+}
+
 #scoreTableDiv{
 	position: relative;
 	overflow: auto;
@@ -321,14 +339,6 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 
 #scoreTable tr td.copyLinkCell a > span{
 	padding: 5px 0 5px 6px !important;
-}
-
-#scoreTable tr td.copyLinkCell a > span > span.ui-icon-copy, #scoreTab #copyLink > span > span.ui-icon-copy{
-	background-image: url(/images/copy.png);
-	background-color: transparent;
-	background-size: 18px;
-	-webkit-border-radius: 0;
-	border-radius: 0;
 }
 
 #scoreTable a.playerName{

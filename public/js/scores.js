@@ -1,7 +1,7 @@
 let players;
 
 //Update the score for a player
-$.updateScore = function(_players){
+$.updateScore = function(currentPlayerName, _players){
 
     const tableDiv = $("#scoreTableDiv");
     const table = $("#scoreTable");
@@ -20,16 +20,16 @@ $.updateScore = function(_players){
 
         let icon = "grid";
 
-        if(pIdx === 0){
-            icon = "star"
+        if(playerName === LOGGED_IN_PLAYER){
+            icon = "man";
         }
 
         //Add in header row
         scoreTableBody += "<tr><td style='font-size: 12px;'>" + (pIdx + 1) + ".</td><th><a href='javascript:$.showPlayerStats(" + pIdx + ", true)' data-role='button' class='playerName' ";
 
-        if(playerName === LOGGED_IN_PLAYER){
+        if(playerName === currentPlayerName){
 
-            scoreTableBody += "data-icon='" + icon + "' data-theme='b' style='text-decoration: underline;'>";
+            scoreTableBody += "data-icon='" + icon + "' data-theme='b'>";
         }
         else if(!player.active){
 
