@@ -24,16 +24,18 @@ $.updateScore = function(currentPlayerName, _players){
             icon = "man";
         }
 
+        let rowStart = "<tr>";
+
+        if(!player.active){
+            rowStart = "<tr style='opacity: 0.6;'>";
+        }
+
         //Add in header row
-        scoreTableBody += "<tr><td style='font-size: 12px;'>" + (pIdx + 1) + ".</td><th><a href='javascript:$.showPlayerStats(" + pIdx + ", true)' data-role='button' class='playerName' ";
+        scoreTableBody += rowStart + "<td style='font-size: 12px;'>" + (pIdx + 1) + ".</td><th><a href='javascript:$.showPlayerStats(" + pIdx + ", true)' data-role='button' class='playerName' ";
 
         if(playerName === currentPlayerName){
 
             scoreTableBody += "data-icon='" + icon + "' data-theme='b'>";
-        }
-        else if(!player.active){
-
-            scoreTableBody += "data-icon='" + icon + "' data-theme='c' style='text-decoration: line-through;'>";
         }
         else{
 
