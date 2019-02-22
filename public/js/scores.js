@@ -1,7 +1,7 @@
-let players;
+let sortedPlayers;
 
 //Update the score for a player
-$.updateScore = function(currentPlayerName, _players){
+$.updateScore = function(currentPlayerName, players){
 
     const tableDiv = $("#scoreTableDiv");
     const table = $("#scoreTable");
@@ -11,10 +11,10 @@ $.updateScore = function(currentPlayerName, _players){
     //Create scoretab var
     let scoreTableBody = "";
 
-    players = _players.sort(function(p1, p2){return p1.rank - p2.rank});
+    sortedPlayers = players.sort(function(p1, p2){return p1.rank - p2.rank});
 
     //Set players in array
-    $(players).each(function(pIdx, player){
+    $(sortedPlayers).each(function(pIdx, player){
 
         const playerName = player.name;
 
@@ -117,7 +117,7 @@ $.showPlayerStats = function(pNum, show){
 	//Hide scores
     scoreTableDiv.hide();
 
-	const player = players[pNum];
+	const player = sortedPlayers[pNum];
 
 	//Set player name
 	$("#stats_name").text(player.name);

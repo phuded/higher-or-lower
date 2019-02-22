@@ -150,30 +150,30 @@ function rankPlayers(players){
 
     const sorted = [...players].sort(function(p1, p2){
 
-        const percentageDiff = parseFloat(p2.stats.percentageCorrect) - parseFloat(p1.stats.percentageCorrect)
-
+        const percentageDiff = (p2.stats.numCorrectGuesses * parseFloat(p2.stats.percentageCorrect)) - (p1.stats.numCorrectGuesses * parseFloat(p1.stats.percentageCorrect));
+        
         if(percentageDiff !== 0){
 
-            return percentageDiff
+            return percentageDiff;
         }
 
-        const correctSteak = p2.stats.correctGuessStreak - p1.stats.correctGuessStreak;
+        const correctSteakDiff = p2.stats.correctGuessStreak - p1.stats.correctGuessStreak;
 
-        if(correctSteak !== 0){
+        if(correctSteakDiff !== 0){
 
-            return correctSteak
+            return correctSteakDiff;
         }
 
-        const incorrectSteak = p1.stats.incorrectGuessStreak - p2.stats.incorrectGuessStreak;
+        const incorrectSteakDiff = p1.stats.incorrectGuessStreak - p2.stats.incorrectGuessStreak;
 
-        if(incorrectSteak !== 0){
+        if(incorrectSteakDiff !== 0){
 
-            return incorrectSteak
+            return incorrectSteakDiff;
         }
 
-        const guesses = p2.stats.guesses.length - p1.stats.guesses.length;
+        const guessesDiff = p2.stats.guesses.length - p1.stats.guesses.length;
 
-        return guesses
+        return guessesDiff;
     });
 
     for(let i = 0; i < sorted.length; i++){
@@ -346,7 +346,7 @@ function playTurn(game, guess, bet){
     // Set cards left over
     game.cardsLeft = game.cards.length;
 
-    // Add stats
+    // Update player's stats
     setPlayerStats(game.currentPlayerName, game.players, status, fingersToDrink);
 
     // Set next player
