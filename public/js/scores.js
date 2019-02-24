@@ -13,10 +13,14 @@ $.updateScore = function(currentPlayerName, players){
 
     sortedPlayers = players.sort(function(p1, p2){return p1.rank - p2.rank});
 
+    const copyUrls = [];
+
     //Set players in array
     $(sortedPlayers).each(function(pIdx, player){
 
         const playerName = player.name;
+
+        const url = $.getCopyUrl() + "/" + playerName;
 
         let icon = "grid";
 
@@ -40,9 +44,9 @@ $.updateScore = function(currentPlayerName, players){
         else{
 
             scoreTableBody += "data-icon='" + icon + "' data-theme='c'>";
-        }
 
-        const url = $.getCopyUrl() + "/" + playerName;
+            copyUrls.push(url);
+        }
 
         const playerCopyLinkButton = "<a class='copyLink' data-role='button' data-icon='copy' data-theme='c' data-iconpos='notext' data-clipboard-text='" + url + "' message='" + playerName  + " game joining link'></a>";
 
@@ -73,7 +77,7 @@ $.updateScore = function(currentPlayerName, players){
         // Show score table
         tableDiv.show();
         copyLink.show();
-        copyLink.attr("data-clipboard-text", $.getCopyUrl());
+        copyLink.attr("data-clipboard-text", copyUrls.join("\n"));
 
         return;
 
