@@ -24,12 +24,11 @@
 #cardDisplay{
 	margin-left: auto;
 	margin-right: auto;
-	width: 220px;
-	height: 340px;
-	border: 2px inset white;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
+	width: 70vw;
+    height: 305px;
+	display: table;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
 }
 
 #cardDisplay.green{
@@ -46,22 +45,22 @@
 }
 
 #card{
+    margin-top: 35px;
 	width:160px;
 	height:232px;
-	margin-top: 25%;
 	margin-left:auto;
 	margin-right:auto;
 	background:url(../images/allcards.png) no-repeat 0px 0px;
 }
 
 #gameButtons{
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 /* Betting buttons */
 #higher, #lower{
 	width: 48vw;
-	font-size: 1.15em;
+    font-size: 16px;
 }
 
 /*Slider*/
@@ -72,6 +71,7 @@
 
 #sliderBar{
 	font-weight:bold;
+	font-size: 12px;
 }
 
 #sliderBar div{
@@ -112,7 +112,8 @@
 }
 
 #footer table td a{
-    height: 40px;
+    height: 38px;
+    font-size: 11px;
 }
 
 #footer table td a > span{
