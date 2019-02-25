@@ -1,5 +1,5 @@
 $.prepareGame = function(){
-
+    
     // Enable copy JS
     const clipboard = new ClipboardJS(".copyLink");
 
@@ -132,6 +132,14 @@ $.websocketListen = function () {
         WS_CONNECTION.close();
     }
 
+    // Close WebSocket when the browser window is closed.
+    $(window).unload( function () {
+
+        if(WS_CONNECTION) {
+            WS_CONNECTION.close();
+        }
+    });
+
     // if user is running mozilla then use it's built-in WebSocket
     window.WebSocket = window.WebSocket || window.MozWebSocket;
 
@@ -148,10 +156,25 @@ $.websocketListen = function () {
 
     WS_CONNECTION = new WebSocket(url);
 
+
+    // Send ping message in regular intervals.
+    // We expect pong messages in return to keep the connection alive.
+    const ping = function () {
+        // Only send a ping when it has a chance to reach the server.
+        if (WS_CONNECTION.readyState !== WebSocket.CLOSING && WS_CONNECTION.readyState !== WebSocket.CLOSED) {
+
+            WS_CONNECTION.send("ping");
+
+            window.setTimeout(ping, 2000);
+        }
+    };
+
     WS_CONNECTION.onopen = function () {
         // connection is opened and ready to use
 
         console.log("WS Listening on: " + url);
+
+        ping();
     };
 
     WS_CONNECTION.onerror = function (error) {
