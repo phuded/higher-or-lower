@@ -294,6 +294,13 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 	background-size: 18px;
 }
 
+#scoreTab .ui-icon-crown{
+	background-image: url(/images/crown.png);
+	background-size: 14px;
+	background-position-x: 2px;
+	background-position-y: 2px;
+}
+
 #scoreTableDiv{
 	position: relative;
 	overflow: auto;

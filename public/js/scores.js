@@ -1,7 +1,7 @@
 let sortedPlayers;
 
 //Update the score for a player
-$.updateScore = function(currentPlayerName, players){
+$.updateScore = function(currentPlayerName, players, gameOver){
 
     const tableDiv = $("#scoreTableDiv");
     const table = $("#scoreTable");
@@ -24,8 +24,12 @@ $.updateScore = function(currentPlayerName, players){
 
         let icon = "grid";
 
-        if(playerName === currentPlayerName){
+        if(!gameOver && (playerName === currentPlayerName)){
             icon = "man";
+        }
+
+        if(gameOver && (pIdx === 0)){
+            icon = "crown";
         }
 
         let rowStart = "<tr>";

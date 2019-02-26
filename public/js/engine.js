@@ -634,15 +634,17 @@ $.updateTurnScores = function(game){
 	//Update fingers
 	$("#totalNumFingers").text(game.bet);
 
+    const gameOver = game.cardsLeft === 0;
+
     // Styling for game title
-	if(game.cardsLeft == 0){
+	if(gameOver){
 
 	    $("#gameTitle strong").attr("style", "text-decoration: line-through;");
 
 	}
 	
 	//Update the score on score tab
-	$.updateScore(game.currentPlayerName, game.players);
+	$.updateScore(game.currentPlayerName, game.players, gameOver);
 };
 
 
