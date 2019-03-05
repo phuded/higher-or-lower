@@ -199,6 +199,12 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 	padding-right: 7px;
 }
 
+a.formButton2{
+	font-size: 16px;
+	height: 100px;
+	margin-top: 15px;
+}
+
 #errorMessage{
     color:red;
     vertical-align:middle;

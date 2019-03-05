@@ -61,7 +61,7 @@
 
 					<div class="gameForm">
 
-						<h3 style="margin-block-start: 0.4em;"><img src="/images/beer.png" style="height: 33px; vertical-align: middle; margin-right: 8px;"/>New Game</h3>
+						<h3 style="margin-block-start: 0.4em; text-align: center;"><img src="/images/beer.png" style="height: 33px; vertical-align: middle; margin-right: 8px;"/>New Game</h3>
 
 
 						<p><b>Select your Player</b></p>
@@ -75,6 +75,22 @@
 								<td> <input id="selectedPlayerName" style="font-size: 0.9em;" type="text" MAXLENGTH=8" placeholder="None Specified" data-theme="d" readonly/></td>
 							</tr>
 						</table>
+
+						<div style="text-align: center">
+							<a id="np" class="formButton2" href="javascript:$.createNewPlayer(true, null)" data-role="button" data-icon="plus" data-inline="true" data-iconpos="bottom" data-theme="a">New</br>Player</a>
+							<a id="ep" class="formButton2" href="javascript:$.showPlayerList(true, null)" data-role="button" data-icon="search" data-inline="true" data-iconpos="bottom">Existing</br>Player</a>
+						</div>
+
+
+
+						<div style="text-align: center">
+							<a id="ng" class="formButton2" href="javascript:$.clearGameSelection()" data-role="button" data-icon="plus" data-inline="true" data-iconpos="bottom" data-theme="a">New</br>Game</a>
+							<a id="eg" class="formButton2" href="javascript:$.showGameList(true)" data-role="button" data-icon="search" data-inline="true" data-iconpos="bottom">Existing</br>Game</a>
+						</div>
+
+
+
+
 
 						<div data-role="collapsible-set" class="formPanel">
 
