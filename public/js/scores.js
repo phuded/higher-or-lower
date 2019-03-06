@@ -49,7 +49,7 @@ $.updateScore = function(currentPlayerName, players, gameOver){
 
             scoreTableBody += "data-icon='" + icon + "' data-theme='c'>";
 
-            copyUrls.push(url);
+            copyUrls.push(playerName + ": " + url);
         }
 
         const playerCopyLinkButton = "<a class='copyLink' data-role='button' data-icon='copy' data-theme='c' data-iconpos='notext' data-clipboard-text='" + url + "' message='" + playerName  + " game joining link'></a>";

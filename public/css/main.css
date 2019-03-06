@@ -29,6 +29,7 @@
 	display: table;
     -webkit-border-radius: 4px;
     border-radius: 4px;
+	overflow: hidden;
 }
 
 #cardDisplay.green{

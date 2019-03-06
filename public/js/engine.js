@@ -156,7 +156,6 @@ $.websocketListen = function () {
 
     WS_CONNECTION = new WebSocket(url);
 
-
     // Send ping message in regular intervals.
     // We expect pong messages in return to keep the connection alive.
     const ping = function () {
@@ -170,11 +169,19 @@ $.websocketListen = function () {
     };
 
     WS_CONNECTION.onopen = function () {
-        // connection is opened and ready to use
 
+        // connection is opened and ready to use
         console.log("WS Listening on: " + url);
 
         ping();
+    };
+
+    WS_CONNECTION.onclose = function (closeEvent) {
+
+        if(!closeEvent.wasClean){
+
+            window.location.reload(true);
+        }
     };
 
     WS_CONNECTION.onerror = function (error) {
