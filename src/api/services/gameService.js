@@ -27,7 +27,7 @@ export async function getGames(req, res) {
 
     const orderBy = req.query["order-by"] ? req.query["order-by"] : "name";
 
-    var dir = req.query.dir ? req.query.dir : "asc";
+    let dir = req.query.dir ? req.query.dir : "asc";
     (dir == "asc")? dir = 1 : dir = -1;
 
     const sort = {[orderBy]: dir};
