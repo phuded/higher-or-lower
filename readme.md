@@ -1,4 +1,10 @@
 ```
+docker build -t higherorlower .
+docker tag higherorlower:latest 062343788775.dkr.ecr.eu-west-1.amazonaws.com/higherorlower:latest
+docker push 062343788775.dkr.ecr.eu-west-1.amazonaws.com/higherorlower:latest
+```
+
+```
 server {
     server_name drink-higher-lower.com;
 
