@@ -17,7 +17,7 @@ $.showNewGameForm = function(show){
         gameName.val("");
         gameName.attr("readonly", null);
 
-        $("#start").html($("#start").html().replace("Join", "Create New"));
+        $("#start").html($("#start").html().replace("Join", "Start"));
 
         return;
     }
@@ -391,8 +391,6 @@ $.showGameList = function(show, selectedGameId, selectedGameName){
 
             gameList.fadeIn('fast');
 
-            // Don't show new game form
-            $.showNewGameForm(false)
         });
 
         return;
@@ -404,25 +402,36 @@ $.showGameList = function(show, selectedGameId, selectedGameName){
 
         if(selectedGameId != null){
 
-            GAME_ID = selectedGameId;
+            $.setExistingGameSelected(selectedGameId, selectedGameName);
 
-            const gameName = $("#gameName");
-
-            gameName.val(selectedGameName);
-            gameName.attr("readonly", "readonly");
-
-            $("#eg").addClass("selected");
-            $("#ng").removeClass("selected");
-
-            // Hide cancel
+            // Hide cancel as just selected
             $("#cancel").hide();
-
-            $("#start").html($("#start").html().replace("Create New", "Join"));
 
             return;
         }
 
+        // Cancel is pressed
         $.showNewGameForm(true);
     });
 
 };
+
+$.setExistingGameSelected = function(selectedGameId, selectedGameName){
+
+    // Don't show new game form
+    $.showNewGameForm(false)
+
+    // Selected a game
+    GAME_ID = selectedGameId;
+
+    const gameName = $("#gameName");
+
+    gameName.val(selectedGameName);
+    gameName.attr("readonly", "readonly");
+
+    $("#eg").addClass("selected");
+    $("#ng").removeClass("selected");
+
+    $("#start").html($("#start").html().replace("Start", "Join"));
+
+}

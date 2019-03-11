@@ -98,16 +98,13 @@ $.prepareGame = function(){
                 url: "/api/players/" + playerName,
                 success: function(player){
 
-                    GAME_ID = gameId;
+                    $.setExistingGameSelected(gameId, $.generateGameName(game));
 
+                    // Set player
                     $("#selectedPlayerName").val(playerName);
 
                     // Get game player list - after player is set
                     $.getGamePlayerList();
-
-                    $("#gameName").val($.generateGameName(game));
-
-                    $("#start").html($("#start").html().replace("Create New", "Join"));
 
                     // Launch the game
                     $.startGame();

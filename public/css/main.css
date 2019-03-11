@@ -163,17 +163,9 @@ span#drinkMessage{
 
 /* Form*/
 
-/*.formPanel .ui-collapsible-heading {*/
-	/*font-size: 15px;*/
-/*}*/
-
-/*.formPanel .ui-collapsible-content{*/
-	/*padding: 10px 8px;*/
-/*}*/
-
 #newGameForm{
 	text-align: left;
-	margin-top: 15px;
+	margin-top: 10px;
 }
 
 a.button{
@@ -183,20 +175,15 @@ a.button{
 
 a.largeButton{
 	font-size: 16px;
-	height: 100px;
+	height: 75px;
 	margin-top: 15px;
 	border: 5px solid transparent;
 	min-width: 110px;
 }
 
-a.largeButton span.ui-icon{
-
-	bottom: 0;
-}
-
 a.largeButton span.ui-btn-text{
 
-	top: 10px;
+	top: 2px;
 }
 
 a.largeButton.selected{
@@ -251,12 +238,15 @@ a.formButton .ui-btn-inner{
 	top:9px;
 }
 
-.gameForm table{
-	width: 98%;
+.gameForm .gameFormSection{
+
+	text-align: center;
+	border-bottom: 1px solid grey;
 }
 
-.gameForm table td.tableButton{
-	width: 20%;
+.selectedItemName{
+
+	margin-bottom: 8px;
 }
 
 /*Game List*/
