@@ -18,7 +18,7 @@ $.generateGameName = function(game, bold){
         gameName = "<strong>" + gameName + "</strong>";
     }
 
-    return gameName + " [Created by: " + game.owner + "]";
+    return gameName + " [" + game.owner + "]";
 };
 
 $.handleInvalidParams = function () {

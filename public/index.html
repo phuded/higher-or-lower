@@ -67,14 +67,20 @@
 							<span style="font-weight: bold; display: block; text-align: left">Select your player</span>
 							<a id="np" class="largeButton" href="javascript:$.createNewPlayer(true, null)" data-role="button" data-icon="plus" data-inline="true" data-iconpos="bottom" data-theme="a">New</br>Player</a>
 							<a id="ep" class="largeButton" href="javascript:$.showPlayerList(true, null)" data-role="button" data-icon="search" data-inline="true" data-iconpos="bottom">Existing</br>Player</a>
-							<input id="selectedPlayerName" class="selectedItemName" type="text" MAXLENGTH=8" placeholder="None Selected" data-theme="d" readonly/>
+							<div class="selectedItemName">
+								<span>Player:</span>
+								<input id="selectedPlayerName" type="text" MAXLENGTH=8" placeholder="None Selected" data-theme="d" readonly/>
+							</div>
 						</div>
 
 						<div class="gameFormSection">
 							<a id="ng" class="largeButton selected" href="javascript:$.showNewGameForm(true)" data-role="button" data-icon="plus" data-inline="true" data-iconpos="bottom" data-theme="a">New</br>Game</a>
 							<a id="eg" class="largeButton" href="javascript:$.showGameList(true)" data-role="button" data-icon="search" data-inline="true" data-iconpos="bottom">Existing</br>Game</a>
 
-							<input id="gameName" class="selectedItemName" type="text" placeholder="Optional: Enter New Game Name" data-theme="d"/>
+							<div class="selectedItemName">
+								<span>Game:</span>
+								<input id="gameName" type="text" placeholder="Optional: Enter New Game Name" data-theme="d"/>
+							</div>
 
 							<div id="newGameForm">
 								<span style="font-weight: bold;">1. Choose other players</span>

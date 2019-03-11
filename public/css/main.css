@@ -187,7 +187,7 @@ a.largeButton span.ui-btn-text{
 }
 
 a.largeButton.selected{
-	border: 5px solid white;
+	border: 5px solid #f3b805;
 }
 
 a.wholeWidthButton{
@@ -247,6 +247,12 @@ a.formButton .ui-btn-inner{
 .selectedItemName{
 
 	margin-bottom: 8px;
+}
+
+.selectedItemName input{
+
+	width: calc(100% - 75px);
+	display: inline;
 }
 
 /*Game List*/
