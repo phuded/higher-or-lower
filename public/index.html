@@ -61,27 +61,28 @@
 
 					<div class="gameForm">
 
-						<h3 style="margin-block-start: 0.4em; text-align: center;"><img src="/images/beer.png" style="height: 33px; vertical-align: middle; margin-right: 8px;"/>New Game</h3>
+						<h3 style="margin-block-start: 0; text-align: center;"><img src="/images/beer.png" style="height: 33px; vertical-align: middle; margin-right: 8px;"/>New Game</h3>
 
-						<div style="text-align: center">
-							<p style="font-weight: bold; text-align: left"> Select your player</p>
-							<a id="np" class="formButton2" href="javascript:$.createNewPlayer(true, null)" data-role="button" data-icon="plus" data-inline="true" data-iconpos="bottom" data-theme="a">New</br>Player</a>
-							<a id="ep" class="formButton2" href="javascript:$.showPlayerList(true, null)" data-role="button" data-icon="search" data-inline="true" data-iconpos="bottom">Existing</br>Player</a>
+						<div style="text-align: center; border-bottom: 1px solid grey;">
+							<span style="font-weight: bold; display: block; text-align: left">Select your player</span>
+							<a id="np" class="largeButton" href="javascript:$.createNewPlayer(true, null)" data-role="button" data-icon="plus" data-inline="true" data-iconpos="bottom" data-theme="a">New</br>Player</a>
+							<a id="ep" class="largeButton" href="javascript:$.showPlayerList(true, null)" data-role="button" data-icon="search" data-inline="true" data-iconpos="bottom">Existing</br>Player</a>
 							<input id="selectedPlayerName" type="text" MAXLENGTH=8" placeholder="None Selected" data-theme="d" readonly/>
+							<br/>
 						</div>
 
 
 
 						<div style="text-align: center">
-							<a id="ng" class="formButton2" href="javascript:$.showNewGameForm(true)" data-role="button" data-icon="plus" data-inline="true" data-iconpos="bottom" data-theme="a">New</br>Game</a>
-							<a id="cg" style="display: none;" class="formButton2" href="javascript:$.clearGameSelection()" data-role="button" data-icon="minus" data-inline="true" data-iconpos="bottom">Clear</br>Game</a>
-							<a id="eg" class="formButton2" href="javascript:$.showGameList(true)" data-role="button" data-icon="search" data-inline="true" data-iconpos="bottom">Existing</br>Game</a>
-							<input id="selectedGameName" type="text" placeholder="None Selected" data-theme="d" readonly/>
+							<a id="ng" class="largeButton selected" href="javascript:$.showNewGameForm(true)" data-role="button" data-icon="plus" data-inline="true" data-iconpos="bottom" data-theme="a">New</br>Game</a>
+							<a id="eg" class="largeButton" href="javascript:$.showGameList(true)" data-role="button" data-icon="search" data-inline="true" data-iconpos="bottom">Existing</br>Game</a>
 
-							<div id="newGameForm" style="display: none">
+							<input id="gameName" type="text" placeholder="Optional: Enter New Game Name" data-theme="d"/>
+
+							<div id="newGameForm">
 								<span style="font-weight: bold;">1. Choose other players</span>
 
-								<a href="javascript:$.showGamePlayerList(true, null)" class="smallerButton wholeWidthButton" data-role="button" data-theme="a" data-inline="true" data-icon="search">Choose Players</a>
+								<a href="javascript:$.showGamePlayerList(true, null)" class="button wholeWidthButton" data-role="button" data-theme="a" data-inline="true" data-icon="search">Choose Players</a>
 
 								<span style="font-weight: bold;">2. What are you drinking?</span>
 								<fieldset data-role="controlgroup">
@@ -119,11 +120,6 @@
 
 						</div>
 
-						<!--<input id="newGameName" type="text" placeholder="Optional: Enter Game Name" data-theme="d"/>-->
-
-
-
-
 						<a href="javascript:$.startGame()" id="start" class="formButton" data-role="button" data-theme="b" data-inline="true" data-icon="check">Create New Game</a>
 
 						<a href="javascript:$.closeForm()" id="cancel" class="formButton" data-role="button" data-theme="c" data-inline="true" data-icon="back" style="display:none;">Back to game</a>
@@ -135,23 +131,23 @@
 
 					<!--Hidden game list -->
 					<div id="gameList" style="display:none;">
-						<a class="listButton wholeWidthButton" style="margin-bottom: 20px;" href="javascript:$.showGameList(false, null, null)" data-role="button" data-theme="a" data-inline="true" data-icon="back">Back</a>
+						<a class="button wholeWidthButton" style="margin-bottom: 20px;" href="javascript:$.showGameList(false, null, null)" data-role="button" data-theme="a" data-inline="true" data-icon="back">Cancel</a>
 						<ul data-role="listview" data-filter="true" data-inset="true" data-theme="c"></ul>
-						<a class="listButton wholeWidthButton" href="javascript:$.showGameList(false, null, null)" data-role="button" data-theme="a" data-inline="true" data-icon="back">Back</a>
+						<a class="button wholeWidthButton" href="javascript:$.showGameList(false, null, null)" data-role="button" data-theme="a" data-inline="true" data-icon="back">Cancel</a>
 					</div>
 
 					<!--Hidden player list -->
 					<div id="playerList" style="display:none;">
-						<a class="listButton wholeWidthButton" style="margin-bottom: 20px;" href="javascript:$.showPlayerList(false, null)" data-role="button" data-theme="a" data-inline="true" data-icon="back">Back</a>
+						<a class="button wholeWidthButton" style="margin-bottom: 20px;" href="javascript:$.showPlayerList(false, null)" data-role="button" data-theme="a" data-inline="true" data-icon="back">Back</a>
 						<ul data-role="listview" data-filter="true" data-inset="true" data-theme="c"></ul>
-						<a class="listButton wholeWidthButton" href="javascript:$.showPlayerList(false, null)" data-role="button" data-theme="a" data-inline="true" data-icon="back">Back</a>
+						<a class="button wholeWidthButton" href="javascript:$.showPlayerList(false, null)" data-role="button" data-theme="a" data-inline="true" data-icon="back">Back</a>
 					</div>
 
 					<!--Hidden game player list -->
 					<div id="gamePlayerList" style="display:none;">
-						<a class="listButton wholeWidthButton" style="margin-bottom: 20px;" href="javascript:$.showGamePlayerList(false, null)" data-role="button" data-theme="a" data-inline="true" data-icon="check">Done</a>
+						<a class="button wholeWidthButton" style="margin-bottom: 20px;" href="javascript:$.showGamePlayerList(false, null)" data-role="button" data-theme="a" data-inline="true" data-icon="check">Done</a>
 						<ul data-role="listview" data-filter="true" data-inset="true" data-theme="c"></ul>
-						<a class="listButton wholeWidthButton" href="javascript:$.showGamePlayerList(false, null)" data-role="button" data-theme="a" data-inline="true" data-icon="check">Done</a>
+						<a class="button wholeWidthButton" href="javascript:$.showGamePlayerList(false, null)" data-role="button" data-theme="a" data-inline="true" data-icon="check">Done</a>
 					</div>
 
 					<!-- New player form -->
@@ -254,7 +250,7 @@
 					<p id="stats_correctS"><b>Most correct guesses in a row: </b><span></span></p>
 					<p id="stats_incorrectS"><b>Most incorrect guesses in a row: </b><span></span></p>
 					<p id="stats_fingers"><b>Most <span></span> drank: </b><span></span></p>
-					<a class="listButton wholeWidthButton" href="javascript:$.showPlayerStats(0,false)" data-role="button" data-icon="back" data-theme="c">Back</a>
+					<a class="button wholeWidthButton" href="javascript:$.showPlayerStats(0,false)" data-role="button" data-icon="back" data-theme="c">Back</a>
 				</div>
 			</div>
 

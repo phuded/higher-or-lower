@@ -105,7 +105,7 @@ $.prepareGame = function(){
                     // Get game player list - after player is set
                     $.getGamePlayerList();
 
-                    $("#selectedGameName").val($.generateGameName(game));
+                    $("#gameName").val($.generateGameName(game));
 
                     $("#start").html($("#start").html().replace("Create New", "Join"));
 
@@ -307,7 +307,7 @@ $.startGame = function(){
 	//Hide any current card
 	$("#cardDisplay").removeClass('green red');
 
-	if(!GAME_ID || !$("#selectedGameName").val()){
+	if(!GAME_ID || !$("#gameName").val()){
 
         $("#gamePlayerList ul li input[type=checkbox]:checked").each(function () {
 
@@ -328,7 +328,7 @@ $.startGame = function(){
 
 $.createNewGame = function(players){
 
-    let gameName = $("#newGameName").val();
+    let gameName = $("#gameName").val();
 
     if(!gameName) {
         const date = new Date();
@@ -693,7 +693,7 @@ $.leaveGame = function(){
             // Open
             $.openForm();
 
-            $.clearCurrentGame();
+            $.showNewGameForm(true);
 
             // Reset scoretab
             resetScoreTable();

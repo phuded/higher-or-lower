@@ -176,14 +176,31 @@ span#drinkMessage{
 	margin-top: 15px;
 }
 
-a.listButton{
-	font-size: 0.8em;
+a.button{
+	font-size: 12px;
 	margin: 0;
 }
 
-a.smallerButton{
-	font-size:0.7em;
-	margin: 0;
+a.largeButton{
+	font-size: 16px;
+	height: 100px;
+	margin-top: 15px;
+	border: 5px solid transparent;
+	min-width: 110px;
+}
+
+a.largeButton span.ui-icon{
+
+	bottom: 0;
+}
+
+a.largeButton span.ui-btn-text{
+
+	top: 10px;
+}
+
+a.largeButton.selected{
+	border: 5px solid white;
 }
 
 a.wholeWidthButton{
@@ -201,14 +218,8 @@ a.formButton.ui-btn-corner-all, a.formButton span.ui-btn-corner-all{
     border-radius: 3px;
 }
 
-a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
+a.formButton .ui-btn-inner{
 	padding-right: 7px;
-}
-
-a.formButton2{
-	font-size: 16px;
-	height: 100px;
-	margin-top: 15px;
 }
 
 #errorMessage{

@@ -3,10 +3,26 @@ $.showNewGameForm = function(show){
     if(show) {
 
         $("#newGameForm").show();
+        $("#ng").addClass("selected");
+        $("#eg").removeClass("selected");
+
+        // Clear any existing game
+        GAME_ID = null;
+
+        // Hide cancel
+        $("#cancel").hide();
+
+        const gameName = $("#gameName");
+
+        gameName.val("");
+        gameName.attr("readonly", null);
+
+        $("#start").html($("#start").html().replace("Join", "Create New"));
 
         return;
     }
 
+    // Hide the new game form
     $("#newGameForm").hide();
 };
 
@@ -286,6 +302,8 @@ $.createNewPlayer = function(show, player){
             //Clear form
             $.clearNewPlayerForm();
         });
+
+        return;
     }
 
     //Call method to create player and display main form if 2nd argument true
@@ -370,11 +388,12 @@ $.showGameList = function(show, selectedGameId, selectedGameName){
         $.getGameList();
 
         formContent.fadeOut(function() {
-            gameList.fadeIn('fast');
-        });
 
-        // Don't show new game form
-        $.showNewGameForm(false)
+            gameList.fadeIn('fast');
+
+            // Don't show new game form
+            $.showNewGameForm(false)
+        });
 
         return;
     }
@@ -387,28 +406,23 @@ $.showGameList = function(show, selectedGameId, selectedGameName){
 
             GAME_ID = selectedGameId;
 
-            $("#selectedGameName").val(selectedGameName);
+            const gameName = $("#gameName");
+
+            gameName.val(selectedGameName);
+            gameName.attr("readonly", "readonly");
+
+            $("#eg").addClass("selected");
+            $("#ng").removeClass("selected");
+
+            // Hide cancel
+            $("#cancel").hide();
 
             $("#start").html($("#start").html().replace("Create New", "Join"));
 
+            return;
         }
+
+        $.showNewGameForm(true);
     });
 
-};
-
-$.clearCurrentGame = function(){
-
-   // Hide cancel
-   $("#cancel").hide();
-
-   GAME_ID = null;
-
-   $.clearGameSelection();
-};
-
-$.clearGameSelection = function(){
-
-    $("#selectedGameName").val("");
-
-    $("#start").html($("#start").html().replace("Join", "Create New"));
 };
