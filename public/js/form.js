@@ -1,3 +1,15 @@
+$.showNewGameForm = function(show){
+
+    if(show) {
+
+        $("#newGameForm").show();
+
+        return;
+    }
+
+    $("#newGameForm").hide();
+};
+
 
 /* Get List of players */
 $.getPlayerList = function(){
@@ -360,6 +372,9 @@ $.showGameList = function(show, selectedGameId, selectedGameName){
         formContent.fadeOut(function() {
             gameList.fadeIn('fast');
         });
+
+        // Don't show new game form
+        $.showNewGameForm(false)
 
         return;
     }
