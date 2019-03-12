@@ -51,6 +51,9 @@ $.prepareGame = function(){
         prevPlayer = cookie.split("=")[1];
 
         $("#selectedPlayerName").val(prevPlayer);
+
+        $("#ep").addClass("selected");
+        $("#np").removeClass("selected");
     }
 
     let path = window.location.pathname;
@@ -102,6 +105,9 @@ $.prepareGame = function(){
 
                     // Set player
                     $("#selectedPlayerName").val(playerName);
+
+                    $("#ep").addClass("selected");
+                    $("#np").removeClass("selected");
 
                     // Get game player list - after player is set
                     $.getGamePlayerList();

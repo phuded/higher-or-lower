@@ -193,11 +193,16 @@ $.showPlayerList = function(show, player){
     }
 
     playerList.fadeOut(function() {
+
         formContent.fadeIn('fast');
 
         if(player != null){
 
+            // Player selected
             $("#selectedPlayerName").val(player);
+
+            $("#ep").addClass("selected");
+            $("#np").removeClass("selected");
 
             // Store in cookie
             $.setCookie(player);
@@ -297,6 +302,7 @@ $.createNewPlayer = function(show, player){
         playerForm.fadeOut(function() {
 
             formContent.fadeIn('fast');
+
             //Clear form
             $.clearNewPlayerForm();
         });
@@ -345,6 +351,9 @@ $.createNewPlayer = function(show, player){
                 formContent.fadeIn('fast');
 
                 $("#selectedPlayerName").val(player.name);
+
+                $("#np").addClass("selected");
+                $("#ep").removeClass("selected");
 
                 $.clearNewPlayerForm();
 
