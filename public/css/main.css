@@ -186,19 +186,19 @@ a.button{
 }
 
 a.largeButton{
+	text-align: left;
 	font-size: 16px;
-	height: 80px;
-	margin-top: 15px;
+	height: 55px;
 	border: 5px solid transparent;
-	min-width: 120px;
+	min-width: 125px;
 }
 
 a.largeButton span.ui-btn-text{
-	top: -3px;
+	top: -4px;
 }
 
 a.largeButton span.ui-icon{
-	bottom: 15px;
+	margin-top: -11px;
 }
 
 a.largeButton.selected{
