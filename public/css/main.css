@@ -11,7 +11,18 @@
 	text-shadow: none;
 }
 
-#mainTab, #scoreTab{
+#formTab{
+	padding: 5px 10px 10px 10px;
+}
+
+#formTab p.title{
+	margin-block-start: 0;
+	text-align: center;
+	font-weight: bold;
+	font-size: 18px;
+}
+
+#gameTab, #scoreTab{
 	text-align:center;
 	padding: 0;
 }
@@ -175,15 +186,18 @@ a.button{
 
 a.largeButton{
 	font-size: 16px;
-	height: 75px;
+	height: 80px;
 	margin-top: 15px;
 	border: 5px solid transparent;
-	min-width: 110px;
+	min-width: 120px;
 }
 
 a.largeButton span.ui-btn-text{
+	top: -3px;
+}
 
-	top: 2px;
+a.largeButton span.ui-icon{
+	bottom: 15px;
 }
 
 a.largeButton.selected{

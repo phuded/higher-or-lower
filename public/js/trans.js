@@ -12,8 +12,8 @@ $.openForm = function(){
 	$('.formPanel .ui-collapsible-contain:eq(0)').trigger('expand');
 
 	// Show form
-    $("#game-contents").hide();
-    $("#form").fadeIn();
+    $("#gameTab").hide();
+    $("#formTab").fadeIn();
 
     // History
     history.replaceState({}, "", "/");
@@ -23,8 +23,8 @@ $.openForm = function(){
 $.closeForm = function(){
 
 	// New
-	$("#form").hide();
-	$("#game-contents").fadeIn();
+	$("#formTab").hide();
+	$("#gameTab").fadeIn();
 
     // Show cancel
     $("#cancel").show();
@@ -63,7 +63,7 @@ $.slideTab = function(rev, tab){
 		changeHash: false
 	});
 	
-	var navBar = $('#'+tab+'_navbar');
+	const navBar = $('#'+tab+'_navbar');
 	navBar.find('a').removeClass('ui-btn-active');
 	navBar.find('a[href="#'+tab+'"]').addClass('ui-btn-active');
 
