@@ -103,7 +103,7 @@ $.getGamePlayerList = function(){
 };
 
 /* Get List of players */
-$.getGameList = function(){
+$.getGameList = function(completeFunction){
 
     const gameList = $("#gameList ul");
 
@@ -165,6 +165,8 @@ $.getGameList = function(){
 
             //Refresh View
             gameList.listview('refresh');
+
+            completeFunction();
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             //Error
@@ -257,11 +259,6 @@ $.deleteGame = function(id){
             //Refresh game list
             $.getGameList();
 
-            // Deleting current game
-            if(GAME_ID && GAME_ID === id){
-
-                $.clearCurrentGame();
-            }
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
 
@@ -377,29 +374,28 @@ $.clearNewPlayerForm = function(){
 	$(".playerFormField").val("");
 };
 
+function showGameListUI(){
+
+    $(".gameForm").fadeOut(function() {
+
+        $("#gameList").fadeIn('fast');
+
+    });
+}
 
 $.showGameList = function(show, selectedGameId, selectedGameName){
-
-    const formContent = $(".gameForm");
-    const gameList = $("#gameList");
 
     if(show){
 
         // Load the game list
-        $.getGameList();
-
-        formContent.fadeOut(function() {
-
-            gameList.fadeIn('fast');
-
-        });
+        $.getGameList(showGameListUI);
 
         return;
     }
 
-    gameList.fadeOut(function() {
+    $("#gameList").fadeOut(function() {
 
-        formContent.fadeIn('fast');
+        $(".gameForm").fadeIn('fast');
 
         if(selectedGameId != null){
 
@@ -420,7 +416,7 @@ $.showGameList = function(show, selectedGameId, selectedGameName){
 $.setExistingGameSelected = function(selectedGameId, selectedGameName){
 
     // Don't show new game form
-    $.showNewGameForm(false)
+    $.showNewGameForm(false);
 
     // Selected a game
     GAME_ID = selectedGameId;
