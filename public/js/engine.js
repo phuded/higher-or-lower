@@ -504,7 +504,7 @@ $.displayCard = function(game, status, showPopup, showNotification){
 		//Rotate card and display new one
 		cardImg.rotate3Di(
 			360,
-			1000,
+			1300,
 			{
 				sideChange: function(front) {
 

@@ -38,10 +38,6 @@
     height: 305px;
 	display: table;
 	overflow: hidden;
-
-	/* Seems to make it more reliable on Mobile*/
-	margin-left: auto;
-	margin-right: auto;
 }
 
 #cardDisplay.green{
