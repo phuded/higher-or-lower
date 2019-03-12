@@ -65,12 +65,11 @@
 					</p>
 
 					<div class="gameFormSection">
-						<span style="font-weight: bold; display: block; text-align: left">Select your player</span>
 						<a id="np" class="largeButton" href="javascript:$.createNewPlayer(true, null)" data-role="button" data-icon="plus" data-inline="true" data-iconpos="bottom" data-theme="a">New</br>Player</a>
 						<a id="ep" class="largeButton" href="javascript:$.showPlayerList(true, null)" data-role="button" data-icon="search" data-inline="true" data-iconpos="bottom">Existing</br>Player</a>
 						<div class="selectedItemName">
 							<span>Player:</span>
-							<input id="selectedPlayerName" type="text" MAXLENGTH=8" placeholder="None Selected" data-theme="d" readonly/>
+							<span id="selectedPlayerName"/>
 						</div>
 					</div>
 

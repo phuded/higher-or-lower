@@ -67,7 +67,7 @@ $.getGamePlayerList = function(){
 
     $("div#gamePlayerList ul").html("");
 
-    const selectedPlayer = $("#selectedPlayerName").val();
+    const selectedPlayer = $("#selectedPlayerName").text();
 
     //Get Player List
     $.ajax({
@@ -152,7 +152,7 @@ $.getGameList = function(){
 
                 options += "<li><a " + html + " >" + name + playerNames + "</a>";
 
-                if(owner === $("#selectedPlayerName").val() || noCards) {
+                if(owner === $("#selectedPlayerName").text() || noCards) {
 
                     options += "<a href='javascript:$.deleteGame(&#39;" + id + "&#39;)' data-role='button' data-theme='b' data-inline='true' data-icon='minus'></a>";
                 }
@@ -194,7 +194,7 @@ $.showPlayerList = function(show, player){
 
         if(player != null){
 
-            $("#selectedPlayerName").val(player);
+            $("#selectedPlayerName").text(player);
 
             // Store in cookie
             $.setCookie(player);
@@ -346,7 +346,7 @@ $.createNewPlayer = function(show, player){
 
                 formContent.fadeIn('fast');
 
-                $("#selectedPlayerName").val(player.name);
+                $("#selectedPlayerName").text(player.name);
 
                 $.clearNewPlayerForm();
 

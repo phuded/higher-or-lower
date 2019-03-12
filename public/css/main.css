@@ -17,6 +17,7 @@
 
 #formTab p.title{
 	margin-block-start: 0;
+	margin-block-end: 0;
 	text-align: center;
 	font-weight: bold;
 	font-size: 18px;
@@ -260,6 +261,7 @@ a.formButton .ui-btn-inner{
 
 .selectedItemName{
 
+	text-align: left;
 	margin-bottom: 8px;
 }
 
@@ -267,6 +269,12 @@ a.formButton .ui-btn-inner{
 
 	width: calc(100% - 75px);
 	display: inline;
+}
+
+#selectedPlayerName{
+
+	color: #3a6fa4;
+	font-weight: bold;
 }
 
 /*Game List*/
