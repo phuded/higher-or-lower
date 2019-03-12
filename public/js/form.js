@@ -16,6 +16,7 @@ $.showNewGameForm = function(show){
 
         gameName.val("");
         gameName.attr("readonly", null);
+        gameName.removeClass("selected");
 
         $("#start").html($("#start").html().replace("Join", "Start"));
 
@@ -67,7 +68,7 @@ $.getGamePlayerList = function(){
 
     $("div#gamePlayerList ul").html("");
 
-    const selectedPlayer = $("#selectedPlayerName").text();
+    const selectedPlayer = $("#selectedPlayerName").val();
 
     //Get Player List
     $.ajax({
@@ -152,7 +153,7 @@ $.getGameList = function(){
 
                 options += "<li><a " + html + " >" + name + playerNames + "</a>";
 
-                if(owner === $("#selectedPlayerName").text() || noCards) {
+                if(owner === $("#selectedPlayerName").val() || noCards) {
 
                     options += "<a href='javascript:$.deleteGame(&#39;" + id + "&#39;)' data-role='button' data-theme='b' data-inline='true' data-icon='minus'></a>";
                 }
@@ -194,7 +195,7 @@ $.showPlayerList = function(show, player){
 
         if(player != null){
 
-            $("#selectedPlayerName").text(player);
+            $("#selectedPlayerName").val(player);
 
             // Store in cookie
             $.setCookie(player);
@@ -346,7 +347,7 @@ $.createNewPlayer = function(show, player){
 
                 formContent.fadeIn('fast');
 
-                $("#selectedPlayerName").text(player.name);
+                $("#selectedPlayerName").val(player.name);
 
                 $.clearNewPlayerForm();
 
@@ -428,10 +429,11 @@ $.setExistingGameSelected = function(selectedGameId, selectedGameName){
 
     gameName.val(selectedGameName);
     gameName.attr("readonly", "readonly");
+    gameName.addClass("selected");
 
     $("#eg").addClass("selected");
     $("#ng").removeClass("selected");
 
     $("#start").html($("#start").html().replace("Start", "Join"));
 
-}
+};

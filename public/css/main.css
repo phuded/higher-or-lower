@@ -271,10 +271,12 @@ a.formButton .ui-btn-inner{
 	display: inline;
 }
 
-#selectedPlayerName{
-
-	color: #3a6fa4;
+.selectedItemName input.selected{
+	background: transparent;
+	border-color: transparent;
 	font-weight: bold;
+	color: #3a6fa4;
+	box-shadow: none;
 }
 
 /*Game List*/

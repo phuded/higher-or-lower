@@ -50,7 +50,7 @@ $.prepareGame = function(){
 
         prevPlayer = cookie.split("=")[1];
 
-        $("#selectedPlayerName").text(prevPlayer);
+        $("#selectedPlayerName").val(prevPlayer);
     }
 
     let path = window.location.pathname;
@@ -101,7 +101,7 @@ $.prepareGame = function(){
                     $.setExistingGameSelected(gameId, $.generateGameName(game));
 
                     // Set player
-                    $("#selectedPlayerName").text(playerName);
+                    $("#selectedPlayerName").val(playerName);
 
                     // Get game player list - after player is set
                     $.getGamePlayerList();
@@ -267,7 +267,7 @@ $.startGame = function(){
 	var canPlay = true;
 		
 	//Check to ensure all player names are entered
-	if($("#selectedPlayerName").text() == ""){
+	if($("#selectedPlayerName").val() == ""){
 		canPlay = false;
 
 		errorMessage.show();
@@ -291,7 +291,7 @@ $.startGame = function(){
 		$(".game_spinner").show();
 	}
 
-	const selectedPlayerName = $("#selectedPlayerName").text();
+	const selectedPlayerName = $("#selectedPlayerName").val();
 
 	let players = [];
 
