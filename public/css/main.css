@@ -178,6 +178,7 @@ span#drinkMessage{
 #newGameForm{
 	text-align: left;
 	margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 a.button{
