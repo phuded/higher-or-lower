@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable = no">
+		<meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 		<link rel="apple-touch-icon" href="/images/iphone-iconS.png" />
@@ -54,165 +54,147 @@
 			</div>
 
 
-			<!-- Dialogue Form -->
-			<div id="form" data-title="Higher or Lower" data-theme="b">
+			<!-- Form -->
 
-				<div id="newGameForm" data-role="content" class="tab-content">
+			<div id="formTab" data-role="content" class="tab-content">
 
-					<div class="gameForm">
+				<div class="gameForm">
 
-						<h3 style="margin-block-start: 0.4em;"><img src="/images/beer.png" style="height: 33px; vertical-align: middle; margin-right: 8px;"/>New Game</h3>
+					<p class="title">
+						<img src="/images/beer.png" style="height: 30px; vertical-align: sub; margin-right: 5px;"/>New Game
+					</p>
 
+					<div class="gameFormSection">
+						<a id="np" class="largeButton" href="javascript:$.createNewPlayer(true, null)" data-role="button" data-icon="plus" data-inline="true" data-iconpos="right" data-theme="a">New</br>Player</a>
+						<a id="ep" class="largeButton" href="javascript:$.showPlayerList(true, null)" data-role="button" data-icon="search" data-inline="true" data-iconpos="right">Existing</br>Player</a>
+						<div class="selectedItemName">
+							<span>Player:</span>
+							<span id="selectedPlayerName"/>
+						</div>
+					</div>
 
-						<p><b>Select your Player</b></p>
-						<span style="font-size: 0.8em;">Choose an existing player or register a new player:</span>
-						<br/>
+					<div class="gameFormSection">
+						<a id="ng" class="largeButton selected" href="javascript:$.showNewGameForm(true)" data-role="button" data-icon="plus" data-inline="true" data-iconpos="right" data-theme="a">New</br>Game</a>
+						<a id="eg" class="largeButton" href="javascript:$.showGameList(true)" data-role="button" data-icon="search" data-inline="true" data-iconpos="right">Existing</br>Game</a>
 
-						<table>
-							<tr>
-								<td class="tableButton"><a id="search" class="smallerButton" href="javascript:$.showPlayerList(true, null)" data-role="button" data-icon="search" data-inline="true" data-theme="a">Choose</a></td>
-								<td class="tableButton"><a id="add" class="smallerButton" href="javascript:$.createNewPlayer(true, null)" data-role="button" data-icon="plus" data-inline="true">New</a></td>
-								<td> <input id="selectedPlayerName" style="font-size: 0.9em;" type="text" MAXLENGTH=8" placeholder="None Specified" data-theme="d" readonly/></td>
-							</tr>
-						</table>
-
-						<div data-role="collapsible-set" class="formPanel">
-
-							<div data-role="collapsible" data-collapsed="false" class="drinkOption" data-theme="b" data-content-theme="c">
-								<h3>Choose an Existing Game</h3>
-
-								<table>
-									<tr>
-										<td class="tableButton"><a id="chooseGame" class="smallerButton" href="javascript:$.showGameList(true)" data-role="button" data-icon="search" data-inline="true" data-theme="a">Choose</a></td>
-										<td class="tableButton"><a id="clearGame" class="smallerButton" href="javascript:$.clearGameSelection()" data-role="button" data-icon="minus" data-inline="true">Unselect</a></td>
-										<td><input id="selectedGameName" style="font-size: 0.75em;" type="text" placeholder="None Selected" data-theme="d" readonly/></td>
-									</tr>
-
-								</table>
-
-							</div>
-
-							<div data-role="collapsible" data-collapsed="true" class="drinkOption" data-theme="a" data-content-theme="c">
-								<h3>Or Create a New Game</h3>
-
-								<input id="newGameName" type="text" placeholder="Optional: Enter Game Name" data-theme="d"/>
-								<br/>
-
-								<span>1. Choose other players</span>
-
-								<a href="javascript:$.showGamePlayerList(true, null)" class="smallerButton wholeWidthButton" data-role="button" data-theme="a" data-inline="true" data-icon="search">Choose Players</a>
-
-								<span>2. What are you drinking?</span>
-								<fieldset data-role="controlgroup">
-									<input type="radio" name="drink_choice" id="drink_beer_bottle" value="swig" class="drinkOption" checked="checked" />
-									<label for="drink_beer_bottle">Bottled Beer</label>
-
-									<input type="radio" name="drink_choice" id="drink_beer_draught" value="finger"  class="drinkOption"/>
-									<label for="drink_beer_draught">Draft Beer</label>
-
-									<input type="radio" name="drink_choice" id="drink_spirit_mixed" value="finger"  class="drinkOption"/>
-									<label for="drink_spirit_mixed">Mixed Spirit</label>
-
-									<input type="radio" name="drink_choice" id="drink_spirit_pure" value="shot"  class="drinkOption"/>
-									<label for="drink_spirit_pure">Pure Spirit</label>
-
-									<input type="radio" name="drink_choice" id="drink_wine" value="sip"  class="drinkOption"/>
-									<label for="drink_wine">Wine</label>
-								</fieldset>
-
-								<span>3. Select Game Options</span>
-								<fieldset id="gameOptions" data-role="controlgroup" data-role="fieldcontain">
-									<input type="checkbox" name="playAsAnyone" id="playAsAnyone" class="gameFlag"/>
-									<label for="playAsAnyone">Play as anyone</label>
-									<input type="checkbox" name="fullBetting" id="fullBetting" class="gameFlag"/>
-									<label for="fullBetting">Bet on any card</label>
-									<input type="checkbox" name="removeCards" id="removeCards" class="gameFlag" checked/>
-									<label for="removeCards">Remove played cards</label>
-									<input type="checkbox" name="limitBetsToOne" id="limitBetsToOne" class="gameFlag" />
-									<label for="limitBetsToOne">Limit bets to 1</label>
-									<input type="checkbox" name="wholePack" id="wholePack" class="gameFlag"/>
-									<label for="wholePack">Use the whole pack</label>
-								</fieldset>
-							</div>
-
+						<div class="selectedItemName">
+							<span>Game:</span>
+							<input id="gameName" type="text" placeholder="Optional: Enter New Game Name" data-theme="d"/>
 						</div>
 
-						<a href="javascript:$.startGame()" id="start" class="formButton" data-role="button" data-theme="b" data-inline="true" data-icon="check">Create New Game</a>
+						<div id="newGameForm">
+							<span style="font-weight: bold;">1. Choose other players</span>
 
-						<a href="javascript:$.closeForm()" id="cancel" class="formButton" data-role="button" data-theme="c" data-inline="true" data-icon="back" style="display:none;">Back to game</a>
+							<a href="javascript:$.showGamePlayerList(true, null)" class="button wholeWidthButton" data-role="button" data-theme="a" data-inline="true" data-icon="search">Choose Players</a>
 
-						<span class="game_spinner" style="display:none;"><img src="/images/loading.gif"/>&nbsp;Loading</span>
-						<span id="errorMessage" style="display: none;">No Player Selected</span>
+							<span style="font-weight: bold;">2. What are you drinking?</span>
+							<fieldset data-role="controlgroup">
+								<input type="radio" name="drink_choice" id="drink_beer_bottle" value="swig" class="drinkOption" checked="checked" data-theme="c"/>
+								<label for="drink_beer_bottle">Bottled Beer</label>
 
+								<input type="radio" name="drink_choice" id="drink_beer_draught" value="finger"  class="drinkOption" data-theme="c"/>
+								<label for="drink_beer_draught">Draft Beer</label>
+
+								<input type="radio" name="drink_choice" id="drink_spirit_mixed" value="finger"  class="drinkOption" data-theme="c"/>
+								<label for="drink_spirit_mixed">Mixed Spirit</label>
+
+								<input type="radio" name="drink_choice" id="drink_spirit_pure" value="shot"  class="drinkOption" data-theme="c"/>
+								<label for="drink_spirit_pure">Pure Spirit</label>
+
+								<input type="radio" name="drink_choice" id="drink_wine" value="sip"  class="drinkOption" data-theme="c"/>
+								<label for="drink_wine">Wine</label>
+							</fieldset>
+
+							<span style="font-weight: bold;">3. Select Game Options</span>
+							<fieldset id="gameOptions" data-role="controlgroup" data-role="fieldcontain">
+								<input type="checkbox" name="playAsAnyone" id="playAsAnyone" class="gameFlag" data-theme="c"/>
+								<label for="playAsAnyone">Play as anyone</label>
+								<input type="checkbox" name="fullBetting" id="fullBetting" class="gameFlag" data-theme="c"/>
+								<label for="fullBetting">Bet on any card</label>
+								<input type="checkbox" name="removeCards" id="removeCards" class="gameFlag" data-theme="c" checked/>
+								<label for="removeCards">Remove played cards</label>
+								<input type="checkbox" name="limitBetsToOne" id="limitBetsToOne" class="gameFlag" data-theme="c" />
+								<label for="limitBetsToOne">Limit bets to 1</label>
+								<input type="checkbox" name="wholePack" id="wholePack" class="gameFlag" data-theme="c"/>
+								<label for="wholePack">Use the whole pack</label>
+							</fieldset>
+
+						</div>
 					</div>
 
-					<!--Hidden game list -->
-					<div id="gameList" style="display:none;">
-						<a class="listButton wholeWidthButton" style="margin-bottom: 20px;" href="javascript:$.showGameList(false, null, null)" data-role="button" data-theme="a" data-inline="true" data-icon="back">Back</a>
-						<ul data-role="listview" data-filter="true" data-inset="true" data-theme="c"></ul>
-						<a class="listButton wholeWidthButton" href="javascript:$.showGameList(false, null, null)" data-role="button" data-theme="a" data-inline="true" data-icon="back">Back</a>
-					</div>
+					<a href="javascript:$.startGame()" id="start" class="formButton" data-role="button" data-theme="b" data-inline="true" data-icon="check">Start Game</a>
 
-					<!--Hidden player list -->
-					<div id="playerList" style="display:none;">
-						<a class="listButton wholeWidthButton" style="margin-bottom: 20px;" href="javascript:$.showPlayerList(false, null)" data-role="button" data-theme="a" data-inline="true" data-icon="back">Back</a>
-						<ul data-role="listview" data-filter="true" data-inset="true" data-theme="c"></ul>
-						<a class="listButton wholeWidthButton" href="javascript:$.showPlayerList(false, null)" data-role="button" data-theme="a" data-inline="true" data-icon="back">Back</a>
-					</div>
+					<a href="javascript:$.closeForm()" id="cancel" class="formButton" data-role="button" data-theme="c" data-inline="true" data-icon="back" style="display:none;">Back to game</a>
 
-					<!--Hidden game player list -->
-					<div id="gamePlayerList" style="display:none;">
-						<a class="listButton wholeWidthButton" style="margin-bottom: 20px;" href="javascript:$.showGamePlayerList(false, null)" data-role="button" data-theme="a" data-inline="true" data-icon="check">Done</a>
-						<ul data-role="listview" data-filter="true" data-inset="true" data-theme="c"></ul>
-						<a class="listButton wholeWidthButton" href="javascript:$.showGamePlayerList(false, null)" data-role="button" data-theme="a" data-inline="true" data-icon="check">Done</a>
-					</div>
+					<span class="game_spinner" style="display:none;"><img src="/images/loading.gif"/>&nbsp;Loading</span>
+					<span id="errorMessage" style="display: none;">No Player Selected</span>
 
-					<!-- New player form -->
-					<div id="playerForm" style="display:none;">
-						<span>Create a new player</span>
-						<br/>
-						<br/>
-						<b>User Name*</b>
-						<br/>
-						<input type="text" class="playerFormField" name="pname" id="pname" MAXLENGTH=8"/>
-						<br/>
-						First Name
-						<br/>
-						<input type="text" class="playerFormField" name="fname" id="fname"/>
-						<br/>
-						Surname
-						<br/>
-						<input type="text"  class="playerFormField" name="surname" id="surname"/>
-						<br/>
-						<a href="javascript:$.createNewPlayer(false, true)" id="createPlayer" data-role="button" data-theme="b" data-inline="true" data-icon="check">Create</a>
-						<a href="javascript:$.createNewPlayer(false, false)" id="cancelPlayer" data-role="button" data-theme="c" data-inline="true" data-icon="back">Cancel</a>
-						<p id="playerFormErrorMessage" style="display:none;">User name already in use or invalid!</p>
-					</div>
-
-					<!-- Download required icons -->
-					<img src="/images/allcards.png" style="display:none;"/>
 				</div>
+
+				<!--Hidden game list -->
+				<div id="gameList" style="display:none;">
+					<a class="button wholeWidthButton" style="margin-bottom: 20px;" href="javascript:$.showGameList(false, null, null)" data-role="button" data-theme="a" data-inline="true" data-icon="back">Cancel</a>
+					<ul data-role="listview" data-filter="true" data-inset="true" data-theme="c"></ul>
+					<a class="button wholeWidthButton" href="javascript:$.showGameList(false, null, null)" data-role="button" data-theme="a" data-inline="true" data-icon="back">Cancel</a>
+				</div>
+
+				<!--Hidden player list -->
+				<div id="playerList" style="display:none;">
+					<a class="button wholeWidthButton" style="margin-bottom: 20px;" href="javascript:$.showPlayerList(false, null)" data-role="button" data-theme="a" data-inline="true" data-icon="back">Back</a>
+					<ul data-role="listview" data-filter="true" data-inset="true" data-theme="c"></ul>
+					<a class="button wholeWidthButton" href="javascript:$.showPlayerList(false, null)" data-role="button" data-theme="a" data-inline="true" data-icon="back">Back</a>
+				</div>
+
+				<!--Hidden game player list -->
+				<div id="gamePlayerList" style="display:none;">
+					<a class="button wholeWidthButton" style="margin-bottom: 20px;" href="javascript:$.showGamePlayerList(false, null)" data-role="button" data-theme="a" data-inline="true" data-icon="check">Done</a>
+					<ul data-role="listview" data-filter="true" data-inset="true" data-theme="c"></ul>
+					<a class="button wholeWidthButton" href="javascript:$.showGamePlayerList(false, null)" data-role="button" data-theme="a" data-inline="true" data-icon="check">Done</a>
+				</div>
+
+				<!-- New player form -->
+				<div id="playerForm" style="display:none;">
+					<span>Create a new player</span>
+					<br/>
+					<br/>
+					<b>User Name*</b>
+					<br/>
+					<input type="text" class="playerFormField" name="pname" id="pname" MAXLENGTH=8"/>
+					<br/>
+					First Name
+					<br/>
+					<input type="text" class="playerFormField" name="fname" id="fname"/>
+					<br/>
+					Surname
+					<br/>
+					<input type="text"  class="playerFormField" name="surname" id="surname"/>
+					<br/>
+					<a href="javascript:$.createNewPlayer(false, true)" id="createPlayer" data-role="button" data-theme="b" data-inline="true" data-icon="check">Create</a>
+					<a href="javascript:$.createNewPlayer(false, false)" id="cancelPlayer" data-role="button" data-theme="c" data-inline="true" data-icon="back">Cancel</a>
+					<p id="playerFormErrorMessage" style="display:none;">User name already in use or invalid!</p>
+				</div>
+
+				<!-- Download required icons -->
+				<img src="/images/allcards.png" style="display:none;"/>
 			</div>
 
-			<div id="game-contents" style="display: none;">
-
-				<div id="mainTab" class="tab-content" data-role="content">
-						<p class="nameBar">
-							<span id="playerName"/>
-						</p>
-						<div id="sliderPanel">
-							<div id="sliderBar" style="display:none;">
-								Bet: <input type="range" name="slider" id="currentNumFingers" value="0" min="0" max="4" data-theme="c" readonly/>
-							</div>
+			<!-- Game -->
+			<div id="gameTab" class="tab-content" data-role="content" style="display: none;">
+					<p class="nameBar">
+						<span id="playerName"/>
+					</p>
+					<div id="sliderPanel">
+						<div id="sliderBar" style="display:none;">
+							Bet: <input type="range" name="slider" id="currentNumFingers" value="0" min="0" max="4" data-theme="c" readonly/>
 						</div>
-						<div id="cardDisplay">
-							<div id="card"></div>
-						</div>
-						<div id="gameButtons" data-role="controlgroup" data-type="horizontal">
-							<a id="higher" href="javascript:$.playTurn(true)" data-role="button" data-icon="arrow-u" data-theme="b">Higher</a>
-							<a id="lower" href="javascript:$.playTurn(false)" data-role="button" data-icon="arrow-d" data-theme="c">Lower</a>
-						</div>
-				</div>
+					</div>
+					<div id="cardDisplay">
+						<div id="card"></div>
+					</div>
+					<div id="gameButtons" data-role="controlgroup" data-type="horizontal">
+						<a id="higher" href="javascript:$.playTurn(true)" data-role="button" data-icon="arrow-u" data-theme="b">Higher</a>
+						<a id="lower" href="javascript:$.playTurn(false)" data-role="button" data-icon="arrow-d" data-theme="c">Lower</a>
+					</div>
 
 				<div id="footer" data-role="footer" data-theme="b">
 					<div data-role="controlgroup" data-type="horizontal">
@@ -267,7 +249,7 @@
 					<p id="stats_correctS"><b>Most correct guesses in a row: </b><span></span></p>
 					<p id="stats_incorrectS"><b>Most incorrect guesses in a row: </b><span></span></p>
 					<p id="stats_fingers"><b>Most <span></span> drank: </b><span></span></p>
-					<a class="listButton wholeWidthButton" href="javascript:$.showPlayerStats(0,false)" data-role="button" data-icon="back" data-theme="c">Back</a>
+					<a class="button wholeWidthButton" href="javascript:$.showPlayerStats(0,false)" data-role="button" data-icon="back" data-theme="c">Back</a>
 				</div>
 			</div>
 

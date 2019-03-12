@@ -50,7 +50,7 @@ $.prepareGame = function(){
 
         prevPlayer = cookie.split("=")[1];
 
-        $("#selectedPlayerName").val(prevPlayer);
+        $("#selectedPlayerName").text(prevPlayer);
     }
 
     let path = window.location.pathname;
@@ -98,16 +98,13 @@ $.prepareGame = function(){
                 url: "/api/players/" + playerName,
                 success: function(player){
 
-                    GAME_ID = gameId;
+                    $.setExistingGameSelected(gameId, $.generateGameName(game));
 
-                    $("#selectedPlayerName").val(playerName);
+                    // Set player
+                    $("#selectedPlayerName").text(playerName);
 
                     // Get game player list - after player is set
                     $.getGamePlayerList();
-
-                    $("#selectedGameName").val($.generateGameName(game));
-
-                    $("#start").html($("#start").html().replace("Create New", "Join"));
 
                     // Launch the game
                     $.startGame();
@@ -270,7 +267,7 @@ $.startGame = function(){
 	var canPlay = true;
 		
 	//Check to ensure all player names are entered
-	if($("#selectedPlayerName").val() == ""){
+	if($("#selectedPlayerName").text() == ""){
 		canPlay = false;
 
 		errorMessage.show();
@@ -294,7 +291,7 @@ $.startGame = function(){
 		$(".game_spinner").show();
 	}
 
-	const selectedPlayerName = $("#selectedPlayerName").val();
+	const selectedPlayerName = $("#selectedPlayerName").text();
 
 	let players = [];
 
@@ -307,7 +304,7 @@ $.startGame = function(){
 	//Hide any current card
 	$("#cardDisplay").removeClass('green red');
 
-	if(!GAME_ID || !$("#selectedGameName").val()){
+	if(!GAME_ID || !$("#gameName").val()){
 
         $("#gamePlayerList ul li input[type=checkbox]:checked").each(function () {
 
@@ -328,7 +325,7 @@ $.startGame = function(){
 
 $.createNewGame = function(players){
 
-    let gameName = $("#newGameName").val();
+    let gameName = $("#gameName").val();
 
     if(!gameName) {
         const date = new Date();
@@ -693,7 +690,7 @@ $.leaveGame = function(){
             // Open
             $.openForm();
 
-            $.clearCurrentGame();
+            $.showNewGameForm(true);
 
             // Reset scoretab
             resetScoreTable();

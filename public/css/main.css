@@ -11,7 +11,19 @@
 	text-shadow: none;
 }
 
-#mainTab, #scoreTab{
+#formTab{
+	padding: 5px 10px 10px 10px;
+}
+
+#formTab p.title{
+	margin-block-start: 0;
+	margin-block-end: 0;
+	text-align: center;
+	font-weight: bold;
+	font-size: 18px;
+}
+
+#gameTab, #scoreTab{
 	text-align:center;
 	padding: 0;
 }
@@ -163,22 +175,34 @@ span#drinkMessage{
 
 /* Form*/
 
-.formPanel .ui-collapsible-heading {
-	font-size: 15px;
+#newGameForm{
+	text-align: left;
+	margin-top: 10px;
 }
 
-.formPanel .ui-collapsible-content{
-	padding: 10px 8px;
-}
-
-a.listButton{
-	font-size: 0.8em;
+a.button{
+	font-size: 12px;
 	margin: 0;
 }
 
-a.smallerButton{
-	font-size:0.7em;
-	margin: 0;
+a.largeButton{
+	text-align: left;
+	font-size: 16px;
+	height: 55px;
+	border: 5px solid transparent;
+	min-width: 125px;
+}
+
+a.largeButton span.ui-btn-text{
+	top: -4px;
+}
+
+a.largeButton span.ui-icon{
+	margin-top: -11px;
+}
+
+a.largeButton.selected{
+	border: 5px solid #f3b805;
 }
 
 a.wholeWidthButton{
@@ -196,7 +220,7 @@ a.formButton.ui-btn-corner-all, a.formButton span.ui-btn-corner-all{
     border-radius: 3px;
 }
 
-a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
+a.formButton .ui-btn-inner{
 	padding-right: 7px;
 }
 
@@ -229,12 +253,28 @@ a.smallerButton .ui-btn-inner, a.formButton .ui-btn-inner{
 	top:9px;
 }
 
-.gameForm table{
-	width: 98%;
+.gameForm .gameFormSection{
+
+	text-align: center;
+	border-bottom: 1px solid grey;
 }
 
-.gameForm table td.tableButton{
-	width: 20%;
+.selectedItemName{
+
+	text-align: left;
+	margin-bottom: 8px;
+}
+
+.selectedItemName input{
+
+	width: calc(100% - 75px);
+	display: inline;
+}
+
+#selectedPlayerName{
+
+	color: #3a6fa4;
+	font-weight: bold;
 }
 
 /*Game List*/

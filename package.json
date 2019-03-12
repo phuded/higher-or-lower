@@ -1,6 +1,6 @@
 {
   "name": "higher-or-lower",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "",
   "main": "src/server.js",
   "scripts": {
