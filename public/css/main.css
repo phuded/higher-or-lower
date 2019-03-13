@@ -175,6 +175,12 @@ span#drinkMessage{
     margin-bottom: 10px;
 }
 
+#newGameForm p{
+	font-weight: bold;
+	margin-block-start: 18px;
+	margin-block-end: -2px;
+}
+
 a.button{
 	font-size: 12px;
 	margin: 0;
