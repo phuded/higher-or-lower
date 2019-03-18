@@ -297,6 +297,9 @@ $.startGame = function(){
 		$(".game_spinner").show();
 	}
 
+    // Hide start button
+    $("#start").hide();
+
 	const selectedPlayerName = $("#selectedPlayerName").val();
 
 	let players = [];

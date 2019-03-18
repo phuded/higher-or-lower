@@ -24,10 +24,14 @@ $.closeForm = function(){
 
 	// New
 	$("#formTab").hide();
-	$("#gameTab").fadeIn();
 
-    // Show cancel
-    $("#cancel").show();
+	$("#gameTab").fadeIn(function() {
+        // Show cancel
+        $("#cancel").show();
+
+        // Show start button
+        $("#start").show();
+    });
 
     // History
     history.replaceState({}, "", "/" + GAME_ID + "/" + LOGGED_IN_PLAYER + "/");
