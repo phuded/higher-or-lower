@@ -2,6 +2,7 @@ $.showNewGameForm = function(show){
 
     if(show) {
 
+        $("#gameNameDiv").show();
         $("#newGameForm").show();
         $("#ng").addClass("selected");
         $("#eg").removeClass("selected");
@@ -17,8 +18,14 @@ $.showNewGameForm = function(show){
         gameName.val("");
         gameName.attr("readonly", null);
         gameName.removeClass("selected");
+        gameName.attr("placeholder", "Optional: Enter New Game Name");
 
-        $("#start").html($("#start").html().replace("Join", "Start"));
+        const start = $("#start");
+
+        start.html(start.html().replace("Join", "Start"));
+
+        // Show start button
+        start.show();
 
         return;
     }
@@ -350,8 +357,8 @@ $.showGameList = function(show, selectedGameId, selectedGameName){
             return;
         }
 
-        // Cancel is pressed
-        $.showNewGameForm(true);
+        // Cancel is pressed TODO: test
+        //$.showNewGameForm(true);
     });
 
 };
@@ -435,6 +442,8 @@ $.setExistingGameSelected = function(selectedGameId, selectedGameName){
     // Don't show new game form
     $.showNewGameForm(false);
 
+    $("#gameNameDiv").show();
+
     // Selected a game
     GAME_ID = selectedGameId;
 
@@ -447,7 +456,12 @@ $.setExistingGameSelected = function(selectedGameId, selectedGameName){
     $("#eg").addClass("selected");
     $("#ng").removeClass("selected");
 
-    $("#start").html($("#start").html().replace("Start", "Join"));
+    const start = $("#start");
+
+    start.html(start.html().replace("Start", "Join"));
+
+    // Show start button
+    start.show();
 
 };
 

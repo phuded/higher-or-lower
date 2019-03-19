@@ -594,7 +594,7 @@ $.displayCard = function(game, status, showPopup, showNotification){
     CURRENT_CARD = game.currentCard;
 
 	//Update num of cards left
-	$("#cardsLeft").html("<u>" + game.cardsLeft + "</u>" + (game.cardsLeft > 1 ? " cards":" card"));
+	$("#cardsLeft").html(game.cardsLeft + (game.cardsLeft > 1 ? " cards":" card"));
 };
 
 /**

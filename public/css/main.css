@@ -177,7 +177,7 @@ span#drinkMessage{
 
 #newGameForm p{
 	font-weight: bold;
-	margin-top: 20px;
+	margin-top: 35px;
 	margin-bottom: -2px;
 }
 
@@ -187,7 +187,7 @@ a.button{
 }
 
 a.largeButton{
-	text-align: left;
+	text-align: center;
 	font-size: 16px;
 	height: 55px;
 	border: 5px solid transparent;

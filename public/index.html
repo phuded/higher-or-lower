@@ -74,26 +74,29 @@
 					</div>
 
 					<div class="gameFormSection">
-						<a id="ng" class="largeButton selected" href="javascript:$.showNewGameForm(true)" data-role="button" data-icon="plus" data-inline="true" data-iconpos="right" data-theme="a">New</br>Game</a>
+						<a id="ng" class="largeButton" href="javascript:$.showNewGameForm(true)" data-role="button" data-icon="plus" data-inline="true" data-iconpos="right" data-theme="a">New</br>Game</a>
 						<a id="eg" class="largeButton" href="javascript:$.showGameList(true)" data-role="button" data-icon="search" data-inline="true" data-iconpos="right">Existing</br>Game</a>
 
-						<div class="selectedItemName">
+						<div id="gameNameDiv" class="selectedItemName"readonly>
 							<span>Game:</span>
-							<input id="gameName" type="text" placeholder="Optional: Enter New Game Name" data-theme="d"/>
+							<input id="gameName" class="selected" type="text" readonly placeholder="No Game" data-theme="d"/>
 						</div>
 
-						<div id="newGameForm">
+						<div id="newGameForm" style="display: none;">
 							<p>1. Choose other players to join</p>
 
-							<a href="javascript:$.showGamePlayerList(true, null)" class="button wholeWidthButton" data-role="button" data-theme="a" data-inline="true" data-icon="search">Choose Players</a>
+							<div style="text-align: center">
+								<a href="javascript:$.showGamePlayerList(true, null)" class="largeButton" data-role="button" data-theme="a" data-inline="true" data-icon="search" data-iconpos="right">Choose</br>Players</a>
+							</div>
 
 							<p>2. What are you drinking?</p>
 							<fieldset data-role="controlgroup">
-								<input type="radio" name="drink_choice" id="drink_beer_bottle" value="swig" class="drinkOption" checked="checked" data-theme="c"/>
-								<label for="drink_beer_bottle">Bottled Beer</label>
 
-								<input type="radio" name="drink_choice" id="drink_beer_draught" value="finger"  class="drinkOption" data-theme="c"/>
+								<input type="radio" name="drink_choice" id="drink_beer_draught" value="finger"  class="drinkOption" checked="checked" data-theme="c"/>
 								<label for="drink_beer_draught">Draft Beer</label>
+
+								<input type="radio" name="drink_choice" id="drink_beer_bottle" value="swig" class="drinkOption" data-theme="c"/>
+								<label for="drink_beer_bottle">Bottled Beer</label>
 
 								<input type="radio" name="drink_choice" id="drink_spirit_mixed" value="finger"  class="drinkOption" data-theme="c"/>
 								<label for="drink_spirit_mixed">Mixed Spirit</label>
@@ -122,7 +125,7 @@
 						</div>
 					</div>
 
-					<a href="javascript:$.startGame()" id="start" class="formButton" data-role="button" data-theme="b" data-inline="true" data-icon="check">Start Game</a>
+					<a href="javascript:$.startGame()" id="start" class="formButton" data-role="button" data-theme="b" data-inline="true" data-icon="check" style="display:none;">Start Game</a>
 
 					<a href="javascript:$.closeForm()" id="cancel" class="formButton" data-role="button" data-theme="c" data-inline="true" data-icon="back" style="display:none;">Back to game</a>
 
