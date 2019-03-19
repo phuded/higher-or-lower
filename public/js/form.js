@@ -325,19 +325,19 @@ $.getGamePlayerList = function(completeFunction){
 /* GAMES */
 function showGameListUI(){
 
-    $(".gameForm").fadeOut(function() {
+    $("#gameList").fadeIn('fast');
 
-        $("#gameList").fadeIn('fast');
-
-    });
 };
 
 $.showGameList = function(show, selectedGameId, selectedGameName){
 
     if(show){
 
-        // Load the game list
-        $.getGameList(showGameListUI);
+        $(".gameForm").fadeOut(function() {
+
+            // Load the game list
+            $.getGameList(showGameListUI);
+        });
 
         return;
     }
