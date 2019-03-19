@@ -80,6 +80,15 @@ $.createNewPlayer = function(show, player){
         return
     }
 
+    const createPlayerButton = $("#createPlayer");
+    const cancelPlayerButton = $("#cancelPlayer");
+    const playerSpinner = $(".player_spinner");
+
+    createPlayerButton.hide();
+    cancelPlayerButton.hide();
+
+    playerSpinner.show();
+
     const fName = $("#fname").val();
     const surname = $("#surname").val();
 
@@ -101,7 +110,9 @@ $.createNewPlayer = function(show, player){
             //Show previous screen
             playerForm.fadeOut(function() {
 
-                formContent.fadeIn('fast');
+                createPlayerButton.show();
+                cancelPlayerButton.show();
+                playerSpinner.hide();
 
                 $("#selectedPlayerName").val(player.name);
 
@@ -115,6 +126,9 @@ $.createNewPlayer = function(show, player){
 
                 // Remove main form error
                 $("#errorMessage").hide();
+
+                formContent.fadeIn('fast');
+
             });
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {

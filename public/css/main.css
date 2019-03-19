@@ -241,17 +241,8 @@ a.formButton .ui-btn-inner{
 	font-size:0.9em;
 }
 
-.game_spinner{
-	position:relative;
-	top:3px;
-	left:10px;
-}
-
-.game_spinner img{
-	height:30px;
-	width:30px;
-	position:relative;
-	top:9px;
+.player_spinner, .game_spinner{
+	height: 30px;
 }
 
 .gameForm .gameFormSection{

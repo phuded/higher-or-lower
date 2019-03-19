@@ -126,7 +126,8 @@
 
 					<a href="javascript:$.closeForm()" id="cancel" class="formButton" data-role="button" data-theme="c" data-inline="true" data-icon="back" style="display:none;">Back to game</a>
 
-					<span class="game_spinner" style="display:none;"><img src="/images/loading.gif"/>&nbsp;Loading</span>
+					<img class="game_spinner" style="display:none; margin: 10px 0 0 5px;" src="/images/loading.gif"/>
+
 					<span id="errorMessage" style="display: none;">No Player Selected</span>
 
 				</div>
@@ -171,6 +172,9 @@
 					<br/>
 					<a href="javascript:$.createNewPlayer(false, true)" id="createPlayer" data-role="button" data-theme="b" data-inline="true" data-icon="check">Create</a>
 					<a href="javascript:$.createNewPlayer(false, false)" id="cancelPlayer" data-role="button" data-theme="c" data-inline="true" data-icon="back">Cancel</a>
+
+					<img class="player_spinner" style="display:none;" src="/images/loading.gif"/>
+
 					<p id="playerFormErrorMessage" style="display:none;">User name already in use or invalid!</p>
 				</div>
 
