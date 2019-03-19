@@ -23,6 +23,10 @@
 	font-size: 18px;
 }
 
+#formTab p.header{
+	font-weight: bold;
+}
+
 #gameTab, #scoreTab{
 	text-align:center;
 	padding: 0;
@@ -148,7 +152,7 @@ div#pictureContainer{
 	text-align: center;
 }
 
-div#pictureContainer >div{
+div#pictureContainer > div{
 	height: 80px;
 }
 
@@ -176,7 +180,6 @@ span#drinkMessage{
 }
 
 #newGameForm p{
-	font-weight: bold;
 	margin-top: 35px;
 	margin-bottom: -2px;
 }
@@ -246,19 +249,19 @@ a.formButton .ui-btn-inner{
 }
 
 .gameForm .gameFormSection{
-
-	text-align: center;
+	text-align: left;
 	border-bottom: 1px solid grey;
 }
 
-.selectedItemName{
+.gameForm .gameFormButtons{
+	text-align: center;
+}
 
-	text-align: left;
+.selectedItemName{
 	margin-bottom: 8px;
 }
 
 .selectedItemName input{
-
 	width: calc(100% - 75px);
 	display: inline;
 }

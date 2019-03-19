@@ -65,8 +65,13 @@
 					</p>
 
 					<div class="gameFormSection">
-						<a id="np" class="largeButton" href="javascript:$.createNewPlayer(true, null)" data-role="button" data-icon="plus" data-inline="true" data-iconpos="right" data-theme="a">New</br>Player</a>
-						<a id="ep" class="largeButton" href="javascript:$.showPlayerList(true, null)" data-role="button" data-icon="search" data-inline="true" data-iconpos="right">Existing</br>Player</a>
+						<p class="header">1. Create a new or select an existing player:</p>
+
+						<div class="gameFormButtons">
+							<a id="np" class="largeButton" href="javascript:$.createNewPlayer(true, null)" data-role="button" data-icon="plus" data-inline="true" data-iconpos="right" data-theme="a">New</br>Player</a>
+							<a id="ep" class="largeButton" href="javascript:$.showPlayerList(true, null)" data-role="button" data-icon="search" data-inline="true" data-iconpos="right">Existing</br>Player</a>
+						</div>
+
 						<div class="selectedItemName">
 							<span>Player:</span>
 							<input id="selectedPlayerName" class="selected" readonly placeholder="No Player"/>
@@ -74,22 +79,26 @@
 					</div>
 
 					<div class="gameFormSection">
-						<a id="ng" class="largeButton" href="javascript:$.showNewGameForm(true)" data-role="button" data-icon="plus" data-inline="true" data-iconpos="right" data-theme="a">New</br>Game</a>
-						<a id="eg" class="largeButton" href="javascript:$.showGameList(true)" data-role="button" data-icon="search" data-inline="true" data-iconpos="right">Existing</br>Game</a>
+						<p class="header">2. Create a new or select an existing game:</p>
 
-						<div id="gameNameDiv" class="selectedItemName"readonly>
+						<div class="gameFormButtons">
+							<a id="ng" class="largeButton" href="javascript:$.showNewGameForm(true)" data-role="button" data-icon="plus" data-inline="true" data-iconpos="right" data-theme="a">New</br>Game</a>
+							<a id="eg" class="largeButton" href="javascript:$.showGameList(true)" data-role="button" data-icon="search" data-inline="true" data-iconpos="right">Existing</br>Game</a>
+						</div>
+
+						<div class="selectedItemName">
 							<span>Game:</span>
 							<input id="gameName" class="selected" type="text" readonly placeholder="No Game" data-theme="d"/>
 						</div>
 
 						<div id="newGameForm" style="display: none;">
-							<p>1. Choose other players to join</p>
+							<p class="header">3. Choose other players to join:</p>
 
-							<div style="text-align: center">
+							<div class="gameFormButtons">
 								<a href="javascript:$.showGamePlayerList(true, null)" class="largeButton" data-role="button" data-theme="a" data-inline="true" data-icon="search" data-iconpos="right">Choose</br>Players</a>
 							</div>
 
-							<p>2. What are you drinking?</p>
+							<p class="header">4. What are you drinking?</p>
 							<fieldset data-role="controlgroup">
 
 								<input type="radio" name="drink_choice" id="drink_beer_draught" value="finger"  class="drinkOption" checked="checked" data-theme="c"/>
@@ -108,7 +117,7 @@
 								<label for="drink_wine">Wine</label>
 							</fieldset>
 
-							<p>3. Select Game Options</p>
+							<p class="header">5. Select other game options</p>
 							<fieldset id="gameOptions" data-role="controlgroup" data-role="fieldcontain">
 								<input type="checkbox" name="playAsAnyone" id="playAsAnyone" class="gameFlag" data-theme="c"/>
 								<label for="playAsAnyone">Play as anyone</label>

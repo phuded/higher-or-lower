@@ -2,7 +2,6 @@ $.showNewGameForm = function(show){
 
     if(show) {
 
-        $("#gameNameDiv").show();
         $("#newGameForm").show();
         $("#ng").addClass("selected");
         $("#eg").removeClass("selected");
@@ -441,8 +440,6 @@ $.setExistingGameSelected = function(selectedGameId, selectedGameName){
 
     // Don't show new game form
     $.showNewGameForm(false);
-
-    $("#gameNameDiv").show();
 
     // Selected a game
     GAME_ID = selectedGameId;
