@@ -23,9 +23,6 @@ $.generateGameName = function(game, bold){
 
 $.handleInvalidParams = function () {
 
-    // Get game player list
-    $.getGamePlayerList();
-
     // History
     history.replaceState({}, "", "/");
 
@@ -33,6 +30,23 @@ $.handleInvalidParams = function () {
     $("body").show();
 };
 
+function getGamePlayerList(players){
+
+    if(!players){
+
+        players = [];
+    }
+
+    $("#gamePlayerList ul li input[type=checkbox]:checked").each(function () {
+
+        const name = $(this).attr('id').substr(7);
+
+        players.push(name);
+
+    });
+
+    return players;
+}
 
 $.preLoadImages = function(imageList, callback) {
 

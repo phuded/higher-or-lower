@@ -13,9 +13,6 @@ $.prepareGame = function(){
     // Preload
     $.preLoadImages(PRELOAD_IMAGES, null);
 
-    //Get player list
-    $.getPlayerList();
-
 	$('#drink').live('pageshow',function(event){
 
 		const fingers = $("#numFingers");
@@ -62,9 +59,6 @@ $.prepareGame = function(){
 
     if(path.length != 4 && path.length != 3){
 
-        // Get game player list - after cookie player is set
-        $.getGamePlayerList();
-
         // Show the page
         $("body").show();
 
@@ -108,9 +102,6 @@ $.prepareGame = function(){
 
                     $("#ep").addClass("selected");
                     $("#np").removeClass("selected");
-
-                    // Get game player list - after player is set
-                    $.getGamePlayerList();
 
                     // Launch the game
                     $.startGame();
@@ -313,15 +304,12 @@ $.startGame = function(){
 	//Hide any current card
 	$("#cardDisplay").removeClass('green red');
 
-	if(!GAME_ID || !$("#gameName").val()){
+	const newGame = $("#newGameForm").is(":visible");
 
-        $("#gamePlayerList ul li input[type=checkbox]:checked").each(function () {
+	if(newGame){
 
-            const name = $(this).attr('id').substr(7);
-
-            players.push(name);
-
-        });
+        // Add game players
+        players = players.concat(GAME_PLAYERS);
 
         $.createNewGame(players);
 
@@ -330,7 +318,6 @@ $.startGame = function(){
 
 	$.joinGame(players);
 };
-
 
 $.createNewGame = function(players){
 
@@ -755,6 +742,8 @@ let DRINK_TYPE;
 let LIMIT_BETS_TO_ONE = false;
 
 let GAME_ID;
+
+let GAME_PLAYERS = [];
 
 //Number of drinkers displayed in table
 let MAX_DRINKER_ROWS = 15;

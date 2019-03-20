@@ -95,7 +95,7 @@
 							<p class="header">3. Choose other players to join:</p>
 
 							<div class="gameFormButtons">
-								<a href="javascript:$.showGamePlayerList(true, null)" class="largeButton" data-role="button" data-theme="a" data-inline="true" data-icon="search" data-iconpos="right">Choose</br>Players</a>
+								<a href="javascript:$.showGamePlayerList(true)" class="largeButton" data-role="button" data-theme="a" data-inline="true" data-icon="search" data-iconpos="right">Choose</br>Players</a>
 							</div>
 
 							<p class="header">4. What are you drinking?</p>
@@ -138,7 +138,7 @@
 
 					<a href="javascript:$.closeForm()" id="cancel" class="formButton" data-role="button" data-theme="c" data-inline="true" data-icon="back" style="display:none;">Back to game</a>
 
-					<img class="game_spinner" style="display:none; height: 35px; margin: 10px 0 0 5px;" src="/images/loading.gif"/>
+					<img class="game_spinner" style="display:none; height: 45px; margin: 10px 0 0 5px;" src="/images/loading.gif"/>
 
 					<span id="errorMessage" style="display: none;">No Player Selected</span>
 
@@ -160,9 +160,9 @@
 
 				<!--Hidden game player list -->
 				<div id="gamePlayerList" style="display:none;">
-					<a class="button wholeWidthButton" style="margin-bottom: 20px;" href="javascript:$.showGamePlayerList(false, null)" data-role="button" data-theme="a" data-inline="true" data-icon="check">Done</a>
+					<a class="button wholeWidthButton" style="margin-bottom: 20px;" href="javascript:$.showGamePlayerList(false)" data-role="button" data-theme="a" data-inline="true" data-icon="check">Done</a>
 					<ul data-role="listview" data-filter="true" data-inset="true" data-theme="c"></ul>
-					<a class="button wholeWidthButton" href="javascript:$.showGamePlayerList(false, null)" data-role="button" data-theme="a" data-inline="true" data-icon="check">Done</a>
+					<a class="button wholeWidthButton" href="javascript:$.showGamePlayerList(false)" data-role="button" data-theme="a" data-inline="true" data-icon="check">Done</a>
 				</div>
 
 				<!-- New player form -->

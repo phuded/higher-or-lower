@@ -23,6 +23,9 @@ $.showNewGameForm = function(show){
 
         start.html(start.html().replace("Join", "Start"));
 
+        // Reset
+        GAME_PLAYERS = [];
+
         // Show start button
         start.show();
 
@@ -110,8 +113,6 @@ $.createNewPlayer = function(show, player){
         success: function(player){
 
             //Added!
-            //Refresh player list
-            $.getPlayerList();
 
             //Show previous screen
             playerForm.fadeOut(function() {
@@ -126,9 +127,6 @@ $.createNewPlayer = function(show, player){
                 $("#ep").removeClass("selected");
 
                 $.clearNewPlayerForm();
-
-                // Reload
-                $.getGamePlayerList();
 
                 // Remove main form error
                 $("#errorMessage").hide();
@@ -158,6 +156,12 @@ $.clearNewPlayerForm = function(){
 
 
 /* PLAYERS */
+function showPlayerListUI(){
+
+    $("#playerList").fadeIn('fast');
+
+};
+
 $.showPlayerList = function(show, player){
 
     const formContent = $(".gameForm");
@@ -166,7 +170,9 @@ $.showPlayerList = function(show, player){
     if(show){
 
         formContent.fadeOut(function() {
-            playerList.fadeIn('fast');
+
+            // Load the player list
+            $.getPlayerList(showPlayerListUI);
         });
 
         return;
@@ -188,11 +194,10 @@ $.showPlayerList = function(show, player){
             // Store in cookie
             $.setCookie(player);
 
+            // Reset
+            GAME_PLAYERS = [];
+
             $("#errorMessage").hide();
-
-            // Get game player list
-            $.getGamePlayerList();
-
         }
     });
 
@@ -210,7 +215,6 @@ $.setCookie = function(playerName){
 
 
 /* Get List of players */
-/* TODO: Fix complete */
 $.getPlayerList = function(completeFunction){
 
     const playerList = $("#playerList ul");
@@ -251,7 +255,13 @@ $.getPlayerList = function(completeFunction){
 };
 
 /* GAME PLAYERS */
-$.showGamePlayerList = function(show, player){
+function showGamePlayerListUI(){
+
+    $("#gamePlayerList").fadeIn('fast');
+
+};
+
+$.showGamePlayerList = function(show){
 
     const formContent = $(".gameForm");
     const gamePlayerList = $("#gamePlayerList");
@@ -259,25 +269,27 @@ $.showGamePlayerList = function(show, player){
     if(show){
 
         formContent.fadeOut(function() {
-            gamePlayerList.fadeIn('fast');
+
+            // Load the player list
+            $.getGamePlayerList(showGamePlayerListUI);
         });
 
         return;
 
     }
 
+    // Show main form
     gamePlayerList.fadeOut(function() {
+
+        // Get the game players
+        GAME_PLAYERS = getGamePlayerList();
+
         formContent.fadeIn('fast');
-
-        if(player != null){
-
-        }
     });
 
 };
 
 /* Get List of game players */
-/* TODO: Fix complete */
 $.getGamePlayerList = function(completeFunction){
 
     const gamePlayerList = $("#gamePlayerList ul");
@@ -303,7 +315,9 @@ $.getGamePlayerList = function(completeFunction){
                 // Don't include selected player
                 if(selectedPlayer !== name) {
 
-                    options += "<li><label style='display:block;'><input type='checkbox' id='player-" + name + "' name='player-" + name + "'> " + name + "</label></li>";
+                    const checked = GAME_PLAYERS.includes(name)? "checked" : "";
+
+                    options += "<li><label style='display:block;'><input type='checkbox' id='player-" + name + "' name='player-" + name + "' " + checked + "> " + name + "</label></li>";
                 }
             }
 
@@ -346,6 +360,7 @@ $.showGameList = function(show, selectedGameId, selectedGameName){
 
         $(".gameForm").fadeIn('fast');
 
+        // If game selected
         if(selectedGameId != null){
 
             $.setExistingGameSelected(selectedGameId, selectedGameName);
@@ -356,8 +371,6 @@ $.showGameList = function(show, selectedGameId, selectedGameName){
             return;
         }
 
-        // Cancel is pressed TODO: test
-        //$.showNewGameForm(true);
     });
 
 };
@@ -456,6 +469,9 @@ $.setExistingGameSelected = function(selectedGameId, selectedGameName){
     const start = $("#start");
 
     start.html(start.html().replace("Start", "Join"));
+
+    // Reset
+    GAME_PLAYERS = [];
 
     // Show start button
     start.show();

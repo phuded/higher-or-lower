@@ -1,10 +1,6 @@
 //Custom function for closing the form
 $.openForm = function(){
 
-    //Get player list
-    $.getPlayerList();
-    $.getGamePlayerList();
-
 	//Clear Search
 	$("div#playerList input").val("");
 	$('div#playerList ul li').removeClass('ui-screen-hidden'); 
