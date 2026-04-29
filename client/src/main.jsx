@@ -579,8 +579,9 @@ function SetupScreen(props) {
         {players.filter((player) => player.name !== setup.playerName).map((player) => {
           const checked = setup.extraPlayers.includes(player.name);
           return (
-            <label key={player._id} className="list-row cursor-pointer">
+            <label key={player._id} className="list-row list-row-check cursor-pointer">
               <input
+                className="checkbox"
                 type="checkbox"
                 checked={checked}
                 onChange={(event) => onSetupChange((state) => ({
@@ -590,7 +591,10 @@ function SetupScreen(props) {
                     : state.extraPlayers.filter((name) => name !== player.name)
                 }))}
               />
-              <span className="font-medium">{player.name}</span>
+              <span className="min-w-0 font-medium">
+                {player.name}
+                {(player.firstName || player.surname) && <span className="font-normal text-slate-500"> - {player.firstName} {player.surname}</span>}
+              </span>
             </label>
           );
         })}

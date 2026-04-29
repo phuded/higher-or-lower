@@ -59,6 +59,18 @@ input {
   background: rgb(248 250 252);
 }
 
+.list-row-check {
+  gap: 0.75rem;
+  padding: 0.7rem 0.85rem;
+}
+
+.checkbox {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: 0 0 auto;
+  accent-color: rgb(15 23 42);
+}
+
 .status-bar {
   border-radius: 0.375rem;
   border: 1px solid rgb(203 213 225);
