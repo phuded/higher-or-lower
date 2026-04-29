@@ -5,15 +5,21 @@
   "main": "src/server.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon --exec babel-node src/server.js",
-    "build": "babel src --out-dir dist",
+    "build": "yarn build:client && yarn build:server",
+    "build:client": "vite build",
+    "build:server": "babel src --out-dir dist",
     "serve": "node dist/server.js"
   },
   "keywords": [],
   "author": "Matt Carter",
   "license": "ISC",
   "devDependencies": {
+    "@tailwindcss/vite": "^4.2.4",
+    "@vitejs/plugin-react": "^6.0.1",
     "cross-env": "^10.1.0",
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "tailwindcss": "^4.2.4",
+    "vite": "^8.0.10"
   },
   "dependencies": {
     "@babel/cli": "^7.28.6",
@@ -22,9 +28,15 @@
     "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.29.2",
     "body-parser": "^2.2.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "express": "^5.2.1",
+    "lucide-react": "^1.14.0",
     "mongoose": "^9.6.0",
     "path": "^0.12.7",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "tailwind-merge": "^3.5.0",
     "websocket": "^1.0.35"
   }
 }
