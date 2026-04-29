@@ -343,7 +343,7 @@ function App() {
       })
     });
 
-    setCardAnimation({from: previousCard, to: nextGame.currentCard, revealing: false});
+    setCardAnimation({from: previousCard, to: nextGame.currentCard, status: nextGame.status, revealing: false});
     setCurrentBet(0);
 
     queueAnimationTimer(() => {
@@ -362,7 +362,7 @@ function App() {
             type: nextGame.drinkType,
             image: `/images/drink${Math.floor(Math.random() * 6) + 1}.jpg`
           });
-        }, 1500);
+        }, 1000);
       }
     }, 1100);
   }
@@ -697,7 +697,8 @@ function SetupScreen(props) {
 
 function GameScreen({game, currentBet, maxBet, canPlay, canBet, cardAnimation, onBet, onPlay, onBack, onLeave}) {
   const card = cardAnimation ? (cardAnimation.revealing ? cardAnimation.to : cardAnimation.from) : game.currentCard;
-  const resultClass = game.status === true ? "bg-emerald-100" : game.status === false ? "bg-red-100" : "bg-white";
+  const displayStatus = cardAnimation ? (cardAnimation.revealing ? cardAnimation.status : undefined) : game.status;
+  const resultClass = displayStatus === true ? "bg-emerald-100" : displayStatus === false ? "bg-red-100" : "bg-white";
 
   return (
     <section className="grid gap-4">
