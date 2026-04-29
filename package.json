@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=development nodemon --exec babel-node src/server.js",
+    "start": "yarn build:client && cross-env NODE_ENV=development nodemon --exec babel-node src/server.js",
     "build": "yarn build:client && yarn build:server",
     "build:client": "vite build",
     "build:server": "babel src --out-dir dist",
