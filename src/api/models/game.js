@@ -14,7 +14,7 @@ let gamePlayerSchema = new mongoose.Schema({
     name: String,
     rank: Number,
     active: {type: Boolean, default: true},
-    stats: {type: gamePlayerStatsSchema, default: gamePlayerStatsSchema}
+    stats: {type: gamePlayerStatsSchema, default: () => ({})}
 });
 
 let cardSchema = new mongoose.Schema({

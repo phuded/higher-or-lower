@@ -9,7 +9,7 @@ import WebSocketServer from "websocket";
 import "@babel/polyfill";
 
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 8080;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -46,7 +46,7 @@ console.log("Env: " + env);
 
 global.config = config[env];
 
-mongoose.connect(global.config.url + "/" + global.config.dbString, {useNewUrlParser: true, useCreateIndex: true});
+mongoose.connect(global.config.url + "/" + global.config.dbString);
 
 mongoose.connection.once('open', function() {
 
@@ -120,5 +120,3 @@ wsServer.on('request', function(request) {
 
     });
 });
-
-
